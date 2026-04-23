@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// 
+/// <summary>
 /// Owns the duck's spawn point and handles resetting it.
 /// To change the spawn point later: create an empty GameObject where
 /// you want the launch position and drag it into the Spawn Point field.
-/// 
+/// </summary>
 public class DuckSpawner : MonoBehaviour
 {
     [Header("References")]
@@ -15,21 +15,19 @@ public class DuckSpawner : MonoBehaviour
 
     [Header("Spawn Point")]
     [Tooltip("Leave empty to use the duck's starting position. " +
-            "Assign an empty GameObject here to set a custom spawn point later.")]
+             "Assign an empty GameObject here to set a custom spawn point later.")]
     [SerializeField] private Transform spawnPoint;
 
     [Header("Reset Key")]
     [SerializeField] private Key resetKey = Key.R;
 
-    // Stored on Awake so we always have a fallback
     private Vector3 _defaultSpawnPosition;
     private Quaternion _defaultSpawnRotation;
 
-
+    // -------------------------------------------------------------------------
 
     private void Awake()
     {
-        // Store duck's starting transform as the default spawn
         _defaultSpawnPosition = duckRoot.transform.position;
         _defaultSpawnRotation = duckRoot.transform.rotation;
     }
@@ -40,11 +38,10 @@ public class DuckSpawner : MonoBehaviour
             ResetDuck();
     }
 
-
+    // -------------------------------------------------------------------------
 
     public void ResetDuck()
     {
-        // Use assigned spawn point if one exists, otherwise use original position
         Vector3 targetPosition = spawnPoint != null
             ? spawnPoint.position
             : _defaultSpawnPosition;
@@ -53,18 +50,22 @@ public class DuckSpawner : MonoBehaviour
             ? spawnPoint.rotation
             : _defaultSpawnRotation;
 
-        // Move the duck
-        duckRoot.transform.SetPositionAndRotation(targetPosition, targetRotation);
-
-        // Zero out velocity so it doesn't carry momentum from the crash
         Rigidbody rb = duckRoot.GetComponent<Rigidbody>();
+
         if (rb != null)
         {
+            // 1. Zero velocity FIRST — clear all crash momentum before anything else
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+
+            // 2. Move via rb.position not transform — teleports in physics space immediately
+            //    transform.SetPositionAndRotation queues a reconciliation that takes
+            //    a few frames to resolve, causing the delay you were seeing
+            rb.position = targetPosition;
+            rb.rotation = targetRotation;
         }
 
-        // Re-enable flight controls and unfreeze camera
+        // 3. Reset flight state LAST — flight controller starts clean with no leftover velocity
         duckImpact.Reset();
 
         Debug.Log("Duck reset to spawn point.");

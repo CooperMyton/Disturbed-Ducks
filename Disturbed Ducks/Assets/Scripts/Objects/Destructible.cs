@@ -1,10 +1,5 @@
 using UnityEngine;
 
-/// 
-/// Attach to any breakable object (boxes, structures, etc).
-/// Damage is calculated from physics impulse, which naturally
-/// accounts for the attacker's speed and mass combined.
-///
 public class Destructible : MonoBehaviour
 {
     [Header("Health")]
@@ -12,58 +7,69 @@ public class Destructible : MonoBehaviour
     [SerializeField] private float currentHP;
 
     [Header("Impact Settings")]
-    [SerializeField] private float damageMultiplier = 0.5f;   // tune this to control how hard it is to break
-    [SerializeField] private float minImpulseToTakeDamage = 5f; // prevents damage from tiny bumps
+    [SerializeField] private float damageMultiplier = 1f;
+    [SerializeField] private float minSpeedToTakeDamage = 3f;
+    [SerializeField] private float damageCooldown = 0.1f;
+
+    [Header("On Destroy")]
+    [Tooltip("How much speed the duck loses when this object is destroyed")]
+    [SerializeField] private float speedPenaltyOnBreak = 6f;
 
     [Header("Visual Feedback")]
-    [SerializeField] private Renderer objectRenderer;   // drag the box renderer here
+    [SerializeField] private Renderer objectRenderer;
     [SerializeField] private Color healthyColor = Color.white;
     [SerializeField] private Color damagedColor = Color.red;
 
+    private float _lastDamageTime = -999f;
 
+    // -------------------------------------------------------------------------
 
     private void Awake()
     {
         currentHP = maxHP;
-
-        // Auto-grab renderer if not assigned in Inspector
         if (objectRenderer == null)
             objectRenderer = GetComponent<Renderer>();
-
         UpdateColor();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Get the rigidbody of whatever hit us
+        if (Time.time - _lastDamageTime < damageCooldown) return;
+
         Rigidbody hitRb = collision.rigidbody;
         if (hitRb == null) return;
 
         float impactSpeed = hitRb.linearVelocity.magnitude;
+        if (impactSpeed < minSpeedToTakeDamage) return;
 
-        if (impactSpeed < minImpulseToTakeDamage) return;
-
-        // Damage = speed × mass × multiplier, matching your original instinct
         float damage = impactSpeed * hitRb.mass * damageMultiplier;
-        TakeDamage(damage);
+        _lastDamageTime = Time.time;
 
+        TakeDamage(damage, hitRb);
         Debug.Log($"{gameObject.name} hit for {damage:F1} | HP: {currentHP:F1}/{maxHP}");
     }
 
+    // -------------------------------------------------------------------------
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, Rigidbody attacker = null)
     {
         currentHP -= amount;
-        currentHP = Mathf.Max(currentHP, 0f); // never go below 0
+        currentHP = Mathf.Max(currentHP, 0f);
         UpdateColor();
 
         if (currentHP <= 0f)
-            Break();
+            Break(attacker);
     }
 
-    private void Break()
+    private void Break(Rigidbody attacker)
     {
-        // TODO: spawn break particles / sound here later
+        // Notify the duck so it loses speed
+        if (attacker != null)
+        {
+            DuckFlightController duck = attacker.GetComponent<DuckFlightController>();
+            duck?.ApplySpeedPenalty(speedPenaltyOnBreak);
+        }
+
         Debug.Log($"{gameObject.name} destroyed!");
         Destroy(gameObject);
     }
@@ -71,8 +77,6 @@ public class Destructible : MonoBehaviour
     private void UpdateColor()
     {
         if (objectRenderer == null) return;
-
-        // Lerp from healthy to damaged color based on how much HP is left
         float healthPercent = currentHP / maxHP;
         objectRenderer.material.color = Color.Lerp(damagedColor, healthyColor, healthPercent);
     }

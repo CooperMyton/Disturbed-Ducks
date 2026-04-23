@@ -4,8 +4,7 @@ using UnityEngine;
 public class DuckImpact : MonoBehaviour
 {
     [Header("Impact Settings")]
-    [SerializeField] private float minSpeedToDisable = 5f; // how fast duck must be going to crash
-    [SerializeField] private LayerMask crashLayers;        // set to Default in Inspector
+    [SerializeField] private float minSpeedToDisable = 5f;
 
     [Header("References")]
     [SerializeField] private CameraTarget cameraTarget;
@@ -13,6 +12,8 @@ public class DuckImpact : MonoBehaviour
     private Rigidbody _rb;
     private DuckFlightController _flightController;
     private bool _hasCrashed = false;
+
+    public bool HasCrashed => _hasCrashed;
 
     private void Awake()
     {
@@ -24,22 +25,17 @@ public class DuckImpact : MonoBehaviour
     {
         if (_hasCrashed) return;
 
-        // Check layer if assigned, otherwise hit anything
-        if (crashLayers != 0 && (crashLayers & (1 << collision.gameObject.layer)) == 0)
-            return;
-
-        // Use the duck's current speed instead of impulse magnitude
-        // since we override linearVelocity every FixedUpdate
         float currentSpeed = _rb.linearVelocity.magnitude;
-
         Debug.Log($"Hit {collision.gameObject.name} at speed {currentSpeed:F1}");
 
         if (currentSpeed >= minSpeedToDisable)
             Crash();
     }
 
-    private void Crash()
+    // Public so DuckFlightController can trigger it via speed penalty
+    public void Crash()
     {
+        if (_hasCrashed) return;
         _hasCrashed = true;
 
         if (_flightController != null)
@@ -51,6 +47,8 @@ public class DuckImpact : MonoBehaviour
         if (cameraTarget != null)
             cameraTarget.FreezeYaw();
 
+        FlightUIManager.Instance?.OnCrashed();
+
         Debug.Log("Duck crashed!");
     }
 
@@ -61,7 +59,10 @@ public class DuckImpact : MonoBehaviour
         _rb.freezeRotation = true;
 
         if (_flightController != null)
+        {
             _flightController.enabled = true;
+            _flightController.PrepareForLaunch();
+        }
 
         if (cameraTarget != null)
             cameraTarget.UnfreezeYaw();
