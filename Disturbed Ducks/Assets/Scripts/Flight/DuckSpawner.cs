@@ -67,6 +67,7 @@ public class DuckSpawner : MonoBehaviour
 
         // 3. Reset flight state LAST — flight controller starts clean with no leftover velocity
         duckImpact.Reset();
+        FlightUIManager.Instance?.ShowLaunchPrompt();
 
         Debug.Log("Duck reset to spawn point.");
     }

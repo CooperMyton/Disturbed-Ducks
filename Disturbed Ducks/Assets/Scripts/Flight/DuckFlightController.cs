@@ -126,4 +126,12 @@ public class DuckFlightController : MonoBehaviour
         localEuler.z = _currentBankAngle;
         modelRoot.localEulerAngles = localEuler;
     }
+
+    /// Called by UpgradeManager when stats change.
+    /// Updates both the base speed and the current flight speed.
+    public void SetBaseSpeed(float newSpeed)
+    {
+        forwardSpeed = newSpeed;
+        _currentSpeed = newSpeed;
+    }
 }

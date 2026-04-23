@@ -1,54 +1,38 @@
 using UnityEngine;
 using TMPro;
 
-/// <summary>
-/// Manages in-flight UI prompts.
-/// Uses a singleton so other scripts can notify it without a direct reference.
-/// </summary>
 public class FlightUIManager : MonoBehaviour
 {
     public static FlightUIManager Instance { get; private set; }
 
     [SerializeField] private TextMeshProUGUI promptText;
+    [SerializeField] private UpgradeUI upgradeUI;
 
     private void Awake()
     {
-        // Simple singleton — only one UI manager should exist
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
     }
 
-    private void Start()
-    {
-        ShowLaunchPrompt();
-    }
-
-    // -------------------------------------------------------------------------
+    private void Start() => ShowLaunchPrompt();
 
     public void ShowLaunchPrompt()
     {
+        upgradeUI?.Hide();
         SetPrompt("Use WASD / Arrow Keys to launch");
     }
 
-    public void OnLaunched()
-    {
-        SetPrompt(""); // clear prompt while flying
-    }
+    public void OnLaunched() => SetPrompt("");
 
     public void OnCrashed()
     {
-        SetPrompt("Press R to respawn");
+        SetPrompt("Press R to Respawn");
+        upgradeUI?.Show();
     }
-
-    // -------------------------------------------------------------------------
 
     private void SetPrompt(string message)
     {
-        if (promptText == null) return;
-        promptText.text = message;
+        if (promptText != null)
+            promptText.text = message;
     }
 }
