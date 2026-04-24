@@ -410,8 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DuckSpawner
   duckRoot: {fileID: 414223592}
   duckImpact: {fileID: 414223593}
-  duckFlightController: {fileID: 414223594}
-  spawnPoint: {fileID: 0}
+  launcherController: {fileID: 383941787}
   resetKey: 32
 --- !u!4 &127137992
 Transform:
@@ -939,6 +938,22 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!114 &383941787 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1074592751678201580, guid: 5fca3644a16a3e4e2923128d2daf5bdf, type: 3}
+  m_PrefabInstance: {fileID: 981918726}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51b1db66876e651479e33a856e0f0e56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+--- !u!4 &383941788 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7926329288201253915, guid: 5fca3644a16a3e4e2923128d2daf5bdf, type: 3}
+  m_PrefabInstance: {fileID: 981918726}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1456,6 +1471,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &858676501
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 858676502}
+  m_Layer: 0
+  m_Name: LaunchDirection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &858676502
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858676501}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 383941788}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &901153774
 GameObject:
   m_ObjectHideFlags: 0
@@ -1688,6 +1734,10 @@ PrefabInstance:
       propertyPath: duckToLaunch
       value: 
       objectReference: {fileID: 414223592}
+    - target: {fileID: 1074592751678201580, guid: 5fca3644a16a3e4e2923128d2daf5bdf, type: 3}
+      propertyPath: launchDirectionTarget
+      value: 
+      objectReference: {fileID: 858676502}
     - target: {fileID: 7926329288201253915, guid: 5fca3644a16a3e4e2923128d2daf5bdf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1730,7 +1780,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7926329288201253915, guid: 5fca3644a16a3e4e2923128d2daf5bdf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 858676502}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5fca3644a16a3e4e2923128d2daf5bdf, type: 3}
 --- !u!1 &1237634827

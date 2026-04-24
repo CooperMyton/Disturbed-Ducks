@@ -1,9 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Tracks current upgrade levels and applies stats to the duck.
-/// Singleton so UpgradeUI can reach it without a direct reference.
-/// </summary>
 public class UpgradeManager : MonoBehaviour
 {
     public static UpgradeManager Instance { get; private set; }
@@ -12,13 +8,12 @@ public class UpgradeManager : MonoBehaviour
     [SerializeField] private DuckData duckData;
     [SerializeField] private DuckFlightController flightController;
 
-    private int _speedLevel = 0;
+    private int _maxSpeedLevel = 0;
 
-    // Read-only properties for UI
-    public int SpeedLevel       => _speedLevel;
-    public int MaxSpeedLevel    => duckData.maxSpeedLevel;
-    public string DuckName      => duckData.duckName;
-    public bool CanUpgradeSpeed => _speedLevel < duckData.maxSpeedLevel;
+    public int SpeedLevel        => _maxSpeedLevel;
+    public int MaxSpeedLevel     => duckData.maxSpeedLevel;
+    public string DuckName       => duckData.duckName;
+    public bool CanUpgradeSpeed  => _maxSpeedLevel < duckData.maxSpeedLevel;
 
     // -------------------------------------------------------------------------
 
@@ -28,38 +23,26 @@ public class UpgradeManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
-    {
-        ApplyStats();
-    }
+    private void Start() => ApplyStats();
 
-    // -------------------------------------------------------------------------
-
-    /// <summary>
-    /// Attempts a speed upgrade. Returns true if successful.
-    /// Currency check is stubbed out — wire up CurrencyManager here later.
-    /// </summary>
     public bool TryUpgradeSpeed()
     {
         if (!CanUpgradeSpeed) return false;
 
         // ----- Currency check (inactive for POC) -----
-        // if (CurrencyManager.Instance.Balance < duckData.speedUpgradeCostPerLevel)
-        //     return false;
-        // CurrencyManager.Instance.Spend(duckData.speedUpgradeCostPerLevel);
+        // if (CurrencyManager.Instance.Balance < duckData.upgradeCostPerLevel) return false;
+        // CurrencyManager.Instance.Spend(duckData.upgradeCostPerLevel);
         // ---------------------------------------------
 
-        _speedLevel++;
+        _maxSpeedLevel++;
         ApplyStats();
         return true;
     }
 
-    // -------------------------------------------------------------------------
-
     private void ApplyStats()
     {
         if (flightController == null) return;
-        float newSpeed = duckData.baseSpeed + (_speedLevel * duckData.speedUpgradeIncrement);
-        flightController.SetBaseSpeed(newSpeed);
+        float newMaxSpeed = duckData.baseMaxSpeed + (_maxSpeedLevel * duckData.maxSpeedUpgradeIncrement);
+        flightController.SetMaxSpeed(newMaxSpeed);
     }
 }

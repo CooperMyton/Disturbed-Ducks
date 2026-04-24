@@ -6,7 +6,8 @@ public class DuckFlightController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float forwardSpeed = 20f;
-    [SerializeField] private float minSpeed = 5f; // slowdown floor
+    [SerializeField] private float maxSpeed = 35f;    // upgraded by UpgradeManager
+    [SerializeField] private float minSpeed = 5f;
 
     [Header("Rotation")]
     [SerializeField] private float pitchSpeed = 70f;
@@ -28,11 +29,8 @@ public class DuckFlightController : MonoBehaviour
 
     // -------------------------------------------------------------------------
 
-    private bool isLaunched = false;
-
     private void Awake()
     {
-        
         _rb = GetComponent<Rigidbody>();
         _rb.useGravity = false;
         _rb.freezeRotation = true;
@@ -42,14 +40,8 @@ public class DuckFlightController : MonoBehaviour
 
     private void Update()
     {
-        // only start flying when the launch is completed.
-        // This could be handled by disabling the script instead, but this method arguably allows for more control
-        // will need to figure out how this works with mutliple ducks, i.e. how we reset to an "unlaunched" state.
-        // work for the future.
-        if(!isLaunched)
-            return;
+        if (!_isLaunched) return;
 
-        // Read input every frame using new Input System
         _moveInput = Vector2.zero;
 
         if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
@@ -62,16 +54,12 @@ public class DuckFlightController : MonoBehaviour
         else if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
             _moveInput.x = -1f;
 
-        // Launch on first input
-        if (!_isLaunched && _moveInput != Vector2.zero)
-            Launch();
-
         ApplyVisualBank(_moveInput.x);
     }
 
     private void FixedUpdate()
     {
-        if (!isLaunched) return;
+        if (!_isLaunched) return;
 
         ApplyRotation(_moveInput.y, _moveInput.x);
         ApplyVelocity();
@@ -79,16 +67,23 @@ public class DuckFlightController : MonoBehaviour
 
     // -------------------------------------------------------------------------
 
-    private void Launch()
+    /// <summary>
+    /// Called by LauncherController when Space is pressed.
+    /// Launch speed is clamped to maxSpeed so upgrades have a meaningful cap.
+    /// </summary>
+    public void StartFlight(float launchSpeed, Vector3 initialVector)
     {
+        // Clamp launch speed to the duck's current max speed
+        _currentSpeed = Mathf.Min(launchSpeed, maxSpeed);
+
+        transform.rotation = Quaternion.LookRotation(initialVector, Vector3.up);
         _isLaunched = true;
-        _currentSpeed = forwardSpeed;
+
         FlightUIManager.Instance?.OnLaunched();
     }
 
     /// <summary>
     /// Called by Destructible when a box is destroyed.
-    /// Reduces speed — if it drops below minSpeed the duck crashes.
     /// </summary>
     public void ApplySpeedPenalty(float penalty)
     {
@@ -101,7 +96,8 @@ public class DuckFlightController : MonoBehaviour
     public void PrepareForLaunch()
     {
         _isLaunched = false;
-        _currentSpeed = forwardSpeed;
+        _moveInput = Vector2.zero;
+        _currentSpeed = 0f;
         _rb.linearVelocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
     }
@@ -137,22 +133,13 @@ public class DuckFlightController : MonoBehaviour
         localEuler.z = _currentBankAngle;
         modelRoot.localEulerAngles = localEuler;
     }
-    public void startFlight(float launchSpeed, Vector3 initalVector)
-    {
-        forwardSpeed = launchSpeed;
-        // Note: applying an offset quaternion for now to resolve the issue of the look vector being incorrect
-        // this is a hack, would be better to have a non-rotating root and a rotating child, but we can decide what to do about this later.
-        Vector3 correctedInitialVector = Quaternion.Euler(0f,0f,0f) * initalVector;
-        transform.rotation = Quaternion.LookRotation(correctedInitialVector, Vector3.up);
 
-
-        isLaunched = true;
-    }
-    /// Called by UpgradeManager when stats change.
-    /// Updates both the base speed and the current flight speed.
-    public void SetBaseSpeed(float newSpeed)
+    /// <summary>
+    /// Called by UpgradeManager when max speed is upgraded.
+    /// Does not change current flight speed mid-flight.
+    /// </summary>
+    public void SetMaxSpeed(float newMaxSpeed)
     {
-        forwardSpeed = newSpeed;
-        _currentSpeed = newSpeed;
+        maxSpeed = newMaxSpeed;
     }
 }

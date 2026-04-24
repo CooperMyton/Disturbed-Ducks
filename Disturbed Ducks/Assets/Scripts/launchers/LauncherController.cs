@@ -5,64 +5,93 @@ public class LauncherController : MonoBehaviour
 {
     [SerializeField] private GameObject duckToLaunch;
 
-    private DuckFlightController flightScript;
+    [Tooltip("Empty child GameObject — rotate this in the scene to aim the launch direction")]
+    [SerializeField] private Transform launchDirectionTarget;
 
-    private bool inFlight = false;
-    private Vector3 launchPosition;
+    [Tooltip("Base launch speed — clamped by duck's max speed upgrade")]
+    [SerializeField] private float launchSpeed = 25f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Tooltip("How fast WASD moves the duck during aiming, in units per second")]
+    [SerializeField] private float aimSpeed = 5f;
+
+    private DuckFlightController _flightScript;
+    private Rigidbody _rb;
+    private bool _inFlight = false;
+    private Vector3 _originalLaunchPosition;
+    private Vector3 _launchPosition;
+
+    // -------------------------------------------------------------------------
+
+    private void Start()
     {
-        flightScript = duckToLaunch.GetComponent<DuckFlightController>();
-        launchPosition = duckToLaunch.transform.position;
+        _flightScript = duckToLaunch.GetComponent<DuckFlightController>();
+        _rb = duckToLaunch.GetComponent<Rigidbody>();
 
+        _originalLaunchPosition = duckToLaunch.transform.position;
+        _launchPosition = _originalLaunchPosition;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void Update()
     {
-        if(inFlight)
-            return;
+        if (_inFlight) return;
 
-
-
-        if(Keyboard.current.spaceKey.isPressed)
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            inFlight = true;
-            launchDuck();
+            _inFlight = true;
+            LaunchDuck();
+            return;
         }
 
-        // if we're still in launch mode, update position based on key presses.
-        
-        if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
-            launchPosition.y = launchPosition.y + .1f;
-        else if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
-            launchPosition.y = launchPosition.y - .1f;
-
-        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-            launchPosition.x = launchPosition.x + .1f;
-        else if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
-            launchPosition.x = launchPosition.x - .1f;
-
-            
-        if (Keyboard.current.zKey.isPressed)
-            launchPosition.z = launchPosition.z + .1f;
-        else if (Keyboard.current.xKey.isPressed)
-            launchPosition.z = launchPosition.z - .1f;
-
-        // NOTE: in the future, instead of having the real flight object move, could replace it with a "dummy" duck prefab
-        // then when we transition to flight mode, we would hide the prefab and transition to showing the real player duck
-
-
-        duckToLaunch.transform.position = launchPosition;
+        HandleAiming();
+        duckToLaunch.transform.position = _launchPosition;
     }
 
-    void launchDuck()
-    {
-        // take the current launch settings and pass it to the flight controller while telling it to activate
-        Vector3 launchVector = transform.position - launchPosition;
-        Vector3 normalizedLaunchVector = launchVector.normalized;
+    // -------------------------------------------------------------------------
 
-        flightScript.startFlight(launchVector.magnitude,launchVector.normalized);
+    private void HandleAiming()
+    {
+        // Time.deltaTime makes movement framerate-independent
+        float step = aimSpeed * Time.deltaTime;
+
+        if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
+            _launchPosition.y += step;
+        else if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
+            _launchPosition.y -= step;
+
+        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+            _launchPosition.x += step;
+        else if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+            _launchPosition.x -= step;
+
+        if (Keyboard.current.zKey.isPressed)
+            _launchPosition.z += step;
+        else if (Keyboard.current.xKey.isPressed)
+            _launchPosition.z -= step;
+    }
+
+    private void LaunchDuck()
+    {
+        // Use launchDirectionTarget if assigned, otherwise fall back to transform.forward
+        Vector3 direction = launchDirectionTarget != null
+            ? (launchDirectionTarget.position - _launchPosition).normalized
+            : transform.forward;
+
+        _flightScript.StartFlight(launchSpeed, direction);
+    }
+
+    public void ResetToLauncher()
+    {
+        _inFlight = false;
+        _launchPosition = _originalLaunchPosition;
+
+        if (_rb != null)
+        {
+            _rb.position = _originalLaunchPosition;
+            _rb.rotation = Quaternion.identity;
+        }
+        else
+        {
+            duckToLaunch.transform.position = _originalLaunchPosition;
+        }
     }
 }
