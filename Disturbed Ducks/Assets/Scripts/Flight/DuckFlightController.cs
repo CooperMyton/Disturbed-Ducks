@@ -101,7 +101,7 @@ public class DuckFlightController : MonoBehaviour
         forwardSpeed = launchSpeed;
         // Note: applying an offset quaternion for now to resolve the issue of the look vector being incorrect
         // this is a hack, would be better to have a non-rotating root and a rotating child, but we can decide what to do about this later.
-        Vector3 correctedInitialVector = Quaternion.Euler(0f,0f,90f) * initalVector;
+        Vector3 correctedInitialVector = Quaternion.Euler(0f,0f,0f) * initalVector;
         transform.rotation = Quaternion.LookRotation(correctedInitialVector, Vector3.up);
 
 
