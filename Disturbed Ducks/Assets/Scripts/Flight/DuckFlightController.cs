@@ -28,8 +28,11 @@ public class DuckFlightController : MonoBehaviour
 
     // -------------------------------------------------------------------------
 
+    private bool isLaunched = false;
+
     private void Awake()
     {
+        
         _rb = GetComponent<Rigidbody>();
         _rb.useGravity = false;
         _rb.freezeRotation = true;
@@ -39,6 +42,14 @@ public class DuckFlightController : MonoBehaviour
 
     private void Update()
     {
+        // only start flying when the launch is completed.
+        // This could be handled by disabling the script instead, but this method arguably allows for more control
+        // will need to figure out how this works with mutliple ducks, i.e. how we reset to an "unlaunched" state.
+        // work for the future.
+        if(!isLaunched)
+            return;
+
+        // Read input every frame using new Input System
         _moveInput = Vector2.zero;
 
         if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
@@ -60,7 +71,7 @@ public class DuckFlightController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_isLaunched) return;
+        if (!isLaunched) return;
 
         ApplyRotation(_moveInput.y, _moveInput.x);
         ApplyVelocity();
@@ -126,7 +137,17 @@ public class DuckFlightController : MonoBehaviour
         localEuler.z = _currentBankAngle;
         modelRoot.localEulerAngles = localEuler;
     }
+    public void startFlight(float launchSpeed, Vector3 initalVector)
+    {
+        forwardSpeed = launchSpeed;
+        // Note: applying an offset quaternion for now to resolve the issue of the look vector being incorrect
+        // this is a hack, would be better to have a non-rotating root and a rotating child, but we can decide what to do about this later.
+        Vector3 correctedInitialVector = Quaternion.Euler(0f,0f,0f) * initalVector;
+        transform.rotation = Quaternion.LookRotation(correctedInitialVector, Vector3.up);
 
+
+        isLaunched = true;
+    }
     /// Called by UpgradeManager when stats change.
     /// Updates both the base speed and the current flight speed.
     public void SetBaseSpeed(float newSpeed)
