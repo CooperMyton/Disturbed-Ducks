@@ -8,8 +8,11 @@ public class LauncherController : MonoBehaviour
     [Tooltip("Empty child GameObject — rotate this in the scene to aim the launch direction")]
     [SerializeField] private Transform launchDirectionTarget;
 
-    [Tooltip("Base launch speed — clamped by duck's max speed upgrade")]
-    [SerializeField] private float launchSpeed = 25f;
+    [Tooltip("Base launch speed multiplier — clamped by duck's max speed upgrade")]
+    [SerializeField] private float launchSpeed = 5f;
+
+    [Tooltip("Distance the slingshot can be pulled back. related to launchspeed")]
+    [SerializeField] private float maxDrawDistance = 5f;
 
     [Tooltip("How fast WASD moves the duck during aiming, in units per second")]
     [SerializeField] private float aimSpeed = 5f;
@@ -20,6 +23,11 @@ public class LauncherController : MonoBehaviour
     private Vector3 _originalLaunchPosition;
     private Vector3 _launchPosition;
 
+    // parameters for the string linerender
+    [SerializeField] private Transform leftBarPosition;
+    [SerializeField] private Transform rightBarPosition;
+    private LineRenderer slingshotString;
+
     // -------------------------------------------------------------------------
 
     private void Start()
@@ -29,6 +37,9 @@ public class LauncherController : MonoBehaviour
 
         _originalLaunchPosition = duckToLaunch.transform.position;
         _launchPosition = _originalLaunchPosition;
+
+        slingshotString = GetComponent<LineRenderer>();
+        slingshotString.positionCount = 4;
     }
 
     private void Update()
@@ -43,6 +54,7 @@ public class LauncherController : MonoBehaviour
         }
 
         HandleAiming();
+        MoveSlingshotString();
         duckToLaunch.transform.position = _launchPosition;
     }
 
@@ -64,9 +76,36 @@ public class LauncherController : MonoBehaviour
             _launchPosition.x -= step;
 
         if (Keyboard.current.zKey.isPressed)
+        {
             _launchPosition.z += step;
+            // check if in line with the launcher, don't want to launch backwards
+            if (_launchPosition.z > launchDirectionTarget.position.z)
+            {
+                _launchPosition.z = launchDirectionTarget.position.z;
+            }
+        }
         else if (Keyboard.current.xKey.isPressed)
             _launchPosition.z -= step;
+
+        // clamp aim position based on distance from center. upgradeable
+        Vector3 offset = _launchPosition - launchDirectionTarget.position;
+        Vector3 limitedPosition = Vector3.ClampMagnitude(offset,maxDrawDistance);
+        _launchPosition = launchDirectionTarget.position + limitedPosition;
+    }
+
+    private void MoveSlingshotString()
+    {
+        // keep the two ends fixed, and update the middle based on the position of the bird
+        if(leftBarPosition && rightBarPosition)
+        {
+            slingshotString.SetPosition(0,leftBarPosition.position);
+            //move the slingshot position slightly behind the bird position while launching
+            Vector3 slingshotBackLeft = new Vector3(_launchPosition.x - 0.25f, _launchPosition.y, _launchPosition.z - .6f);
+            Vector3 slingshotBackright = new Vector3(_launchPosition.x + 0.25f, _launchPosition.y, _launchPosition.z - .6f);
+            slingshotString.SetPosition(1,slingshotBackLeft);
+            slingshotString.SetPosition(2,slingshotBackright);
+            slingshotString.SetPosition(3,rightBarPosition.position);
+        }
     }
 
     private void LaunchDuck()
@@ -76,7 +115,11 @@ public class LauncherController : MonoBehaviour
             ? (launchDirectionTarget.position - _launchPosition).normalized
             : transform.forward;
 
-        _flightScript.StartFlight(launchSpeed, direction);
+        // Determine the magnitude that the string has been pulled back
+        Vector3 offset = launchDirectionTarget.position - _launchPosition;
+        float launchPower = offset.magnitude;
+        Debug.Log("Launched with speed: " + launchSpeed * launchPower);
+        _flightScript.StartFlight(launchSpeed * launchPower, direction);
     }
 
     public void ResetToLauncher()

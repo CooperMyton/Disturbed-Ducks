@@ -69,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 02fce1bc59b80f048a44e9b025e82296, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -156,7 +156,9 @@ MonoBehaviour:
   maxHP: 100
   currentHP: 0
   damageMultiplier: 0.5
-  minImpulseToTakeDamage: 5
+  minSpeedToTakeDamage: 3
+  damageCooldown: 0.1
+  speedPenaltyOnBreak: 6
   objectRenderer: {fileID: 0}
   healthyColor: {r: 1, g: 1, b: 1, a: 1}
   damagedColor: {r: 1, g: 0, b: 0, a: 1}
