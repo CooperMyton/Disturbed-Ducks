@@ -79,6 +79,8 @@ public class DuckFlightController : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(initialVector, Vector3.up);
         _isLaunched = true;
 
+        GetComponent<AbilityController>()?.OnLaunched();
+
         FlightUIManager.Instance?.OnLaunched();
     }
 
@@ -141,5 +143,10 @@ public class DuckFlightController : MonoBehaviour
     public void SetMaxSpeed(float newMaxSpeed)
     {
         maxSpeed = newMaxSpeed;
+    }
+
+        public void ApplySpeedMultiplier(float multiplier)
+    {
+        _currentSpeed = Mathf.Clamp(_currentSpeed * multiplier, minSpeed, maxSpeed);
     }
 }
