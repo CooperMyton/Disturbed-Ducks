@@ -84,13 +84,14 @@ public class DuckFlightController : MonoBehaviour
         _currentSpeed = Mathf.Min(launchSpeed, maxSpeed);
         _verticalVelocity = 0f;
 
-        transform.rotation = Quaternion.LookRotation(initialVector, Vector3.up);
+        // Use _rb.rotation not transform.rotation — sets rotation in physics
+        // space immediately, same reason we use rb.position on reset
+        _rb.rotation = Quaternion.LookRotation(initialVector, Vector3.up);
         _isLaunched = true;
 
         GetComponent<AbilityController>()?.OnLaunched();
         FlightUIManager.Instance?.OnLaunched();
     }
-
     public void ApplySpeedPenalty(float penalty)
     {
         _currentSpeed = Mathf.Max(_currentSpeed - penalty, 0f);

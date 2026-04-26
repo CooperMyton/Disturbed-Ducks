@@ -6,6 +6,9 @@ public class DuckImpact : MonoBehaviour
     [Header("Impact Settings")]
     [SerializeField] private float minSpeedToDisable = 5f;
 
+    [Header("Ground")]
+    [SerializeField] private string groundTag = "Ground";
+
     [Header("References")]
     [SerializeField] private CameraTarget cameraTarget;
 
@@ -25,6 +28,13 @@ public class DuckImpact : MonoBehaviour
     {
         if (_hasCrashed) return;
 
+        // Ground always crashes regardless of speed
+        if (collision.gameObject.CompareTag(groundTag))
+        {
+            Crash();
+            return;
+        }
+
         float currentSpeed = _rb.linearVelocity.magnitude;
         Debug.Log($"Hit {collision.gameObject.name} at speed {currentSpeed:F1}");
 
@@ -32,7 +42,6 @@ public class DuckImpact : MonoBehaviour
             Crash();
     }
 
-    // Public so DuckFlightController can trigger it via speed penalty
     public void Crash()
     {
         if (_hasCrashed) return;
@@ -48,7 +57,6 @@ public class DuckImpact : MonoBehaviour
             cameraTarget.FreezeYaw();
 
         GetComponent<AbilityController>()?.OnCrashed();
-
         FlightUIManager.Instance?.OnCrashed();
 
         Debug.Log("Duck crashed!");
@@ -66,9 +74,9 @@ public class DuckImpact : MonoBehaviour
             _flightController.PrepareForLaunch();
         }
 
-        GetComponent<AbilityController>()?.OnReset();
-
         if (cameraTarget != null)
             cameraTarget.UnfreezeYaw();
+
+        GetComponent<AbilityController>()?.OnReset();
     }
 }

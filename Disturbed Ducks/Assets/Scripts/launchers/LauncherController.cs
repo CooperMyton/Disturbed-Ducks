@@ -62,7 +62,6 @@ public class LauncherController : MonoBehaviour
 
     private void HandleAiming()
     {
-        // Time.deltaTime makes movement framerate-independent
         float step = aimSpeed * Time.deltaTime;
 
         if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
@@ -76,21 +75,18 @@ public class LauncherController : MonoBehaviour
             _launchPosition.x -= step;
 
         if (Keyboard.current.zKey.isPressed)
-        {
             _launchPosition.z += step;
-            // check if in line with the launcher, don't want to launch backwards
-            if (_launchPosition.z > launchDirectionTarget.position.z)
-            {
-                _launchPosition.z = launchDirectionTarget.position.z;
-            }
-        }
         else if (Keyboard.current.xKey.isPressed)
             _launchPosition.z -= step;
 
-        // clamp aim position based on distance from center. upgradeable
+        // Clamp total draw distance first
         Vector3 offset = _launchPosition - launchDirectionTarget.position;
-        Vector3 limitedPosition = Vector3.ClampMagnitude(offset,maxDrawDistance);
-        _launchPosition = launchDirectionTarget.position + limitedPosition;
+        Vector3 limitedOffset = Vector3.ClampMagnitude(offset, maxDrawDistance);
+        _launchPosition = launchDirectionTarget.position + limitedOffset;
+
+        // Then clamp Z — prevents pulling behind the launcher after magnitude clamp
+        if (_launchPosition.z > launchDirectionTarget.position.z)
+            _launchPosition.z = launchDirectionTarget.position.z;
     }
 
     private void MoveSlingshotString()
@@ -110,19 +106,27 @@ public class LauncherController : MonoBehaviour
 
     private void LaunchDuck()
     {
-        // Use launchDirectionTarget if assigned, otherwise fall back to transform.forward
-        Vector3 offset = launchDirectionTarget != null
-            ? launchDirectionTarget.position - _launchPosition
-            : transform.forward;
+        if (launchDirectionTarget == null)
+        {
+            _flightScript.StartFlight(launchSpeed, transform.forward);
+            return;
+        }
 
-        // Determine the magnitude that the string has been pulled back, defaulting to 1f
-        float launchPower = launchDirectionTarget != null
-            ? offset.magnitude
-            : 1f;
-        // determine the direction
+        Vector3 offset = launchDirectionTarget.position - _launchPosition;
+        float launchPower = offset.magnitude;
+
+        // Guard: if duck is too close to the target point, offset is unreliable
+        // Use a minimum threshold to ensure direction is always meaningful
+        if (launchPower < 0.1f)
+        {
+            Debug.LogWarning("Launch position too close to target — using default forward direction.");
+            _flightScript.StartFlight(launchSpeed, transform.forward);
+            return;
+        }
+
         Vector3 direction = offset.normalized;
-        Debug.Log("Launched with speed: " + launchSpeed * launchPower);
-        Debug.Log("Launch direction: "+ direction.x + ", "+ direction.y + ", " + direction.z);
+
+        Debug.Log($"Launched with speed: {launchSpeed * launchPower:F1} | Direction: {direction}");
         _flightScript.StartFlight(launchSpeed * launchPower, direction);
     }
 
@@ -135,10 +139,15 @@ public class LauncherController : MonoBehaviour
         {
             _rb.position = _originalLaunchPosition;
             _rb.rotation = Quaternion.identity;
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
         }
         else
         {
             duckToLaunch.transform.position = _originalLaunchPosition;
         }
+
+        // Reset string visual to match starting position
+        MoveSlingshotString();
     }
 }
