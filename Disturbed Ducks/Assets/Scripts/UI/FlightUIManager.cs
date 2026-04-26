@@ -19,7 +19,7 @@ public class FlightUIManager : MonoBehaviour
     public void ShowLaunchPrompt()
     {
         upgradeUI?.Hide();
-        SetPrompt("Use WASD / Arrow Keys to launch");
+        SetPrompt("Use WASD / Arrow Keys to aim and fly, X and Z to set launcher, shift to use an ability, and space to launch");
     }
 
     public void OnLaunched() => SetPrompt("");

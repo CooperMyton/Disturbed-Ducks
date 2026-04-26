@@ -6,13 +6,21 @@ public class DuckFlightController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float forwardSpeed = 20f;
-    [SerializeField] private float maxSpeed = 35f;    // upgraded by UpgradeManager
+    [SerializeField] private float maxSpeed = 35f;
     [SerializeField] private float minSpeed = 5f;
 
     [Header("Rotation")]
     [SerializeField] private float pitchSpeed = 70f;
     [SerializeField] private float yawSpeed = 70f;
     [SerializeField] private float maxPitchAngle = 60f;
+
+    [Header("Glide Physics")]
+    [SerializeField] private float glideGravity = 12f;          // downward pull strength
+    [SerializeField] private float maxFallSpeed = 25f;          // terminal velocity
+    [SerializeField] private float climbSpeedPenalty = 10f;     // speed lost per second when climbing
+    [SerializeField] private float diveSpeedGain = 6f;          // speed gained per second when diving
+    [SerializeField] private float noseFollowSpeed = 1.5f;      // how fast nose aligns to glide arc
+    [SerializeField] private float pitchDeadzone = 5f;          // degrees before climb/dive penalty kicks in
 
     [Header("Visual Bank")]
     [SerializeField] private Transform modelRoot;
@@ -23,7 +31,9 @@ public class DuckFlightController : MonoBehaviour
     private Vector2 _moveInput;
     private float _currentBankAngle;
     private float _currentSpeed;
+    private float _verticalVelocity = 0f;   // gravity accumulates here
     private bool _isLaunched = false;
+    private bool _playerIsPitching = false;
 
     public bool IsLaunched => _isLaunched;
 
@@ -32,7 +42,7 @@ public class DuckFlightController : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _rb.useGravity = false;
+        _rb.useGravity = false;         // we handle gravity manually
         _rb.freezeRotation = true;
         _rb.interpolation = RigidbodyInterpolation.Interpolate;
         _currentSpeed = forwardSpeed;
@@ -54,6 +64,8 @@ public class DuckFlightController : MonoBehaviour
         else if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
             _moveInput.x = -1f;
 
+        _playerIsPitching = _moveInput.y != 0f;
+
         ApplyVisualBank(_moveInput.x);
     }
 
@@ -62,44 +74,43 @@ public class DuckFlightController : MonoBehaviour
         if (!_isLaunched) return;
 
         ApplyRotation(_moveInput.y, _moveInput.x);
-        ApplyVelocity();
+        ApplyGlidePhysics();
     }
 
     // -------------------------------------------------------------------------
 
-    /// <summary>
-    /// Called by LauncherController when Space is pressed.
-    /// Launch speed is clamped to maxSpeed so upgrades have a meaningful cap.
-    /// </summary>
     public void StartFlight(float launchSpeed, Vector3 initialVector)
     {
-        // Clamp launch speed to the duck's current max speed
         _currentSpeed = Mathf.Min(launchSpeed, maxSpeed);
+        _verticalVelocity = 0f;
 
         transform.rotation = Quaternion.LookRotation(initialVector, Vector3.up);
         _isLaunched = true;
 
         GetComponent<AbilityController>()?.OnLaunched();
-
         FlightUIManager.Instance?.OnLaunched();
     }
 
-    /// <summary>
-    /// Called by Destructible when a box is destroyed.
-    /// </summary>
     public void ApplySpeedPenalty(float penalty)
     {
         _currentSpeed = Mathf.Max(_currentSpeed - penalty, 0f);
-
         if (_currentSpeed <= minSpeed)
             GetComponent<DuckImpact>()?.Crash();
     }
+
+    public void ApplySpeedMultiplier(float multiplier)
+    {
+        _currentSpeed = Mathf.Clamp(_currentSpeed * multiplier, minSpeed, maxSpeed);
+    }
+
+    public void SetMaxSpeed(float newMaxSpeed) => maxSpeed = newMaxSpeed;
 
     public void PrepareForLaunch()
     {
         _isLaunched = false;
         _moveInput = Vector2.zero;
         _currentSpeed = 0f;
+        _verticalVelocity = 0f;
         _rb.linearVelocity = Vector3.zero;
         _rb.angularVelocity = Vector3.zero;
     }
@@ -113,9 +124,53 @@ public class DuckFlightController : MonoBehaviour
         ClampPitch();
     }
 
-    private void ApplyVelocity()
+    private void ApplyGlidePhysics()
     {
-        _rb.linearVelocity = transform.forward * _currentSpeed;
+        // --- Get current pitch (-180 to 180, negative = nose up) ---
+        float pitch = transform.eulerAngles.x > 180f
+            ? transform.eulerAngles.x - 360f
+            : transform.eulerAngles.x;
+
+        // --- Speed influenced by pitch angle ---
+        if (pitch < -pitchDeadzone)
+        {
+            // Climbing — bleed speed proportional to how steeply we're climbing
+            float climbFactor = Mathf.Abs(pitch) / maxPitchAngle;
+            _currentSpeed -= climbSpeedPenalty * climbFactor * Time.fixedDeltaTime;
+        }
+        else if (pitch > pitchDeadzone)
+        {
+            // Diving — gain speed proportional to dive angle
+            float diveFactor = pitch / maxPitchAngle;
+            _currentSpeed += diveSpeedGain * diveFactor * Time.fixedDeltaTime;
+        }
+
+        _currentSpeed = Mathf.Clamp(_currentSpeed, minSpeed, maxSpeed);
+
+        // --- Accumulate gravity into vertical velocity ---
+        _verticalVelocity -= glideGravity * Time.fixedDeltaTime;
+        _verticalVelocity = Mathf.Max(_verticalVelocity, -maxFallSpeed);
+
+        // --- Final velocity: forward thrust + gravity component ---
+        Vector3 velocity = transform.forward * _currentSpeed + Vector3.up * _verticalVelocity;
+        _rb.linearVelocity = velocity;
+
+        // --- Nose follow: gradually align to actual velocity arc ---
+        // Only when player isn't actively pitching — lets gravity
+        // naturally pull the nose down during a glide
+        if (!_playerIsPitching && velocity.sqrMagnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(velocity.normalized, Vector3.up);
+
+            // Only blend the pitch axis — player still owns yaw
+            Vector3 currentEuler = transform.eulerAngles;
+            Vector3 targetEuler  = targetRotation.eulerAngles;
+
+            float blendedPitch = Mathf.LerpAngle(currentEuler.x, targetEuler.x,
+                noseFollowSpeed * Time.fixedDeltaTime);
+
+            transform.eulerAngles = new Vector3(blendedPitch, currentEuler.y, 0f);
+        }
     }
 
     private void ClampPitch()
@@ -134,19 +189,5 @@ public class DuckFlightController : MonoBehaviour
         Vector3 localEuler = modelRoot.localEulerAngles;
         localEuler.z = _currentBankAngle;
         modelRoot.localEulerAngles = localEuler;
-    }
-
-    /// <summary>
-    /// Called by UpgradeManager when max speed is upgraded.
-    /// Does not change current flight speed mid-flight.
-    /// </summary>
-    public void SetMaxSpeed(float newMaxSpeed)
-    {
-        maxSpeed = newMaxSpeed;
-    }
-
-        public void ApplySpeedMultiplier(float multiplier)
-    {
-        _currentSpeed = Mathf.Clamp(_currentSpeed * multiplier, minSpeed, maxSpeed);
     }
 }
