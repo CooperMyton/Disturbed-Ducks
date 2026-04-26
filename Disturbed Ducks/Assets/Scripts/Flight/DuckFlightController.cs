@@ -20,7 +20,8 @@ public class DuckFlightController : MonoBehaviour
     [SerializeField] private float climbSpeedPenalty = 10f;     // speed lost per second when climbing
     [SerializeField] private float diveSpeedGain = 6f;          // speed gained per second when diving
     [SerializeField] private float noseFollowSpeed = 1.5f;      // how fast nose aligns to glide arc
-    [SerializeField] private float pitchDeadzone = 5f;          // degrees before climb/dive penalty kicks in
+    [SerializeField] private float pitchDeadzone = 5f;
+    [SerializeField] private float dashDecayRate = 8f;          // degrees before climb/dive penalty kicks in
 
     [Header("Visual Bank")]
     [SerializeField] private Transform modelRoot;
@@ -99,9 +100,10 @@ public class DuckFlightController : MonoBehaviour
             GetComponent<DuckImpact>()?.Crash();
     }
 
-    public void ApplySpeedMultiplier(float multiplier)
+    public void ApplySpeedBoost(float amount)
     {
-        _currentSpeed = Mathf.Clamp(_currentSpeed * multiplier, minSpeed, maxSpeed);
+        _currentSpeed += amount;
+        // Intentionally no clamp here — we allow going over max, decay handles it
     }
 
     public void SetMaxSpeed(float newMaxSpeed) => maxSpeed = newMaxSpeed;
@@ -146,7 +148,14 @@ public class DuckFlightController : MonoBehaviour
             _currentSpeed += diveSpeedGain * diveFactor * Time.fixedDeltaTime;
         }
 
-        _currentSpeed = Mathf.Clamp(_currentSpeed, minSpeed, maxSpeed);
+        if (_currentSpeed > maxSpeed)
+        {
+            _currentSpeed = Mathf.MoveTowards(_currentSpeed, maxSpeed, dashDecayRate * Time.fixedDeltaTime);
+        }
+        else
+        {
+            _currentSpeed = Mathf.Clamp(_currentSpeed, minSpeed, maxSpeed);
+        }
 
         // --- Accumulate gravity into vertical velocity ---
         _verticalVelocity -= glideGravity * Time.fixedDeltaTime;

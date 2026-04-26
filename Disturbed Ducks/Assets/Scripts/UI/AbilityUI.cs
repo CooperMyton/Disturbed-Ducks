@@ -77,4 +77,12 @@ public class AbilityUI : MonoBehaviour
         if (cooldownFill != null)
             cooldownFill.fillAmount = ratio;
     }
+
+    public void ResetCooldown()
+    {
+        _onCooldown = false;
+        _cooldownRemaining = 0f;
+        SetFill(1f);
+        cooldownText.text = "READY";
+    }
 }

@@ -43,6 +43,7 @@ public class AbilityController : MonoBehaviour
     {
         _isFlying = false;
         _cooldownTimer = 0f;
+        AbilityUI.Instance?.ResetCooldown();
     }
 
     // -------------------------------------------------------------------------
