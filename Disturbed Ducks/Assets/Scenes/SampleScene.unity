@@ -3172,19 +3172,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6061186580609233963, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
       propertyPath: yawSpeed
-      value: 70
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 6061186580609233963, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
       propertyPath: pitchSpeed
-      value: 70
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 6061186580609233963, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
       propertyPath: forwardSpeed
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6061186580609233963, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
+      propertyPath: glideGravity
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6061186580609233963, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
+      propertyPath: maxFallSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6061186580609233963, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
       propertyPath: maxPitchAngle
       value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6061186580609233963, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
+      propertyPath: climbSpeedPenalty
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 9090209953229790018, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
       propertyPath: m_Enabled

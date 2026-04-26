@@ -14,5 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DashAbility
   abilityName: Ability
   cooldown: 3
-  dashMultiplier: 2.5
-  dashDuration: 0.4
+  speedBoost: 10
