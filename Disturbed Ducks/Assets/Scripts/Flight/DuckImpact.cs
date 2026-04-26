@@ -9,6 +9,9 @@ public class DuckImpact : MonoBehaviour
     [Header("Ground")]
     [SerializeField] private string groundTag = "Ground";
 
+    [Header("Obstacle")]
+    [SerializeField] private string obstacleTag = "obstacle";
+
     [Header("References")]
     [SerializeField] private CameraTarget cameraTarget;
 
@@ -29,7 +32,7 @@ public class DuckImpact : MonoBehaviour
         if (_hasCrashed) return;
 
         // Ground always crashes regardless of speed
-        if (collision.gameObject.CompareTag(groundTag))
+        if (collision.gameObject.CompareTag(groundTag) || collision.gameObject.CompareTag(obstacleTag))
         {
             Crash();
             return;
