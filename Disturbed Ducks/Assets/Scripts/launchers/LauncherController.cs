@@ -111,14 +111,18 @@ public class LauncherController : MonoBehaviour
     private void LaunchDuck()
     {
         // Use launchDirectionTarget if assigned, otherwise fall back to transform.forward
-        Vector3 direction = launchDirectionTarget != null
-            ? (launchDirectionTarget.position - _launchPosition).normalized
+        Vector3 offset = launchDirectionTarget != null
+            ? launchDirectionTarget.position - _launchPosition
             : transform.forward;
 
-        // Determine the magnitude that the string has been pulled back
-        Vector3 offset = launchDirectionTarget.position - _launchPosition;
-        float launchPower = offset.magnitude;
+        // Determine the magnitude that the string has been pulled back, defaulting to 1f
+        float launchPower = launchDirectionTarget != null
+            ? offset.magnitude
+            : 1f;
+        // determine the direction
+        Vector3 direction = offset.normalized;
         Debug.Log("Launched with speed: " + launchSpeed * launchPower);
+        Debug.Log("Launch direction: "+ direction.x + ", "+ direction.y + ", " + direction.z);
         _flightScript.StartFlight(launchSpeed * launchPower, direction);
     }
 
