@@ -4,17 +4,29 @@ public class UpgradeManager : MonoBehaviour
 {
     public static UpgradeManager Instance { get; private set; }
 
-    [Header("References")]
-    [SerializeField] private DuckData duckData;
-    [SerializeField] private DuckFlightController flightController;
+    [SerializeField] private DuckController duckController;
 
-    private int _maxSpeedLevel = 0;
+    private int _speedLevel = 0;
+    private int _maneurLevel = 0;
+    private int _abilityLevel = 0; // 0 = locked
 
-    public int SpeedLevel        => _maxSpeedLevel;
-    public int MaxSpeedLevel     => duckData.maxSpeedLevel;
-    public string DuckName       => duckData.duckName;
-    public bool CanUpgradeSpeed  => _maxSpeedLevel < duckData.maxSpeedLevel;
+    // Convenience reference
+    private DuckDefinition Def => duckController.Definition;
+    private DuckFlightController Flight =>
+        duckController.GetComponent<DuckFlightController>();
+    private AbilityController Ability =>
+        duckController.GetComponent<AbilityController>();
 
+    // Read by UpgradeUI
+    public int SpeedLevel     => _speedLevel;
+    public int ManeurLevel    => _maneurLevel;
+    public int AbilityLevel   => _abilityLevel;
+
+    public bool CanUpgradeSpeed   => _speedLevel   < Def.maxSpeedUpgrade.maxLevels;
+    public bool CanUpgradeManeur  => _maneurLevel  < Def.manoeuvrabilityUpgrade.maxLevels;
+    public bool CanUpgradeAbility => _abilityLevel < Def.abilityUpgrade.levels.Length;
+
+        public DuckDefinition Definition => duckController?.Definition;
     // -------------------------------------------------------------------------
 
     private void Awake()
@@ -23,26 +35,66 @@ public class UpgradeManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start() => ApplyStats();
+    // -------------------------------------------------------------------------
 
     public bool TryUpgradeSpeed()
     {
         if (!CanUpgradeSpeed) return false;
+        if (!CanAfford(Def.maxSpeedUpgrade.costPerLevel)) return false;
 
-        // ----- Currency check (inactive for POC) -----
-        // if (CurrencyManager.Instance.Balance < duckData.upgradeCostPerLevel) return false;
-        // CurrencyManager.Instance.Spend(duckData.upgradeCostPerLevel);
-        // ---------------------------------------------
+        _speedLevel++;
+        float newMax = Def.baseMaxSpeed +
+            (_speedLevel * Def.maxSpeedUpgrade.incrementPerLevel);
+        Flight?.SetMaxSpeed(newMax);
 
-        _maxSpeedLevel++;
-        ApplyStats();
+        UpgradeUI.Instance?.Refresh();
         return true;
     }
 
-    private void ApplyStats()
+    public bool TryUpgradeManoeuvrability()
     {
-        if (flightController == null) return;
-        float newMaxSpeed = duckData.baseMaxSpeed + (_maxSpeedLevel * duckData.maxSpeedUpgradeIncrement);
-        flightController.SetMaxSpeed(newMaxSpeed);
+        if (!CanUpgradeManeur) return false;
+        if (!CanAfford(Def.manoeuvrabilityUpgrade.costPerLevel)) return false;
+
+        _maneurLevel++;
+        float newTurn = Def.baseTurnSpeed +
+            (_maneurLevel * Def.manoeuvrabilityUpgrade.incrementPerLevel);
+        Flight?.SetManoeuvrability(newTurn);
+        UpgradeUI.Instance?.Refresh();
+        return true;
+    }
+
+    public bool TryUpgradeAbility()
+    {
+        if (!CanUpgradeAbility) return false;
+
+        var levelData = Def.abilityUpgrade.levels[_abilityLevel];
+        if (!CanAfford(levelData.cost)) return false;
+
+        _abilityLevel++;
+
+        if (_abilityLevel == 1)
+        {
+            // First level = unlock only, no stat boost yet
+            Ability?.UnlockAbility();
+        }
+        else
+        {
+            Ability?.ApplyAbilityUpgrade(
+                levelData.abilityBoostIncrement,
+                levelData.cooldownReduction
+            );
+        }
+        UpgradeUI.Instance?.Refresh();
+        return true;
+    }
+
+    // -------------------------------------------------------------------------
+
+    private bool CanAfford(int cost)
+    {
+        // Free for POC — wire CurrencyManager here later
+        // if (cost > 0 && CurrencyManager.Instance.Balance < cost) return false;
+        return true;
     }
 }

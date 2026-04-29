@@ -12,9 +12,20 @@ public class FlightUIManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+        
     }
 
-    private void Start() => ShowLaunchPrompt();
+    private void Start()
+    {
+        ShowLaunchPrompt();
+        Invoke(nameof(InitializeUI), 0.1f);
+    }
+
+    private void InitializeUI()
+    {
+        AbilityUI.Instance?.Show();
+        //ShowLaunchPrompt();
+    }
 
     public void ShowLaunchPrompt()
     {

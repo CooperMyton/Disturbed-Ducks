@@ -5,13 +5,13 @@ public class DashAbility : AbilityBase
 {
     [Header("Dash Settings")]
     [Tooltip("Flat speed added on dash — can push over max speed")]
-    public float speedBoost = 15f;
+    public float baseSpeedBoost = 15f;
 
-    public override void Use(GameObject user)
+    public override void Use(GameObject user, float upgradeBoost)
     {
         DuckFlightController flight = user.GetComponent<DuckFlightController>();
         if (flight == null) return;
 
-        flight.ApplySpeedBoost(speedBoost);
+        flight.ApplySpeedBoost(baseSpeedBoost + upgradeBoost);
     }
 }

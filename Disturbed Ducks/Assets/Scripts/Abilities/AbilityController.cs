@@ -1,26 +1,27 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
-/// Sits on DuckRoot. Holds the duck's current ability and fires it on input.
-/// Swap the ability asset to change what the duck can do — no code changes needed.
-
 public class AbilityController : MonoBehaviour
 {
-    [Header("Ability")]
-    [SerializeField] private AbilityBase ability;
-
     [Header("Input")]
     [SerializeField] private Key abilityKey = Key.LeftShift;
 
+    private AbilityBase _ability;
     private float _cooldownTimer = 0f;
     private bool _isFlying = false;
+    private bool _isUnlocked = false;
 
-    // Read by AbilityUI
-    public float CooldownRemaining => Mathf.Max(_cooldownTimer, 0f);
-    public float CooldownTotal     => ability != null ? ability.cooldown : 1f;
-    public bool  IsReady           => _cooldownTimer <= 0f && ability != null;
-    public string AbilityName      => ability != null ? ability.abilityName : "";
+    // Accumulated from upgrade levels
+    private float _upgradeBoost = 0f;
+    private float _cooldownReduction = 0f;
+
+    public float CooldownRemaining  => Mathf.Max(_cooldownTimer, 0f);
+    public float CurrentCooldown    => _ability != null
+        ? Mathf.Max(_ability.cooldown - _cooldownReduction, 0.5f)
+        : 1f;
+    public bool  IsReady            => _cooldownTimer <= 0f && _ability != null && _isUnlocked;
+    public bool  IsUnlocked         => _isUnlocked;
+    public string AbilityName       => _ability != null ? _ability.abilityName : "";
 
     // -------------------------------------------------------------------------
 
@@ -29,13 +30,41 @@ public class AbilityController : MonoBehaviour
         if (_cooldownTimer > 0f)
             _cooldownTimer -= Time.deltaTime;
 
-        if (!_isFlying) return;
 
-        if (Keyboard.current[abilityKey].wasPressedThisFrame && IsReady)
-            TriggerAbility();
+        //if (Keyboard.current[abilityKey].wasPressedThisFrame && IsReady)
+        //    TriggerAbility();
+        if (Keyboard.current[abilityKey].wasPressedThisFrame)
+        {
+            Debug.Log($"Shift pressed — isFlying: {_isFlying}, isUnlocked: {_isUnlocked}, " +
+                    $"ability null: {_ability == null}, cooldown: {_cooldownTimer:F2}, isReady: {IsReady}");
+
+            if (IsReady)
+                TriggerAbility();
+        }
+
+        if (!_isFlying || !_isUnlocked) return;
     }
 
     // -------------------------------------------------------------------------
+
+    public void SetAbility(AbilityBase ability)
+    {
+        _ability = ability;
+    }
+
+    public void UnlockAbility()
+    {
+        _isUnlocked = true;
+    }
+
+    /// <summary>
+    /// Called by UpgradeManager for each ability upgrade level purchased.
+    /// </summary>
+    public void ApplyAbilityUpgrade(float boostIncrement, float cooldownReduction)
+    {
+        _upgradeBoost      += boostIncrement;
+        _cooldownReduction += cooldownReduction;
+    }
 
     public void OnLaunched()  => _isFlying = true;
     public void OnCrashed()   => _isFlying = false;
@@ -50,9 +79,12 @@ public class AbilityController : MonoBehaviour
 
     private void TriggerAbility()
     {
-        ability.Use(gameObject);
-        _cooldownTimer = ability.cooldown;
-        AbilityUI.Instance?.OnAbilityUsed(ability.cooldown);
-        Debug.Log($"Used ability: {ability.abilityName}");
+        Debug.Log($"TriggerAbility called — ability: {_ability?.abilityName}, boost: {_upgradeBoost}");
+        float actualCooldown = CurrentCooldown;
+        _ability.Use(gameObject, _upgradeBoost);
+        _cooldownTimer = actualCooldown;
+
+        GetComponent<DuckController>()?.OnAbilityUsed();
+        AbilityUI.Instance?.OnAbilityUsed(actualCooldown);
     }
 }

@@ -9,11 +9,61 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22040c998c9e0b847addd2100ba59ae5, type: 3}
+  m_Script: {fileID: 11500000, guid: 00a0964a359b4f2428a2558e31a4721a, type: 3}
   m_Name: BasicDuck
-  m_EditorClassIdentifier: Assembly-CSharp::DuckData
+  m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: Basic Duck
-  baseSpeed: 20
-  speedUpgradeIncrement: 3
-  maxSpeedLevel: 10
-  speedUpgradeCostPerLevel: 0
+  baseMaxSpeed: 35
+  baseTurnSpeed: 70
+  baseGlideGravity: 12
+  baseMinSpeed: 5
+  neutralModel: {fileID: 0}
+  flightModel: {fileID: 0}
+  crashedModel: {fileID: 0}
+  launchSound: {fileID: 0}
+  crashSound: {fileID: 0}
+  abilitySound: {fileID: 0}
+  ability: {fileID: 11400000, guid: 1a62f0cd826a3ce4e897e73fe6a324ae, type: 2}
+  maxSpeedUpgrade:
+    upgradeName: Max Speed
+    maxLevels: 10
+    costPerLevel: 0
+    incrementPerLevel: 5
+  manoeuvrabilityUpgrade:
+    upgradeName: Manoeuvrability
+    maxLevels: 10
+    costPerLevel: 0
+    incrementPerLevel: 8
+  abilityUpgrade:
+    upgradeName: Ability
+    levels:
+    - abilityBoostIncrement: 0
+      cooldownReduction: 0
+      cost: 0
+    - abilityBoostIncrement: 5
+      cooldownReduction: 0
+      cost: 0
+    - abilityBoostIncrement: 0
+      cooldownReduction: 0.3
+      cost: 0
+    - abilityBoostIncrement: 5
+      cooldownReduction: 0
+      cost: 0
+    - abilityBoostIncrement: 0
+      cooldownReduction: 0.3
+      cost: 0
+    - abilityBoostIncrement: 5
+      cooldownReduction: 0
+      cost: 0
+    - abilityBoostIncrement: 0
+      cooldownReduction: 0.3
+      cost: 0
+    - abilityBoostIncrement: 5
+      cooldownReduction: 0
+      cost: 0
+    - abilityBoostIncrement: 0
+      cooldownReduction: 0.3
+      cost: 0
+    - abilityBoostIncrement: 0
+      cooldownReduction: 5
+      cost: 0
