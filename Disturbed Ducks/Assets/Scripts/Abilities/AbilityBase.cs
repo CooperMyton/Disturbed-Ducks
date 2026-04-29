@@ -12,8 +12,9 @@ public abstract class AbilityBase : ScriptableObject
     public float cooldown = 3f;
 
     /// <summary>
+    /// Upgrade boost is accumulated boost from ability upgrade levels
     /// Called by AbilityController when the player presses the ability key.
     /// user is the duck's GameObject — grab whatever components you need from it.
     /// </summary>
-    public abstract void Use(GameObject user);
+    public abstract void Use(GameObject user, float upgradeBoost);
 }

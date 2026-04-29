@@ -90,7 +90,7 @@ public class DuckFlightController : MonoBehaviour
         _rb.rotation = Quaternion.LookRotation(initialVector, Vector3.up);
         _isLaunched = true;
 
-        GetComponent<AbilityController>()?.OnLaunched();
+        GetComponent<DuckController>()?.OnLaunched();
         FlightUIManager.Instance?.OnLaunched();
     }
     public void ApplySpeedPenalty(float penalty)
@@ -199,5 +199,20 @@ public class DuckFlightController : MonoBehaviour
         Vector3 localEuler = modelRoot.localEulerAngles;
         localEuler.z = _currentBankAngle;
         modelRoot.localEulerAngles = localEuler;
+    }
+
+    public void SetBaseStats(float maxSpeed, float turnSpeed, float gravity, float minSpeed)
+    {
+        this.maxSpeed      = maxSpeed;
+        this.pitchSpeed    = turnSpeed;
+        this.yawSpeed      = turnSpeed;  // keeping pitch and yaw in sync for now
+        this.glideGravity  = gravity;
+        this.minSpeed      = minSpeed;
+    }
+
+    public void SetManoeuvrability(float turnSpeed)
+    {
+        pitchSpeed = turnSpeed;
+        yawSpeed   = turnSpeed;
     }
 }

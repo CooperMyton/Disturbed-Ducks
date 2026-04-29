@@ -2,116 +2,120 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// Displays the upgrade panel on crash.
-/// Pip indicators are generated at runtime — no manual setup needed per level.
-/// </summary>
 public class UpgradeUI : MonoBehaviour
 {
     [Header("Panel")]
     [SerializeField] private GameObject upgradePanel;
     [SerializeField] private TextMeshProUGUI duckNameText;
 
-    [Header("Speed Row")]
-    [SerializeField] private Transform tierContainer;         // HorizontalLayoutGroup lives here
-    [SerializeField] private TextMeshProUGUI levelText;       // "Level 3 / 10"
-    [SerializeField] private Button upgradeButton;
-    [SerializeField] private TextMeshProUGUI upgradeButtonText;
+    [Header("Level Labels")]
+    [SerializeField] private TextMeshProUGUI speedLevelText;
+    [SerializeField] private TextMeshProUGUI maneurLevelText;
+    [SerializeField] private TextMeshProUGUI abilityLevelText;
 
-    [Header("Pip Appearance")]
-    [SerializeField] private Color filledColor  = new Color(1f, 0.85f, 0f);   // gold
-    [SerializeField] private Color emptyColor   = new Color(1f, 1f, 1f, 0.25f);
-    [SerializeField] private float pipSize      = 24f;
-    [SerializeField] private float pipSpacing   = 6f;
-
-    private Image[] _pips;
+    [Header("Upgrade Buttons")]
+    [SerializeField] private Button speedButton;
+    [SerializeField] private Button maneurButton;
+    [SerializeField] private Button abilityButton;
+    [SerializeField] private TextMeshProUGUI abilityButtonText;
+    [SerializeField] private TextMeshProUGUI speedButtonText;
+    [SerializeField] private TextMeshProUGUI maneurButtonText;
 
     // -------------------------------------------------------------------------
 
+    public static UpgradeUI Instance { get; private set; }
+
     private void Awake()
     {
-        upgradeButton.onClick.AddListener(OnUpgradeClicked);
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
+
+        // Guard every button — if not wired up it won't crash
+        speedButton? .onClick.AddListener(() => OnUpgradeClicked(0));
+        maneurButton?.onClick.AddListener(() => OnUpgradeClicked(1));
+        abilityButton?.onClick.AddListener(() => OnUpgradeClicked(2));
         Hide();
     }
 
     private void Start()
     {
-        BuildPips();
-        Refresh();
+        Invoke(nameof(InitializeUI), 0.15f);
     }
 
-    // -------------------------------------------------------------------------
-
-    public void Show()
+    private void InitializeUI()
     {
-        upgradePanel.SetActive(true);
-        Refresh();
-    }
-
-    public void Hide()
-    {
-        upgradePanel.SetActive(false);
-    }
-
-    // -------------------------------------------------------------------------
-
-    private void BuildPips()
-    {
-        if (UpgradeManager.Instance == null) return;
-
-        int max = UpgradeManager.Instance.MaxSpeedLevel;
-        _pips = new Image[max];
-
-        // Get or add a layout group so pips space themselves automatically
-        HorizontalLayoutGroup layout = tierContainer.GetComponent<HorizontalLayoutGroup>();
-        if (layout == null) layout = tierContainer.gameObject.AddComponent<HorizontalLayoutGroup>();
-        layout.spacing = pipSpacing;
-        layout.childAlignment = TextAnchor.MiddleCenter;
-        layout.childForceExpandWidth = false;
-        layout.childForceExpandHeight = false;
-
-        for (int i = 0; i < max; i++)
+        if (UpgradeManager.Instance == null)
         {
-            GameObject pip = new GameObject($"Pip_{i + 1}", typeof(RectTransform), typeof(Image));
-            pip.transform.SetParent(tierContainer, false);
-
-            RectTransform rt = pip.GetComponent<RectTransform>();
-            rt.sizeDelta = new Vector2(pipSize, pipSize);
-
-            _pips[i] = pip.GetComponent<Image>();
+            Debug.LogError("UpgradeManager.Instance is null");
+            return;
         }
+        if (UpgradeManager.Instance.Definition == null)
+        {
+            Debug.LogError("DuckDefinition is null — assign BasicDuck on DuckController");
+            return;
+        }
+        Refresh();
     }
 
-    private void Refresh()
+    // -------------------------------------------------------------------------
+
+    public void Show()  { upgradePanel.SetActive(true);  Refresh(); }
+    public void Hide()  { upgradePanel.SetActive(false); }
+
+    public void Refresh()
     {
         if (UpgradeManager.Instance == null) return;
-
-        int current = UpgradeManager.Instance.SpeedLevel;
-        int max     = UpgradeManager.Instance.MaxSpeedLevel;
-        bool canUpgrade = UpgradeManager.Instance.CanUpgradeSpeed;
+        var um  = UpgradeManager.Instance;
+        var def = um.Definition;
+        if (def == null) return;
 
         // Duck name
         if (duckNameText != null)
-            duckNameText.text = UpgradeManager.Instance.DuckName;
+            duckNameText.text = def.duckName;
 
-        // Fill pips up to current level
-        if (_pips != null)
-            for (int i = 0; i < _pips.Length; i++)
-                _pips[i].color = i < current ? filledColor : emptyColor;
+        // Speed
+        if (speedLevelText != null)
+            speedLevelText.text =
+                $"{def.maxSpeedUpgrade.upgradeName}: " +
+                $"{um.SpeedLevel} / {def.maxSpeedUpgrade.maxLevels}";
+        if (speedButton != null)
+            speedButton.interactable = um.CanUpgradeSpeed;
+        if (speedButtonText != null)
+            speedButtonText.text = um.CanUpgradeSpeed ? "UPGRADE" : "MAX";
 
-        // Level label
-        if (levelText != null)
-            levelText.text = $"Level {current} / {max}";
+        // Manoeuvrability
+        if (maneurLevelText != null)
+            maneurLevelText.text =
+                $"{def.manoeuvrabilityUpgrade.upgradeName}: " +
+                $"{um.ManeurLevel} / {def.manoeuvrabilityUpgrade.maxLevels}";
+        if (maneurButton != null)
+            maneurButton.interactable = um.CanUpgradeManeur;
+        if (maneurButtonText != null)
+            maneurButtonText.text = um.CanUpgradeManeur ? "UPGRADE" : "MAX";
 
-        // Button state
-        upgradeButton.interactable = canUpgrade;
-        upgradeButtonText.text = canUpgrade ? "UPGRADE" : "MAX";
+        // Ability
+        bool abilityLocked = um.AbilityLevel == 0;
+        if (abilityLevelText != null)
+            abilityLevelText.text = abilityLocked
+                ? $"{def.abilityUpgrade.upgradeName}: LOCKED"
+                : $"{def.abilityUpgrade.upgradeName}: " +
+                  $"{um.AbilityLevel} / {def.abilityUpgrade.levels.Length}";
+        if (abilityButton != null)
+            abilityButton.interactable = um.CanUpgradeAbility;
+        if (abilityButtonText != null)
+            abilityButtonText.text = abilityLocked
+                ? "UNLOCK"
+                : (um.CanUpgradeAbility ? "UPGRADE" : "MAX");
     }
 
-    private void OnUpgradeClicked()
+    private void OnUpgradeClicked(int track)
     {
-        if (UpgradeManager.Instance == null) return;
-        UpgradeManager.Instance.TryUpgradeSpeed();
+        switch (track)
+        {
+            case 0: UpgradeManager.Instance?.TryUpgradeSpeed();           break;
+            case 1: UpgradeManager.Instance?.TryUpgradeManoeuvrability(); break;
+            case 2: UpgradeManager.Instance?.TryUpgradeAbility();         break;
+        }
         Refresh();
     }
 }

@@ -29,15 +29,20 @@ public class AbilityUI : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+        SetFill(1f);
+        cooldownText.text = "READY";
     }
 
     private void Start()
     {
-        //if (abilityController != null)
-            //abilityNameText.text = abilityController.AbilityName;
+        
 
         SetFill(1f);
-        cooldownText.text = "";
+        cooldownText.text = "READY";
+
+        // Make sure panel is visible from the start
+        if (abilityPanel != null)
+            abilityPanel.SetActive(true);
     }
 
     private void Update()
