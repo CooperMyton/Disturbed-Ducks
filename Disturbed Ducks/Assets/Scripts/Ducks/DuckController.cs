@@ -55,6 +55,7 @@ public class DuckController : MonoBehaviour
 
     public void OnLaunched()
     {
+        _abilityController?.OnLaunched();
         _soundController?.PlayLaunch();
         _modelController?.SetFlight();
         _flightTrail?.SetEmitting(true);
@@ -62,6 +63,7 @@ public class DuckController : MonoBehaviour
 
     public void OnCrashed()
     {
+        _abilityController?.OnCrashed();
         _soundController?.PlayCrash();
         _modelController?.SetCrashed();
         _flightTrail?.SetEmitting(false);
@@ -69,6 +71,7 @@ public class DuckController : MonoBehaviour
 
     public void OnReset()
     {
+        _abilityController?.OnReset();
         _modelController?.SetNeutral();
         _flightTrail?.Clear();
         _flightTrail?.SetEmitting(false);
@@ -77,5 +80,10 @@ public class DuckController : MonoBehaviour
     public void OnAbilityUsed()
     {
         _soundController?.PlayAbility();
+    }
+    public void ApplyDefinitionFromType(DuckDefinition newDefinition)
+    {
+        definition = newDefinition;
+        ApplyDefinition();
     }
 }

@@ -10,6 +10,13 @@ public class DuckDefinition : ScriptableObject
     [Header("Identity")]
     public string duckName = "Basic Duck";
 
+    [Header("Purchase")]
+    [Tooltip("Cost to buy the first duck of this type")]
+    public int basePurchaseCost = 50;
+    [Tooltip("Each additional duck of this type costs this much more")]
+    public float purchaseCostMultiplier = 1.5f;
+
+
     [Header("Base Stats")]
     [Tooltip("Hard speed cap before upgrades")]
     public float baseMaxSpeed = 35f;
@@ -49,6 +56,11 @@ public class DuckDefinition : ScriptableObject
     };
 
     public AbilityUpgradeTrack abilityUpgrade = new AbilityUpgradeTrack();
+
+    public int GetPurchaseCost(int currentlyOwned)
+    {
+        return Mathf.RoundToInt(basePurchaseCost * Mathf.Pow(purchaseCostMultiplier, currentlyOwned));
+    }
 }
 
 // -------------------------------------------------------------------------
@@ -79,6 +91,6 @@ public class AbilityUpgradeTrack
 {
     public string upgradeName = "Ability";
     [Tooltip("Level 1 = unlock. Levels 2-10 = improvements. " +
-             "Set abilityBoostIncrement OR cooldownReduction per level to control what alternates.")]
+            "Set abilityBoostIncrement OR cooldownReduction per level to control what alternates.")]
     public AbilityUpgradeLevelData[] levels = new AbilityUpgradeLevelData[10];
 }

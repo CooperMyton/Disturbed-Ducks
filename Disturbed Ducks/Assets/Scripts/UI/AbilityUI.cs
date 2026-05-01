@@ -3,9 +3,6 @@ using UnityEngine.UI;
 using TMPro;
 
 
-/// Displays ability name and cooldown radial fill.
-/// Singleton so AbilityController can reach it without a direct reference.
-
 public class AbilityUI : MonoBehaviour
 {
     public static AbilityUI Instance { get; private set; }
@@ -13,14 +10,12 @@ public class AbilityUI : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject abilityPanel;
     [SerializeField] private TextMeshProUGUI abilityNameText;
-    [SerializeField] private Image cooldownFill;       // radial fill image
+    [SerializeField] private Image cooldownFill;
     [SerializeField] private TextMeshProUGUI cooldownText;
-
-    [Header("References")]
     [SerializeField] private AbilityController abilityController;
 
-    private float _cooldownTotal;
-    private float _cooldownRemaining;
+    private float _cooldownTotal = 1f;
+    private float _cooldownRemaining = 0f;
     private bool _onCooldown = false;
 
     // -------------------------------------------------------------------------
@@ -29,65 +24,83 @@ public class AbilityUI : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        SetFill(1f);
-        cooldownText.text = "READY";
     }
 
     private void Start()
     {
-        
+        Invoke(nameof(InitDisplay), 0.2f);
+    }
+
+    private void InitDisplay()
+    {
+        if (abilityController != null && abilityNameText != null)
+            abilityNameText.text = abilityController.AbilityName;
 
         SetFill(1f);
-        cooldownText.text = "READY";
 
-        // Make sure panel is visible from the start
+        if (cooldownText != null)
+            cooldownText.text = "READY";
+
         if (abilityPanel != null)
             abilityPanel.SetActive(true);
     }
 
     private void Update()
     {
-        if (!_onCooldown) return;
 
         _cooldownRemaining -= Time.deltaTime;
 
         if (_cooldownRemaining <= 0f)
         {
             _onCooldown = false;
+            _cooldownRemaining = 0f;
             SetFill(1f);
-            cooldownText.text = "READY";
+            if (cooldownText != null)
+                cooldownText.text = "READY";
+            Debug.Log("Ability ready");
             return;
         }
 
         float ratio = _cooldownRemaining / _cooldownTotal;
         SetFill(ratio);
-        cooldownText.text = $"{_cooldownRemaining:F1}s";
+
+        if (cooldownText != null)
+            cooldownText.text = $"{_cooldownRemaining:F1}s";
     }
 
     // -------------------------------------------------------------------------
 
     public void OnAbilityUsed(float cooldownDuration)
     {
-        _cooldownTotal = cooldownDuration;
+        Debug.Log($"AbilityUI.OnAbilityUsed called — duration: {cooldownDuration}");
+        _cooldownTotal     = cooldownDuration;
         _cooldownRemaining = cooldownDuration;
-        _onCooldown = true;
-        cooldownText.text = $"{_cooldownRemaining:F1}s";
+        _onCooldown        = true;
+
+        if (cooldownText != null)
+            cooldownText.text = $"{_cooldownRemaining:F1}s";
     }
 
-    public void Show() => abilityPanel.SetActive(true);
-    public void Hide() => abilityPanel.SetActive(false);
+    public void ResetCooldown()
+    {
+        Debug.Log($"AbilityUI.ResetCooldown called from: {System.Environment.StackTrace}");
+
+        _onCooldown        = false;
+        _cooldownRemaining = 0f;
+        SetFill(1f);
+
+        if (cooldownText != null)
+            cooldownText.text = "READY";
+    }
+
+    public void Show() { if (abilityPanel != null) abilityPanel.SetActive(true); }
+    public void Hide() { if (abilityPanel != null) abilityPanel.SetActive(false); }
 
     private void SetFill(float ratio)
     {
         if (cooldownFill != null)
             cooldownFill.fillAmount = ratio;
     }
+    
 
-    public void ResetCooldown()
-    {
-        _onCooldown = false;
-        _cooldownRemaining = 0f;
-        SetFill(1f);
-        cooldownText.text = "READY";
-    }
 }

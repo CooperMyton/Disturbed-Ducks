@@ -6,17 +6,35 @@ public class DuckSpawner : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject duckRoot;
     [SerializeField] private DuckImpact duckImpact;
-    [SerializeField] private LauncherController launcherController; // replaces manual spawn point
+    [SerializeField] private DuckController duckController;
+    [SerializeField] private LauncherController launcherController;
 
-    [Header("Reset Key")]
-    [SerializeField] private Key resetKey = Key.R;
+    [Header("Keys")]
+    [SerializeField] private Key nextDuckKey = Key.R;
 
     // -------------------------------------------------------------------------
 
     private void Update()
     {
-        if (Keyboard.current[resetKey].wasPressedThisFrame)
-            ResetDuck();
+        if (Keyboard.current[nextDuckKey].wasPressedThisFrame)
+            TryNextDuck();
+    }
+
+    public void TryNextDuck()
+    {
+        //Debug.Log($"TryNextDuck — HasAnyRemaining: {PlayerDuckInventory.Instance?.HasAnyRemaining()}, " +
+        //        $"TotalRemaining: {PlayerDuckInventory.Instance?.TotalRemaining()}");
+
+        if (PlayerDuckInventory.Instance == null) return;
+        PlayerDuckInventory.Instance.UseSelectedDuck();
+        if (!PlayerDuckInventory.Instance.HasAnyRemaining())
+        {
+            Debug.Log("No ducks remaining — showing EndOfAttemptUI");
+            EndOfAttemptUI.Instance?.Show();
+            return;
+        }
+
+        ResetDuck();
     }
 
     public void ResetDuck()
@@ -29,14 +47,26 @@ public class DuckSpawner : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
 
-        // Launcher owns the position — let it handle the reset
+        // Apply selected duck type to DuckController
+        DuckDefinition selected = PlayerDuckInventory.Instance?.SelectedType;
+        if (selected != null)
+            duckController.ApplyDefinitionFromType(selected);
+
+        UpgradeManager.Instance?.ApplyCurrentStats();    
+
         launcherController.ResetToLauncher();
-
-        // Re-enable flight state after launcher resets position
         duckImpact.Reset();
-
         FlightUIManager.Instance?.ShowLaunchPrompt();
 
         Debug.Log("Duck reset to launcher.");
+    }
+
+    /// Called by EndOfAttemptUI restart button
+    public void RestartAttempt()
+    {
+        PlayerDuckInventory.Instance?.ResetRemainingCounts();
+        StageManager.RestartCurrentStage();
+        ResetDuck(); // ← ApplyDefinitionFromType fires here
+        LoadoutUI.Instance?.RebuildAndShow(); // ← now sees the final state
     }
 }

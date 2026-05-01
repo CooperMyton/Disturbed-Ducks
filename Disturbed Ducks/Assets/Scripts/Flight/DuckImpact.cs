@@ -60,8 +60,8 @@ public class DuckImpact : MonoBehaviour
             cameraTarget.FreezeYaw();
 
         GetComponent<AbilityController>()?.OnCrashed();
-
         GetComponent<DuckController>()?.OnCrashed();
+
 
         FlightUIManager.Instance?.OnCrashed();
 

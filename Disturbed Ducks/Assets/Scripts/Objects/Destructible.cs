@@ -20,6 +20,9 @@ public class Destructible : MonoBehaviour
     [SerializeField] private Color healthyColor = Color.white;
     [SerializeField] private Color damagedColor = Color.red;
 
+    [Header("Currency Reward")]
+    [SerializeField] private int currencyOnBreak = 10;
+
     private float _lastDamageTime = -999f;
 
     // -------------------------------------------------------------------------
@@ -63,14 +66,15 @@ public class Destructible : MonoBehaviour
 
     private void Break(Rigidbody attacker)
     {
-        // Notify the duck so it loses speed
         if (attacker != null)
         {
             DuckFlightController duck = attacker.GetComponent<DuckFlightController>();
             duck?.ApplySpeedPenalty(speedPenaltyOnBreak);
         }
 
-        Debug.Log($"{gameObject.name} destroyed!");
+        CurrencyManager.Instance?.Add(currencyOnBreak);
+
+        Debug.Log($"{gameObject.name} destroyed! +{currencyOnBreak} currency");
         Destroy(gameObject);
     }
 

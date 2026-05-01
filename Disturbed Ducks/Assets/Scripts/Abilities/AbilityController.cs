@@ -30,19 +30,15 @@ public class AbilityController : MonoBehaviour
         if (_cooldownTimer > 0f)
             _cooldownTimer -= Time.deltaTime;
 
-
-        //if (Keyboard.current[abilityKey].wasPressedThisFrame && IsReady)
-        //    TriggerAbility();
         if (Keyboard.current[abilityKey].wasPressedThisFrame)
         {
-            Debug.Log($"Shift pressed — isFlying: {_isFlying}, isUnlocked: {_isUnlocked}, " +
-                    $"ability null: {_ability == null}, cooldown: {_cooldownTimer:F2}, isReady: {IsReady}");
+            //Debug.Log($"Shift pressed — isFlying: {_isFlying}, isUnlocked: {_isUnlocked}, " +
+            //        $"ability null: {_ability == null}, cooldown: {_cooldownTimer:F2}, isReady: {IsReady}");
 
-            if (IsReady)
+            // Only trigger if actually flying
+            if (IsReady && _isFlying)
                 TriggerAbility();
         }
-
-        if (!_isFlying || !_isUnlocked) return;
     }
 
     // -------------------------------------------------------------------------
@@ -79,10 +75,11 @@ public class AbilityController : MonoBehaviour
 
     private void TriggerAbility()
     {
-        Debug.Log($"TriggerAbility called — ability: {_ability?.abilityName}, boost: {_upgradeBoost}");
+        //Debug.Log($"TriggerAbility — cooldown will be: {CurrentCooldown:F2}");
         float actualCooldown = CurrentCooldown;
         _ability.Use(gameObject, _upgradeBoost);
         _cooldownTimer = actualCooldown;
+        //Debug.Log($"TriggerAbility — cooldownTimer set to: {_cooldownTimer:F2}");
 
         GetComponent<DuckController>()?.OnAbilityUsed();
         AbilityUI.Instance?.OnAbilityUsed(actualCooldown);

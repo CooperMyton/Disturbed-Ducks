@@ -18,27 +18,42 @@ public class FlightUIManager : MonoBehaviour
     private void Start()
     {
         ShowLaunchPrompt();
-        Invoke(nameof(InitializeUI), 0.1f);
+        Invoke(nameof(InitializeUI), 0.5f);
     }
 
     private void InitializeUI()
     {
         AbilityUI.Instance?.Show();
-        //ShowLaunchPrompt();
+        ShowLaunchPrompt();
     }
 
     public void ShowLaunchPrompt()
     {
         upgradeUI?.Hide();
-        SetPrompt("Use WASD / Arrow Keys to aim and fly, X and Z to set launcher, shift to use an ability, and space to launch");
+        EndOfAttemptUI.Instance?.Hide();
+        LoadoutUI.Instance?.Show();
+        SetPrompt("Select duck and use WASD to aim, Space to launch");
     }
 
-    public void OnLaunched() => SetPrompt("");
+    public void OnLaunched()
+    {
+        LoadoutUI.Instance?.Hide();
+        SetPrompt("");
+    }
 
     public void OnCrashed()
     {
-        SetPrompt("Press R to Respawn");
-        upgradeUI?.Show();
+        SetPrompt("Press R for next duck");
+
+        if (PlayerDuckInventory.Instance != null &&
+            !PlayerDuckInventory.Instance.HasAnyRemaining())
+        {
+            EndOfAttemptUI.Instance?.Show();
+        }
+        else
+        {
+            upgradeUI?.Show();
+        }
     }
 
     private void SetPrompt(string message)
