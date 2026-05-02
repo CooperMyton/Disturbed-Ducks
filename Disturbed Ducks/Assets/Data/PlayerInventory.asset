@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 966c395d0954f6348a929f7da487585f, type: 3}
+  m_Name: PlayerInventory
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
+  currency: 0
+  ownedDuckTypes:
+  - {fileID: 11400000, guid: 16029683c5870394088368d81ec3deab, type: 2}
+  ownedDuckCounts: 01000000
+  speedLevels: 00000000
+  maneurLevels: 00000000
+  abilityLevels: 00000000
+  startingDuck: {fileID: 11400000, guid: 16029683c5870394088368d81ec3deab, type: 2}
+  startingDuckCount: 1
+  clearedStageIds: []

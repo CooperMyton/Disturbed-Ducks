@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: BasicDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: Basic Duck
-  baseMaxSpeed: 35
-  baseTurnSpeed: 70
+  basePurchaseCost: 10
+  purchaseCostMultiplier: 1.5
+  baseMaxSpeed: 30
+  baseTurnSpeed: 40
   baseGlideGravity: 12
   baseMinSpeed: 5
   neutralModel: {fileID: 0}
@@ -26,44 +28,80 @@ MonoBehaviour:
   ability: {fileID: 11400000, guid: 1a62f0cd826a3ce4e897e73fe6a324ae, type: 2}
   maxSpeedUpgrade:
     upgradeName: Max Speed
-    maxLevels: 10
-    costPerLevel: 0
-    incrementPerLevel: 5
+    levels:
+    - statIncrement: 3
+      cost: 0
+    - statIncrement: 3
+      cost: 10
+    - statIncrement: 3
+      cost: 20
+    - statIncrement: 3
+      cost: 50
+    - statIncrement: 3
+      cost: 100
+    - statIncrement: 3
+      cost: 250
+    - statIncrement: 3
+      cost: 500
+    - statIncrement: 3
+      cost: 1000
+    - statIncrement: 3
+      cost: 5000
+    - statIncrement: 5
+      cost: 10000
   manoeuvrabilityUpgrade:
     upgradeName: Manoeuvrability
-    maxLevels: 10
-    costPerLevel: 0
-    incrementPerLevel: 8
+    levels:
+    - statIncrement: 5
+      cost: 5
+    - statIncrement: 5
+      cost: 15
+    - statIncrement: 5
+      cost: 35
+    - statIncrement: 5
+      cost: 75
+    - statIncrement: 5
+      cost: 125
+    - statIncrement: 5
+      cost: 300
+    - statIncrement: 5
+      cost: 650
+    - statIncrement: 5
+      cost: 1250
+    - statIncrement: 5
+      cost: 6000
+    - statIncrement: 10
+      cost: 10000
   abilityUpgrade:
     upgradeName: Ability
     levels:
     - abilityBoostIncrement: 0
       cooldownReduction: 0
-      cost: 0
+      cost: 5
     - abilityBoostIncrement: 5
       cooldownReduction: 0
-      cost: 0
+      cost: 10
     - abilityBoostIncrement: 0
       cooldownReduction: 0.3
-      cost: 0
+      cost: 10
     - abilityBoostIncrement: 5
       cooldownReduction: 0
-      cost: 0
+      cost: 20
     - abilityBoostIncrement: 0
       cooldownReduction: 0.3
-      cost: 0
+      cost: 20
     - abilityBoostIncrement: 5
       cooldownReduction: 0
-      cost: 0
+      cost: 50
     - abilityBoostIncrement: 0
       cooldownReduction: 0.3
-      cost: 0
+      cost: 50
     - abilityBoostIncrement: 5
       cooldownReduction: 0
-      cost: 0
+      cost: 100
     - abilityBoostIncrement: 0
       cooldownReduction: 0.3
-      cost: 0
-    - abilityBoostIncrement: 0
-      cooldownReduction: 5
-      cost: 0
+      cost: 100
+    - abilityBoostIncrement: 5
+      cooldownReduction: 0.3
+      cost: 500
