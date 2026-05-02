@@ -57,7 +57,6 @@ public class AbilityUI : MonoBehaviour
             SetFill(1f);
             if (cooldownText != null)
                 cooldownText.text = "READY";
-            Debug.Log("Ability ready");
             return;
         }
 

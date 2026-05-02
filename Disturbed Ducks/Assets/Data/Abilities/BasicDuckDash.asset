@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d93482e53326e343bd23c57f5e40425, type: 3}
   m_Name: BasicDuckDash
   m_EditorClassIdentifier: Assembly-CSharp::DashAbility
-  abilityName: Ability
+  abilityName: Dash
   cooldown: 3
-  speedBoost: 10
+  baseSpeedBoost: 8

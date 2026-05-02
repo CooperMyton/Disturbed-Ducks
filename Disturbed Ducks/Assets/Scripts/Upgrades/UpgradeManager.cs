@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 public class UpgradeManager : MonoBehaviour
 {
     public static UpgradeManager Instance { get; private set; }
@@ -15,7 +14,7 @@ public class UpgradeManager : MonoBehaviour
     private AbilityController Ability =>
         duckController?.GetComponent<AbilityController>();
 
-    public DuckDefinition Definition  => duckController?.Definition;
+    public DuckDefinition Definition => duckController?.Definition;
     public int SpeedLevel   => inventory != null && Def != null
         ? inventory.GetSpeedLevel(Def)   : 0;
     public int ManeurLevel  => inventory != null && Def != null
@@ -24,9 +23,9 @@ public class UpgradeManager : MonoBehaviour
         ? inventory.GetAbilityLevel(Def) : 0;
 
     public bool CanUpgradeSpeed =>
-        Def != null && SpeedLevel  < Def.maxSpeedUpgrade.maxLevels;
+        Def != null && SpeedLevel < Def.maxSpeedUpgrade.levels.Length;
     public bool CanUpgradeManeur =>
-        Def != null && ManeurLevel < Def.manoeuvrabilityUpgrade.maxLevels;
+        Def != null && ManeurLevel < Def.manoeuvrabilityUpgrade.levels.Length;
     public bool CanUpgradeAbility =>
         Def != null && AbilityLevel < Def.abilityUpgrade.levels.Length;
 
@@ -38,7 +37,6 @@ public class UpgradeManager : MonoBehaviour
         Instance = this;
     }
 
-
     private void Start()
     {
         Invoke(nameof(ApplyCurrentStats), 0.1f);
@@ -49,15 +47,14 @@ public class UpgradeManager : MonoBehaviour
     public bool TryUpgradeSpeed()
     {
         if (!CanUpgradeSpeed) return false;
-        if (!CanAfford(Def.maxSpeedUpgrade.costPerLevel)) return false;
+        var levelData = Def.maxSpeedUpgrade.levels[SpeedLevel];
+        if (!CanAfford(levelData.cost)) return false;
+        if (levelData.cost > 0) CurrencyManager.Instance?.Spend(levelData.cost);
 
         int newLevel = SpeedLevel + 1;
         inventory.SetSpeedLevel(Def, newLevel);
 
-        float newMax = Def.baseMaxSpeed +
-            (newLevel * Def.maxSpeedUpgrade.incrementPerLevel);
-        Flight?.SetMaxSpeed(newMax);
-
+        Flight?.SetMaxSpeed(CalcSpeed(newLevel));
         UpgradeUI.Instance?.Refresh();
         return true;
     }
@@ -65,15 +62,14 @@ public class UpgradeManager : MonoBehaviour
     public bool TryUpgradeManoeuvrability()
     {
         if (!CanUpgradeManeur) return false;
-        if (!CanAfford(Def.manoeuvrabilityUpgrade.costPerLevel)) return false;
+        var levelData = Def.manoeuvrabilityUpgrade.levels[ManeurLevel];
+        if (!CanAfford(levelData.cost)) return false;
+        if (levelData.cost > 0) CurrencyManager.Instance?.Spend(levelData.cost);
 
         int newLevel = ManeurLevel + 1;
         inventory.SetManeurLevel(Def, newLevel);
 
-        float newTurn = Def.baseTurnSpeed +
-            (newLevel * Def.manoeuvrabilityUpgrade.incrementPerLevel);
-        Flight?.SetManoeuvrability(newTurn);
-
+        Flight?.SetManoeuvrability(CalcTurnSpeed(newLevel));
         UpgradeUI.Instance?.Refresh();
         return true;
     }
@@ -81,9 +77,9 @@ public class UpgradeManager : MonoBehaviour
     public bool TryUpgradeAbility()
     {
         if (!CanUpgradeAbility) return false;
-
         var levelData = Def.abilityUpgrade.levels[AbilityLevel];
         if (!CanAfford(levelData.cost)) return false;
+        if (levelData.cost > 0) CurrencyManager.Instance?.Spend(levelData.cost);
 
         int newLevel = AbilityLevel + 1;
         inventory.SetAbilityLevel(Def, newLevel);
@@ -107,13 +103,8 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        float maxSpeed = Def.baseMaxSpeed +
-            (SpeedLevel * Def.maxSpeedUpgrade.incrementPerLevel);
-        Flight.SetMaxSpeed(maxSpeed);
-
-        float turnSpeed = Def.baseTurnSpeed +
-            (ManeurLevel * Def.manoeuvrabilityUpgrade.incrementPerLevel);
-        Flight.SetManoeuvrability(turnSpeed);
+        Flight.SetMaxSpeed(CalcSpeed(SpeedLevel));
+        Flight.SetManoeuvrability(CalcTurnSpeed(ManeurLevel));
 
         if (Ability != null)
         {
@@ -125,15 +116,34 @@ public class UpgradeManager : MonoBehaviour
             for (int i = 1; i < AbilityLevel &&
                 i < Def.abilityUpgrade.levels.Length; i++)
             {
-                totalBoost   += Def.abilityUpgrade.levels[i].abilityBoostIncrement;
+                totalBoost    += Def.abilityUpgrade.levels[i].abilityBoostIncrement;
                 totalCooldown += Def.abilityUpgrade.levels[i].cooldownReduction;
             }
             if (AbilityLevel > 1)
                 Ability.ApplyAbilityUpgrade(totalBoost, totalCooldown);
         }
 
-        Debug.Log($"ApplyCurrentStats complete — maxSpeed: {maxSpeed}, " +
-                $"turnSpeed: {turnSpeed}, abilityLevel: {AbilityLevel}");
+        Debug.Log($"ApplyCurrentStats complete — maxSpeed: {CalcSpeed(SpeedLevel)}, " +
+                  $"turnSpeed: {CalcTurnSpeed(ManeurLevel)}, abilityLevel: {AbilityLevel}");
+    }
+
+    // -------------------------------------------------------------------------
+
+    // Sum increments for all purchased levels
+    private float CalcSpeed(int level)
+    {
+        float val = Def.baseMaxSpeed;
+        for (int i = 0; i < level && i < Def.maxSpeedUpgrade.levels.Length; i++)
+            val += Def.maxSpeedUpgrade.levels[i].statIncrement;
+        return val;
+    }
+
+    private float CalcTurnSpeed(int level)
+    {
+        float val = Def.baseTurnSpeed;
+        for (int i = 0; i < level && i < Def.manoeuvrabilityUpgrade.levels.Length; i++)
+            val += Def.manoeuvrabilityUpgrade.levels[i].statIncrement;
+        return val;
     }
 
     private bool CanAfford(int cost)

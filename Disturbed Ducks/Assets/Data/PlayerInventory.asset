@@ -15,10 +15,10 @@ MonoBehaviour:
   currency: 0
   ownedDuckTypes:
   - {fileID: 11400000, guid: 16029683c5870394088368d81ec3deab, type: 2}
-  ownedDuckCounts: 03000000
-  speedLevels: 02000000
-  maneurLevels: 02000000
-  abilityLevels: 02000000
+  ownedDuckCounts: 01000000
+  speedLevels: 00000000
+  maneurLevels: 00000000
+  abilityLevels: 00000000
   startingDuck: {fileID: 11400000, guid: 16029683c5870394088368d81ec3deab, type: 2}
-  startingDuckCount: 3
+  startingDuckCount: 1
   clearedStageIds: []
