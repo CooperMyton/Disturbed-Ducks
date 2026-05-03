@@ -12,6 +12,34 @@ public class DuckSpawner : MonoBehaviour
     [Header("Keys")]
     [SerializeField] private Key nextDuckKey = Key.R;
 
+    // True while duck is in the air — prevents mid-flight definition swaps
+    private bool _inFlight = false;
+
+    // -------------------------------------------------------------------------
+
+    private void Start()
+    {
+        if (PlayerDuckInventory.Instance != null)
+            PlayerDuckInventory.Instance.OnSelectedTypeChanged += OnSelectedTypeChanged;
+    }
+
+    private void OnDestroy()
+    {
+        if (PlayerDuckInventory.Instance != null)
+            PlayerDuckInventory.Instance.OnSelectedTypeChanged -= OnSelectedTypeChanged;
+    }
+
+    // When the player picks a different duck from the loadout UI while the duck
+    // is still on the launcher, immediately swap the definition so the correct
+    // duck launches.
+    private void OnSelectedTypeChanged(DuckDefinition selected)
+    {
+        if (_inFlight) return;
+        if (selected == null) return;
+        duckController.ApplyDefinitionFromType(selected);
+        UpgradeManager.Instance?.ApplyCurrentStats();
+    }
+
     // -------------------------------------------------------------------------
 
     private void Update()
@@ -22,9 +50,6 @@ public class DuckSpawner : MonoBehaviour
 
     public void TryNextDuck()
     {
-        //Debug.Log($"TryNextDuck — HasAnyRemaining: {PlayerDuckInventory.Instance?.HasAnyRemaining()}, " +
-        //        $"TotalRemaining: {PlayerDuckInventory.Instance?.TotalRemaining()}");
-
         if (PlayerDuckInventory.Instance == null) return;
         PlayerDuckInventory.Instance.UseSelectedDuck();
         if (!PlayerDuckInventory.Instance.HasAnyRemaining())
@@ -39,20 +64,20 @@ public class DuckSpawner : MonoBehaviour
 
     public void ResetDuck()
     {
-        Rigidbody rb = duckRoot.GetComponent<Rigidbody>();
+        _inFlight = false;
 
+        Rigidbody rb = duckRoot.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
 
-        // Apply selected duck type to DuckController
         DuckDefinition selected = PlayerDuckInventory.Instance?.SelectedType;
         if (selected != null)
             duckController.ApplyDefinitionFromType(selected);
 
-        UpgradeManager.Instance?.ApplyCurrentStats();    
+        UpgradeManager.Instance?.ApplyCurrentStats();
 
         launcherController.ResetToLauncher();
         duckImpact.Reset();
@@ -61,12 +86,19 @@ public class DuckSpawner : MonoBehaviour
         Debug.Log("Duck reset to launcher.");
     }
 
+    // Call this from wherever launch is triggered (LauncherController or DuckController)
+    // so DuckSpawner knows not to swap definitions mid-flight.
+    public void OnDuckLaunched()
+    {
+        _inFlight = true;
+    }
+
     /// Called by EndOfAttemptUI restart button
     public void RestartAttempt()
     {
         PlayerDuckInventory.Instance?.ResetRemainingCounts();
         StageManager.RestartCurrentStage();
-        ResetDuck(); // ← ApplyDefinitionFromType fires here
-        LoadoutUI.Instance?.RebuildAndShow(); // ← now sees the final state
+        ResetDuck();
+        LoadoutUI.Instance?.RebuildAndShow();
     }
 }

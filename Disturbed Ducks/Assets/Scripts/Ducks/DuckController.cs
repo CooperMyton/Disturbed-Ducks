@@ -48,6 +48,8 @@ public class DuckController : MonoBehaviour
         _soundController?.SetDefinition(definition);
         _modelController?.SetDefinition(definition);
         _abilityController?.SetAbility(definition.ability);
+        AbilityUI.Instance?.RefreshName(); 
+        GetComponent<ExplosionOnCrash>()?.SetExplosionDefinition(definition.explosionDefinition);
     }
 
     // -------------------------------------------------------------------------
@@ -63,6 +65,7 @@ public class DuckController : MonoBehaviour
 
     public void OnCrashed()
     {
+        GetComponent<ExplosionOnCrash>()?.OnCrashed();
         _abilityController?.OnCrashed();
         _soundController?.PlayCrash();
         _modelController?.SetCrashed();
@@ -72,6 +75,7 @@ public class DuckController : MonoBehaviour
     public void OnReset()
     {
         _abilityController?.OnReset();
+        GetComponent<ExplosionOnCrash>()?.ResetFlight();
         _modelController?.SetNeutral();
         _flightTrail?.Clear();
         _flightTrail?.SetEmitting(false);

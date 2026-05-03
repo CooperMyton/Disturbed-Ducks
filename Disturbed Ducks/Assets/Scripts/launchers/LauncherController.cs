@@ -17,6 +17,9 @@ public class LauncherController : MonoBehaviour
     [Tooltip("How fast WASD moves the duck during aiming, in units per second")]
     [SerializeField] private float aimSpeed = 5f;
 
+    // Serialized reference so we don't GetComponent every launch
+    [SerializeField] private DuckSpawner duckSpawner;
+
     private DuckFlightController _flightScript;
     private Rigidbody _rb;
     private bool _inFlight = false;
@@ -91,21 +94,23 @@ public class LauncherController : MonoBehaviour
 
     private void MoveSlingshotString()
     {
-        // keep the two ends fixed, and update the middle based on the position of the bird
-        if(leftBarPosition && rightBarPosition)
+        if (leftBarPosition && rightBarPosition)
         {
-            slingshotString.SetPosition(0,leftBarPosition.position);
-            //move the slingshot position slightly behind the bird position while launching
-            Vector3 slingshotBackLeft = new Vector3(_launchPosition.x - 0.25f, _launchPosition.y, _launchPosition.z - .6f);
-            Vector3 slingshotBackright = new Vector3(_launchPosition.x + 0.25f, _launchPosition.y, _launchPosition.z - .6f);
-            slingshotString.SetPosition(1,slingshotBackLeft);
-            slingshotString.SetPosition(2,slingshotBackright);
-            slingshotString.SetPosition(3,rightBarPosition.position);
+            slingshotString.SetPosition(0, leftBarPosition.position);
+            Vector3 slingshotBackLeft  = new Vector3(_launchPosition.x - 0.25f, _launchPosition.y, _launchPosition.z - .6f);
+            Vector3 slingshotBackRight = new Vector3(_launchPosition.x + 0.25f, _launchPosition.y, _launchPosition.z - .6f);
+            slingshotString.SetPosition(1, slingshotBackLeft);
+            slingshotString.SetPosition(2, slingshotBackRight);
+            slingshotString.SetPosition(3, rightBarPosition.position);
         }
     }
 
     private void LaunchDuck()
     {
+        // Notify DuckSpawner that the duck is now in flight so pre-launch
+        // definition swaps are blocked until the next reset.
+        duckSpawner?.OnDuckLaunched();
+
         if (launchDirectionTarget == null)
         {
             _flightScript.StartFlight(launchSpeed, transform.forward);
@@ -115,8 +120,6 @@ public class LauncherController : MonoBehaviour
         Vector3 offset = launchDirectionTarget.position - _launchPosition;
         float launchPower = offset.magnitude;
 
-        // Guard: if duck is too close to the target point, offset is unreliable
-        // Use a minimum threshold to ensure direction is always meaningful
         if (launchPower < 0.1f)
         {
             Debug.LogWarning("Launch position too close to target — using default forward direction.");
@@ -147,7 +150,6 @@ public class LauncherController : MonoBehaviour
             duckToLaunch.transform.position = _originalLaunchPosition;
         }
 
-        // Reset string visual to match starting position
         MoveSlingshotString();
     }
 }

@@ -49,6 +49,8 @@ public class PlayerDuckInventory : MonoBehaviour
 
     private void Start()
     {
+        foreach (var def in inventory.ownedDuckTypes)
+            Debug.Log($"Owned duck: {def?.duckName}, instanceID: {def?.GetInstanceID()}");
         ResetRemainingCounts();
         if (inventory.ownedDuckTypes.Count > 0)
             SelectType(inventory.ownedDuckTypes[0]);

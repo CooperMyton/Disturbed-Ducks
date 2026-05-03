@@ -10,6 +10,7 @@ public abstract class AbilityBase : ScriptableObject
     [Header("Ability Info")]
     public string abilityName = "Ability";
     public float cooldown = 3f;
+    public virtual bool IsSingleUse => false;
 
     /// <summary>
     /// Upgrade boost is accumulated boost from ability upgrade levels

@@ -38,6 +38,9 @@ public class DuckDefinition : ScriptableObject
     [Header("Ability")]
     public AbilityBase ability;
 
+    [Header("Explosion — Bomb Duck only, leave null for Basic Duck")]
+    public ExplosionDefinition explosionDefinition;
+
     [Header("Upgrades")]
     public StatUpgradeTrack maxSpeedUpgrade = new StatUpgradeTrack
     {
@@ -80,12 +83,18 @@ public class StatUpgradeTrack
 [System.Serializable]
 public class AbilityUpgradeLevelData
 {
-    [Tooltip("Flat boost added to ability power at this level. Set to 0 for a cooldown level.")]
-    public float abilityBoostIncrement = 0f;
-    [Tooltip("Seconds removed from cooldown at this level. Set to 0 for a boost level.")]
-    public float cooldownReduction = 0f;
-    [Tooltip("Cost for this specific level — lets you make later levels more expensive")]
-    public int cost = 0;
+    [Tooltip("Speed boost for Dash ability — leave 0 for Bomb Duck levels")]
+    public float abilityBoostIncrement   = 0f;
+    [Tooltip("Cooldown reduction for Dash — leave 0 for Bomb Duck levels")]
+    public float cooldownReduction       = 0f;
+    [Tooltip("Explosion radius increase — for Bomb Duck")]
+    public float radiusIncrement         = 0f;
+    [Tooltip("Explosion damage increase — for Bomb Duck")]
+    public float damageIncrement         = 0f;
+    [Tooltip("Seconds removed from explosion delay — for Bomb Duck")]
+    public float explosionDelayReduction = 0f;
+    [Tooltip("Currency cost for this level")]
+    public int   cost                    = 0;
 }
 
 [System.Serializable]

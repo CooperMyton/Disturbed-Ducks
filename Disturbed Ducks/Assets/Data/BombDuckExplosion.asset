@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bea504e3c10a484492f64fd16944f20, type: 3}
+  m_Name: BombDuckExplosion
+  m_EditorClassIdentifier: Assembly-CSharp::ExplosionDefinition
+  baseRadius: 2
+  baseDamage: 30
+  baseDelay: 0
+  abilityRadius: 3
+  abilityDamage: 50
+  abilityDelay: 2.5
+  explosionMaterial: {fileID: 2100000, guid: 1477c3f5260cb23458d25fcc66b8e7b8, type: 2}
+  explosionColor: {r: 1, g: 0.4, b: 0, a: 1}
+  visualDuration: 0.4
