@@ -15,12 +15,20 @@ public class AbilityController : MonoBehaviour
     private float _upgradeBoost = 0f;
     private float _cooldownReduction = 0f;
 
+    private float _radiusBoost    = 0f;
+    private float _damageBoost    = 0f;
+    private float _delayReduction = 0f;
+
     public float CooldownRemaining  => Mathf.Max(_cooldownTimer, 0f);
     public float CurrentCooldown    => _ability != null
         ? Mathf.Max(_ability.cooldown - _cooldownReduction, 0.5f)
         : 1f;
     public bool  IsReady            => _cooldownTimer <= 0f && _ability != null && _isUnlocked;
     public bool  IsUnlocked         => _isUnlocked;
+
+    public float RadiusBoost    => _radiusBoost;
+    public float DamageBoost    => _damageBoost;
+    public float DelayReduction => _delayReduction;
     public string AbilityName       => _ability != null ? _ability.abilityName : "";
 
     // -------------------------------------------------------------------------
@@ -32,10 +40,6 @@ public class AbilityController : MonoBehaviour
 
         if (Keyboard.current[abilityKey].wasPressedThisFrame)
         {
-            //Debug.Log($"Shift pressed — isFlying: {_isFlying}, isUnlocked: {_isUnlocked}, " +
-            //        $"ability null: {_ability == null}, cooldown: {_cooldownTimer:F2}, isReady: {IsReady}");
-
-            // Only trigger if actually flying
             if (IsReady && _isFlying)
                 TriggerAbility();
         }
@@ -53,13 +57,18 @@ public class AbilityController : MonoBehaviour
         _isUnlocked = true;
     }
 
-    /// <summary>
-    /// Called by UpgradeManager for each ability upgrade level purchased.
-    /// </summary>
-    public void ApplyAbilityUpgrade(float boostIncrement, float cooldownReduction)
+    public void ApplyAbilityUpgrade(float boostIncrement, float cooldownReduction,
+        float radiusIncrement = 0f, float damageIncrement = 0f,
+        float explosionDelayReduction = 0f)
     {
         _upgradeBoost      += boostIncrement;
         _cooldownReduction += cooldownReduction;
+        _radiusBoost       += radiusIncrement;
+        _damageBoost       += damageIncrement;
+        _delayReduction    += explosionDelayReduction;
+
+        GetComponent<ExplosionOnCrash>()?.ApplyUpgrade(
+            radiusIncrement, damageIncrement, explosionDelayReduction);
     }
 
     public void OnLaunched()  => _isFlying = true;
@@ -75,13 +84,32 @@ public class AbilityController : MonoBehaviour
 
     private void TriggerAbility()
     {
-        //Debug.Log($"TriggerAbility — cooldown will be: {CurrentCooldown:F2}");
         float actualCooldown = CurrentCooldown;
         _ability.Use(gameObject, _upgradeBoost);
         _cooldownTimer = actualCooldown;
-        //Debug.Log($"TriggerAbility — cooldownTimer set to: {_cooldownTimer:F2}");
 
         GetComponent<DuckController>()?.OnAbilityUsed();
-        AbilityUI.Instance?.OnAbilityUsed(actualCooldown);
+
+        // Single-use abilities (e.g. bomb) skip the normal cooldown UI.
+        // They notify AbilityUI directly (e.g. OnBombArmed) from within Use().
+        if (!_ability.IsSingleUse)
+            AbilityUI.Instance?.OnAbilityUsed(actualCooldown);
+    }
+
+    public void SetAbilityUpgrades(float totalBoost, float totalCooldown,
+        float totalRadius = 0f, float totalDamage = 0f, float totalDelay = 0f)
+    {
+        _upgradeBoost      = totalBoost;
+        _cooldownReduction = totalCooldown;
+        _radiusBoost       = totalRadius;
+        _damageBoost       = totalDamage;
+        _delayReduction    = totalDelay;
+
+        var exp = GetComponent<ExplosionOnCrash>();
+        if (exp != null) { exp.ResetUpgrades(); exp.ApplyUpgrade(totalRadius, totalDamage, totalDelay); }
+    }
+    public void LockAbility()
+    {
+        _isUnlocked = false;
     }
 }

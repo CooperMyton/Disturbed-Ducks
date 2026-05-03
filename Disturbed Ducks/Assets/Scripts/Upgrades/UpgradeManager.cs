@@ -8,19 +8,23 @@ public class UpgradeManager : MonoBehaviour
     [SerializeField] private DuckController duckController;
     [SerializeField] private PlayerInventory inventory;
 
-    private DuckDefinition Def => duckController?.Definition;
+    private DuckDefinition _overrideDuck;
+
+    private DuckDefinition Def       => _overrideDuck ?? duckController?.Definition;
+    private DuckDefinition FlyingDef => duckController?.Definition;
+    private bool TabMatchesFlyingDuck => _overrideDuck == null || _overrideDuck == FlyingDef;
+
     private DuckFlightController Flight =>
         duckController?.GetComponent<DuckFlightController>();
     private AbilityController Ability =>
         duckController?.GetComponent<AbilityController>();
 
-    public DuckDefinition Definition => duckController?.Definition;
-    public int SpeedLevel   => inventory != null && Def != null
-        ? inventory.GetSpeedLevel(Def)   : 0;
-    public int ManeurLevel  => inventory != null && Def != null
-        ? inventory.GetManeurLevel(Def)  : 0;
-    public int AbilityLevel => inventory != null && Def != null
-        ? inventory.GetAbilityLevel(Def) : 0;
+    public DuckDefinition Definition       => Def;
+    public DuckDefinition FlyingDefinition => FlyingDef;
+
+    public int SpeedLevel   => inventory != null && Def != null ? inventory.GetSpeedLevel(Def)   : 0;
+    public int ManeurLevel  => inventory != null && Def != null ? inventory.GetManeurLevel(Def)  : 0;
+    public int AbilityLevel => inventory != null && Def != null ? inventory.GetAbilityLevel(Def) : 0;
 
     public bool CanUpgradeSpeed =>
         Def != null && SpeedLevel < Def.maxSpeedUpgrade.levels.Length;
@@ -37,9 +41,18 @@ public class UpgradeManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    private void Start() => Invoke(nameof(ApplyCurrentStats), 0.1f);
+
+    public void SetActiveDuck(DuckDefinition def)
     {
-        Invoke(nameof(ApplyCurrentStats), 0.1f);
+        _overrideDuck = def;
+        UpgradeUI.Instance?.Refresh();
+    }
+
+    public void ClearActiveDuckOverride()
+    {
+        _overrideDuck = null;
+        UpgradeUI.Instance?.Refresh();
     }
 
     // -------------------------------------------------------------------------
@@ -54,7 +67,9 @@ public class UpgradeManager : MonoBehaviour
         int newLevel = SpeedLevel + 1;
         inventory.SetSpeedLevel(Def, newLevel);
 
-        Flight?.SetMaxSpeed(CalcSpeed(newLevel));
+        if (TabMatchesFlyingDuck)
+            Flight?.SetMaxSpeed(CalcSpeed(Def, newLevel));
+
         UpgradeUI.Instance?.Refresh();
         return true;
     }
@@ -69,7 +84,9 @@ public class UpgradeManager : MonoBehaviour
         int newLevel = ManeurLevel + 1;
         inventory.SetManeurLevel(Def, newLevel);
 
-        Flight?.SetManoeuvrability(CalcTurnSpeed(newLevel));
+        if (TabMatchesFlyingDuck)
+            Flight?.SetManoeuvrability(CalcTurnSpeed(Def, newLevel));
+
         UpgradeUI.Instance?.Refresh();
         return true;
     }
@@ -84,12 +101,18 @@ public class UpgradeManager : MonoBehaviour
         int newLevel = AbilityLevel + 1;
         inventory.SetAbilityLevel(Def, newLevel);
 
-        if (newLevel == 1)
-            Ability?.UnlockAbility();
-        else
-            Ability?.ApplyAbilityUpgrade(
-                levelData.abilityBoostIncrement,
-                levelData.cooldownReduction);
+        if (TabMatchesFlyingDuck)
+        {
+            if (newLevel == 1)
+                Ability?.UnlockAbility();
+            else
+                Ability?.ApplyAbilityUpgrade(
+                    levelData.abilityBoostIncrement,
+                    levelData.cooldownReduction,
+                    levelData.radiusIncrement,
+                    levelData.damageIncrement,
+                    levelData.explosionDelayReduction);
+        }
 
         UpgradeUI.Instance?.Refresh();
         return true;
@@ -97,59 +120,63 @@ public class UpgradeManager : MonoBehaviour
 
     public void ApplyCurrentStats()
     {
-        if (Def == null || Flight == null)
+        var def = FlyingDef;
+        if (def == null || Flight == null)
         {
-            Debug.LogWarning("ApplyCurrentStats: Def or Flight null");
+            Debug.LogWarning("ApplyCurrentStats: FlyingDef or Flight null");
             return;
         }
 
-        Flight.SetMaxSpeed(CalcSpeed(SpeedLevel));
-        Flight.SetManoeuvrability(CalcTurnSpeed(ManeurLevel));
+        int speedLvl   = inventory.GetSpeedLevel(def);
+        int maneurLvl  = inventory.GetManeurLevel(def);
+        int abilityLvl = inventory.GetAbilityLevel(def);
+
+        Flight.SetMaxSpeed(CalcSpeed(def, speedLvl));
+        Flight.SetManoeuvrability(CalcTurnSpeed(def, maneurLvl));
 
         if (Ability != null)
         {
-            if (AbilityLevel >= 1)
-                Ability.UnlockAbility();
+            if (abilityLvl >= 1) Ability.UnlockAbility();
+            else                 Ability.LockAbility();
 
-            float totalBoost = 0f;
-            float totalCooldown = 0f;
-            for (int i = 1; i < AbilityLevel &&
-                i < Def.abilityUpgrade.levels.Length; i++)
+            float tBoost = 0, tCooldown = 0, tRadius = 0, tDamage = 0, tDelay = 0;
+            for (int i = 1; i < abilityLvl && i < def.abilityUpgrade.levels.Length; i++)
             {
-                totalBoost    += Def.abilityUpgrade.levels[i].abilityBoostIncrement;
-                totalCooldown += Def.abilityUpgrade.levels[i].cooldownReduction;
+                var lvl   = def.abilityUpgrade.levels[i];
+                tBoost   += lvl.abilityBoostIncrement;
+                tCooldown += lvl.cooldownReduction;
+                tRadius  += lvl.radiusIncrement;
+                tDamage  += lvl.damageIncrement;
+                tDelay   += lvl.explosionDelayReduction;
             }
-            if (AbilityLevel > 1)
-                Ability.ApplyAbilityUpgrade(totalBoost, totalCooldown);
+            Ability.SetAbilityUpgrades(tBoost, tCooldown, tRadius, tDamage, tDelay);
         }
 
-        Debug.Log($"ApplyCurrentStats complete — maxSpeed: {CalcSpeed(SpeedLevel)}, " +
-                  $"turnSpeed: {CalcTurnSpeed(ManeurLevel)}, abilityLevel: {AbilityLevel}");
+        Debug.Log($"ApplyCurrentStats — maxSpeed: {CalcSpeed(def, speedLvl)}, " +
+                  $"turnSpeed: {CalcTurnSpeed(def, maneurLvl)}, abilityLevel: {abilityLvl}");
     }
 
     // -------------------------------------------------------------------------
 
-    // Sum increments for all purchased levels
-    private float CalcSpeed(int level)
+    private float CalcSpeed(DuckDefinition def, int level)
     {
-        float val = Def.baseMaxSpeed;
-        for (int i = 0; i < level && i < Def.maxSpeedUpgrade.levels.Length; i++)
-            val += Def.maxSpeedUpgrade.levels[i].statIncrement;
+        float val = def.baseMaxSpeed;
+        for (int i = 0; i < level && i < def.maxSpeedUpgrade.levels.Length; i++)
+            val += def.maxSpeedUpgrade.levels[i].statIncrement;
         return val;
     }
 
-    private float CalcTurnSpeed(int level)
+    private float CalcTurnSpeed(DuckDefinition def, int level)
     {
-        float val = Def.baseTurnSpeed;
-        for (int i = 0; i < level && i < Def.manoeuvrabilityUpgrade.levels.Length; i++)
-            val += Def.manoeuvrabilityUpgrade.levels[i].statIncrement;
+        float val = def.baseTurnSpeed;
+        for (int i = 0; i < level && i < def.manoeuvrabilityUpgrade.levels.Length; i++)
+            val += def.manoeuvrabilityUpgrade.levels[i].statIncrement;
         return val;
     }
 
     private bool CanAfford(int cost)
     {
         if (cost <= 0) return true;
-        return CurrencyManager.Instance != null &&
-            CurrencyManager.Instance.CanAfford(cost);
+        return CurrencyManager.Instance != null && CurrencyManager.Instance.CanAfford(cost);
     }
 }

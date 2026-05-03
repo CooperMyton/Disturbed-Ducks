@@ -12,7 +12,6 @@ public class FlightUIManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        
     }
 
     private void Start()
@@ -43,16 +42,21 @@ public class FlightUIManager : MonoBehaviour
 
     public void OnCrashed()
     {
-        SetPrompt("Press R for next duck");
+        bool hasRemaining = PlayerDuckInventory.Instance != null &&
+                            PlayerDuckInventory.Instance.HasAnyRemaining();
 
-        if (PlayerDuckInventory.Instance != null &&
-            !PlayerDuckInventory.Instance.HasAnyRemaining())
+        if (!hasRemaining)
         {
+            // Out of birds — show end screen AND upgrade panel so they can
+            // spend coins before restarting
+            SetPrompt("");
             EndOfAttemptUI.Instance?.Show();
+            upgradeUI?.Show();
         }
         else
         {
-            upgradeUI?.Show();
+            // Birds still available — just prompt, no upgrade menu
+            SetPrompt("Press R for next duck");
         }
     }
 

@@ -13,12 +13,17 @@ public class LoadoutSlot : MonoBehaviour
     [SerializeField] private Image background;
     [SerializeField] private Button button;
 
+    // Serialized so you can tweak per-slot in the prefab if needed.
+    // Default is near-black — readable on yellow, white, and grey backgrounds.
+    [SerializeField] private Color countTextColor = new Color(0.1f, 0.1f, 0.1f, 1f);
+
     public DuckDefinition Definition { get; private set; }
 
     public void Initialize(DuckDefinition def)
     {
         Definition = def;
-        if (nameText != null) nameText.text = def.duckName;
+        if (nameText  != null) nameText.text  = def.duckName;
+        if (countText != null) countText.color = countTextColor;
         button?.onClick.AddListener(() =>
             PlayerDuckInventory.Instance?.SelectType(def));
     }
