@@ -101,4 +101,11 @@ public class DuckSpawner : MonoBehaviour
         ResetDuck();
         LoadoutUI.Instance?.RebuildAndShow();
     }
+    public static DuckSpawner Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
+    }
 }
