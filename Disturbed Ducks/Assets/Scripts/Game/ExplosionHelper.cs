@@ -10,7 +10,8 @@ public static class ExplosionHelper
         Collider[] hits = Physics.OverlapSphere(position, radius);
         foreach (var hit in hits)
         {
-            hit.GetComponent<Destructible>()?.TakeDamage(damage);
+            // fromExplosion: true — allows explosion-only destructibles to take damage
+            hit.GetComponent<Destructible>()?.TakeDamage(damage, true);
             hit.GetComponent<TargetEnemy>()?.TakeDamage(damage);
         }
 
@@ -31,15 +32,13 @@ public static class ExplosionHelper
         var rend = sphere.GetComponent<Renderer>();
         if (def.explosionMaterial != null)
         {
-            // Assigned material — used in builds, safest path
             rend.material = new Material(def.explosionMaterial);
         }
         else
         {
             // Fallback: tint the default material rather than calling Shader.Find.
             // Shader.Find returns null in WebGL builds for any shader not explicitly
-            // included, which causes an invisible explosion. The default primitive
-            // material always survives stripping.
+            // included, which causes an invisible explosion.
             rend.material.color = def.explosionColor;
         }
 

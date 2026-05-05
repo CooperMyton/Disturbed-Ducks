@@ -2,17 +2,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
 public class StageClearUI : MonoBehaviour
 {
     public static StageClearUI Instance { get; private set; }
 
     [Header("References")]
-    [SerializeField] private GameObject panel;
+    [SerializeField] private GameObject      panel;
     [SerializeField] private TextMeshProUGUI stageNameText;
     [SerializeField] private TextMeshProUGUI firstClearText;
     [SerializeField] private TextMeshProUGUI currencyText;
-    [SerializeField] private Button nextStageButton;
+    [SerializeField] private Button          nextStageButton;
 
     // -------------------------------------------------------------------------
 
@@ -42,9 +41,13 @@ public class StageClearUI : MonoBehaviour
 
         if (currencyText != null)
             currencyText.text = $"Currency: {CurrencyManager.Instance?.Balance}";
+
+        // Hide the next stage button if this is the final stage
+        if (nextStageButton != null)
+            nextStageButton.gameObject.SetActive(stage.nextStage != null);
     }
 
-    public void Hide() => panel.SetActive(false);
+    public void Hide() => panel?.SetActive(false);
 
     // -------------------------------------------------------------------------
 
@@ -53,5 +56,4 @@ public class StageClearUI : MonoBehaviour
         Hide();
         StageManager.Instance?.LoadNextStage();
     }
-
 }
