@@ -19,13 +19,14 @@ MonoBehaviour:
   baseTurnSpeed: 40
   baseGlideGravity: 12
   baseMinSpeed: 5
-  neutralModel: {fileID: 0}
-  flightModel: {fileID: 0}
-  crashedModel: {fileID: 0}
+  neutralModel: {fileID: 919132149155446097, guid: ca4349f12576e0143bc7506b19b8a3ec, type: 3}
+  flightModel: {fileID: 919132149155446097, guid: 1efe1b4acff58c64899ae00b1551ee76, type: 3}
+  crashedModel: {fileID: 919132149155446097, guid: f739817ffb5e518458887491017743c2, type: 3}
   launchSound: {fileID: 0}
   crashSound: {fileID: 0}
   abilitySound: {fileID: 0}
   ability: {fileID: 11400000, guid: 1a62f0cd826a3ce4e897e73fe6a324ae, type: 2}
+  explosionDefinition: {fileID: 0}
   maxSpeedUpgrade:
     upgradeName: Max Speed
     levels:
@@ -77,31 +78,61 @@ MonoBehaviour:
     levels:
     - abilityBoostIncrement: 0
       cooldownReduction: 0
+      radiusIncrement: 0
+      damageIncrement: 0
+      explosionDelayReduction: 0
       cost: 5
     - abilityBoostIncrement: 5
       cooldownReduction: 0
+      radiusIncrement: 0
+      damageIncrement: 0
+      explosionDelayReduction: 0
       cost: 10
     - abilityBoostIncrement: 0
       cooldownReduction: 0.3
+      radiusIncrement: 0
+      damageIncrement: 0
+      explosionDelayReduction: 0
       cost: 10
     - abilityBoostIncrement: 5
       cooldownReduction: 0
+      radiusIncrement: 0
+      damageIncrement: 0
+      explosionDelayReduction: 0
       cost: 20
     - abilityBoostIncrement: 0
       cooldownReduction: 0.3
+      radiusIncrement: 0
+      damageIncrement: 0
+      explosionDelayReduction: 0
       cost: 20
     - abilityBoostIncrement: 5
       cooldownReduction: 0
+      radiusIncrement: 0
+      damageIncrement: 0
+      explosionDelayReduction: 0
       cost: 50
     - abilityBoostIncrement: 0
       cooldownReduction: 0.3
+      radiusIncrement: 0
+      damageIncrement: 0
+      explosionDelayReduction: 0
       cost: 50
     - abilityBoostIncrement: 5
       cooldownReduction: 0
+      radiusIncrement: 0
+      damageIncrement: 0
+      explosionDelayReduction: 0
       cost: 100
     - abilityBoostIncrement: 0
       cooldownReduction: 0.3
+      radiusIncrement: 0
+      damageIncrement: 0
+      explosionDelayReduction: 0
       cost: 100
     - abilityBoostIncrement: 5
       cooldownReduction: 0.3
+      radiusIncrement: 0
+      damageIncrement: 0
+      explosionDelayReduction: 0
       cost: 500
