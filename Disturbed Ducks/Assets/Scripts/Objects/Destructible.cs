@@ -23,6 +23,10 @@ public class Destructible : MonoBehaviour
     [Header("Currency Reward")]
     [SerializeField] private int currencyOnBreak = 10;
 
+    [Header("Explosion Only")]
+    [Tooltip("If true, this object can only be damaged by explosions — duck impact does nothing")]
+    [SerializeField] private bool explosionOnly = false;
+
     private float _lastDamageTime = -999f;
 
     // -------------------------------------------------------------------------
@@ -37,6 +41,9 @@ public class Destructible : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // Explosion-only walls ignore all physical impact
+        if (explosionOnly) return;
+
         if (Time.time - _lastDamageTime < damageCooldown) return;
 
         Rigidbody hitRb = collision.rigidbody;
@@ -48,14 +55,19 @@ public class Destructible : MonoBehaviour
         float damage = impactSpeed * hitRb.mass * damageMultiplier;
         _lastDamageTime = Time.time;
 
-        TakeDamage(damage, hitRb);
+        TakeDamage(damage, false, hitRb);
         Debug.Log($"{gameObject.name} hit for {damage:F1} | HP: {currentHP:F1}/{maxHP}");
     }
 
     // -------------------------------------------------------------------------
 
-    public void TakeDamage(float amount, Rigidbody attacker = null)
+    /// <param name="amount">Damage to apply.</param>
+    /// <param name="fromExplosion">True when called by ExplosionHelper.</param>
+    /// <param name="attacker">Rigidbody of the attacker, if any.</param>
+    public void TakeDamage(float amount, bool fromExplosion = false, Rigidbody attacker = null)
     {
+        if (explosionOnly && !fromExplosion) return;
+
         currentHP -= amount;
         currentHP = Mathf.Max(currentHP, 0f);
         UpdateColor();

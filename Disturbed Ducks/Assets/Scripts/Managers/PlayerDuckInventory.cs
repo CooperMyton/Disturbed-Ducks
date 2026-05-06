@@ -16,7 +16,6 @@ public class PlayerDuckInventory : MonoBehaviour
     [Tooltip("Maximum total ducks the player can own across all types")]
     [SerializeField] private int maxTotalDucks = 10;
 
-    // Runtime remaining per type — reset at start of each attempt
     private Dictionary<DuckDefinition, int> _remaining
         = new Dictionary<DuckDefinition, int>();
 
@@ -49,13 +48,10 @@ public class PlayerDuckInventory : MonoBehaviour
 
     private void Start()
     {
-        foreach (var def in inventory.ownedDuckTypes)
-            Debug.Log($"Owned duck: {def?.duckName}, instanceID: {def?.GetInstanceID()}");
         ResetRemainingCounts();
         if (inventory.ownedDuckTypes.Count > 0)
             SelectType(inventory.ownedDuckTypes[0]);
 
-        // Debug — tells us exactly what the inventory contains on start
         Debug.Log($"PlayerDuckInventory Start — owned types: {inventory.ownedDuckTypes.Count}");
         for (int i = 0; i < inventory.ownedDuckTypes.Count; i++)
             Debug.Log($"  {inventory.ownedDuckTypes[i]?.duckName}: {inventory.ownedDuckCounts[i]} owned");
@@ -64,7 +60,6 @@ public class PlayerDuckInventory : MonoBehaviour
 
     // -------------------------------------------------------------------------
 
-    /// Resets runtime remaining counts to owned counts — call at attempt start
     public void ResetRemainingCounts()
     {
         _remaining.Clear();
@@ -74,8 +69,6 @@ public class PlayerDuckInventory : MonoBehaviour
             _remaining[inventory.ownedDuckTypes[i]] = inventory.ownedDuckCounts[i];
         }
 
-        // Re-select first available type — _selectedType may be null if
-        // all ducks were exhausted before this reset
         if (_selectedType == null || GetRemaining(_selectedType) == 0)
             AutoSelectNextAvailable();
 
@@ -102,7 +95,6 @@ public class PlayerDuckInventory : MonoBehaviour
         return total;
     }
 
-    /// Decrements remaining count for the selected type
     public void UseSelectedDuck()
     {
         if (_selectedType == null) return;
@@ -111,7 +103,6 @@ public class PlayerDuckInventory : MonoBehaviour
         _remaining[_selectedType] = Mathf.Max(0, _remaining[_selectedType] - 1);
         OnInventoryChanged?.Invoke();
 
-        // Auto-switch if current type is exhausted
         if (_remaining[_selectedType] == 0)
             AutoSelectNextAvailable();
     }
@@ -127,9 +118,17 @@ public class PlayerDuckInventory : MonoBehaviour
 
     public bool TryBuyDuck(DuckDefinition def)
     {
+        // Global loadout cap
         if (TotalOwned >= maxTotalDucks)
         {
             Debug.Log("Duck loadout is full");
+            return false;
+        }
+
+        // Per-duck type cap
+        if (GetOwned(def) >= def.maxOwned)
+        {
+            Debug.Log($"{def.duckName} already at max owned ({def.maxOwned})");
             return false;
         }
 

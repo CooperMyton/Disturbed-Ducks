@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BasicDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: Basic Duck
-  basePurchaseCost: 10
-  purchaseCostMultiplier: 1.5
+  purchaseCosts: 000000000a0000001900000032000000960000002c010000ee020000dc050000b80b000010270000
+  maxOwned: 10
   baseMaxSpeed: 30
   baseTurnSpeed: 40
   baseGlideGravity: 12
@@ -73,66 +73,3 @@ MonoBehaviour:
       cost: 6000
     - statIncrement: 10
       cost: 10000
-  abilityUpgrade:
-    upgradeName: Ability
-    levels:
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 5
-    - abilityBoostIncrement: 5
-      cooldownReduction: 0
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 10
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0.3
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 10
-    - abilityBoostIncrement: 5
-      cooldownReduction: 0
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 20
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0.3
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 20
-    - abilityBoostIncrement: 5
-      cooldownReduction: 0
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 50
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0.3
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 50
-    - abilityBoostIncrement: 5
-      cooldownReduction: 0
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 100
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0.3
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 100
-    - abilityBoostIncrement: 5
-      cooldownReduction: 0.3
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 500
