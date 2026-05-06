@@ -90,7 +90,6 @@ public class UpgradeUI : MonoBehaviour
     public void Show()
     {
         upgradePanel.SetActive(true);
-        // Auto-jump to flying duck's tab on open
         var flyingDef = UpgradeManager.Instance?.FlyingDefinition;
         if (flyingDef != null) SelectTab(flyingDef);
         else Refresh();
@@ -122,11 +121,7 @@ public class UpgradeUI : MonoBehaviour
 
     private void BuildTabs()
     {
-        if (tabContainer == null || gameDefinition == null)
-        {
-            Debug.LogError($"BuildTabs early return — tabContainer null: {tabContainer == null}, gameDefinition null: {gameDefinition == null}");
-            return;
-        }
+        if (tabContainer == null || gameDefinition == null) return;
 
         foreach (Transform child in tabContainer) Destroy(child.gameObject);
         _tabData.Clear();
@@ -136,9 +131,6 @@ public class UpgradeUI : MonoBehaviour
             var go = new GameObject(duck.duckName + "_Tab");
             go.transform.SetParent(tabContainer, false);
 
-            // FIX 1: LayoutElement tells the HLG the tab's preferred height so
-            // Control Child Size Height gives it 36px instead of 0px (Image
-            // with no sprite reports preferredHeight = 0).
             var le = go.AddComponent<LayoutElement>();
             le.preferredHeight = 36f;
 
@@ -154,22 +146,16 @@ public class UpgradeUI : MonoBehaviour
             textRt.anchorMax = Vector2.one;
             textRt.offsetMin = textRt.offsetMax = Vector2.zero;
 
-            var tmp       = textGo.AddComponent<TextMeshProUGUI>();
-            tmp.text      = duck.duckName;
-            tmp.alignment = TextAlignmentOptions.Center;
-            tmp.fontSize  = 14;
-            // FIX 2: TMP raycastTarget is true by default; the label was
-            // sitting on top of the Button and swallowing pointer events.
+            var tmp           = textGo.AddComponent<TextMeshProUGUI>();
+            tmp.text          = duck.duckName;
+            tmp.alignment     = TextAlignmentOptions.Center;
+            tmp.fontSize      = 14;
             tmp.raycastTarget = false;
 
             var capturedDuck = duck;
             btn.onClick.AddListener(() => SelectTab(capturedDuck));
 
-            // activeSelf = true so the tab shows when UpgradePanel becomes active.
-            // activeInHierarchy is still false here (panel is hidden at build time)
-            // — that's expected and fine.
             go.SetActive(true);
-
             _tabData.Add((btn, img));
         }
     }
@@ -187,14 +173,14 @@ public class UpgradeUI : MonoBehaviour
         if (gameDefinition == null) return;
         for (int i = 0; i < gameDefinition.allDucks.Count && i < _tabData.Count; i++)
         {
-            var duck       = gameDefinition.allDucks[i];
-            var (_, img)   = _tabData[i];
+            var duck        = gameDefinition.allDucks[i];
+            var (_, img)    = _tabData[i];
             bool isSelected = duck == _selectedTab;
             bool owned      = (PlayerDuckInventory.Instance?.GetOwned(duck) ?? 0) > 0;
 
             img.color = isSelected ? tabSelectedColor
-                    : owned      ? tabUnselectedColor
-                                : tabUnownedColor;
+                      : owned      ? tabUnselectedColor
+                                   : tabUnownedColor;
         }
     }
 
@@ -204,6 +190,7 @@ public class UpgradeUI : MonoBehaviour
         if (um == null) return;
         var def = _selectedTab;
 
+        // Speed
         if (speedLevelText != null)
             speedLevelText.text =
                 $"{def.maxSpeedUpgrade.upgradeName}: {um.SpeedLevel} / {def.maxSpeedUpgrade.levels.Length}";
@@ -211,6 +198,7 @@ public class UpgradeUI : MonoBehaviour
         if (speedButtonText != null) speedButtonText.text =
             GetStatLabel(um.CanUpgradeSpeed, um.SpeedLevel, def.maxSpeedUpgrade.levels);
 
+        // Manoeuvrability
         if (maneurLevelText != null)
             maneurLevelText.text =
                 $"{def.manoeuvrabilityUpgrade.upgradeName}: {um.ManeurLevel} / {def.manoeuvrabilityUpgrade.levels.Length}";
@@ -218,13 +206,17 @@ public class UpgradeUI : MonoBehaviour
         if (maneurButtonText != null) maneurButtonText.text =
             GetStatLabel(um.CanUpgradeManeur, um.ManeurLevel, def.manoeuvrabilityUpgrade.levels);
 
-        bool locked = um.AbilityLevel == 0;
+        // Ability — data now comes from the ability asset itself
+        bool hasAbility = def.ability != null;
+        bool locked     = um.AbilityLevel == 0;
+
         if (abilityLevelText != null)
-            abilityLevelText.text = locked
-                ? $"{def.abilityUpgrade.upgradeName}: LOCKED"
-                : $"{def.abilityUpgrade.upgradeName}: {um.AbilityLevel} / {def.abilityUpgrade.levels.Length}";
+            abilityLevelText.text = !hasAbility ? "No Ability"
+                : locked ? $"{def.ability.abilityName}: LOCKED"
+                         : $"{def.ability.abilityName}: {um.AbilityLevel} / {def.ability.MaxUpgradeLevels}";
+
         if (abilityButton != null)     abilityButton.interactable = um.CanUpgradeAbility;
-        if (abilityButtonText != null) abilityButtonText.text = GetAbilityLabel(um, def, locked);
+        if (abilityButtonText != null) abilityButtonText.text     = GetAbilityLabel(um, def, locked);
 
         RefreshBuyDuck(def);
     }
@@ -242,36 +234,45 @@ public class UpgradeUI : MonoBehaviour
         if (purchaseUnlockButton != null)
             purchaseUnlockButton.interactable = canAfford;
         if (purchaseUnlockButtonText != null)
-            purchaseUnlockButtonText.text = canAfford ? "PURCHASE" : "NOT ENOUGH COINS";
+            purchaseUnlockButtonText.text = cost > 0 ? $"PURCHASE ({cost} coins)" : "PURCHASE (Free)";
     }
 
     private void RefreshBuyDuck(DuckDefinition def)
     {
         if (buyDuckButton == null || buyDuckButtonText == null) return;
-        var  inv       = PlayerDuckInventory.Instance;
+        var inv = PlayerDuckInventory.Instance;
         if (inv == null) return;
-        bool full      = inv.TotalOwned >= inv.MaxTotalDucks;
-        int  cost      = def.GetPurchaseCost(inv.GetOwned(def));
+
+        int  owned     = inv.GetOwned(def);
+        bool totalFull = inv.TotalOwned >= inv.MaxTotalDucks;
+        bool typeFull  = owned >= def.maxOwned;           // per-duck cap
+        bool full      = totalFull || typeFull;
+        int  cost      = def.GetPurchaseCost(owned);
         bool canAfford = CurrencyManager.Instance?.CanAfford(cost) ?? false;
 
         buyDuckButton.interactable = !full && canAfford;
-        buyDuckButtonText.text = full      ? "LOADOUT FULL"
-            : cost > 0 ? $"BUY DUCK ({cost} coins)" : "BUY DUCK (Free)";
+        buyDuckButtonText.text = typeFull  ? "MAX OWNED"
+            : totalFull ? "LOADOUT FULL"
+            : cost > 0  ? $"BUY DUCK ({cost} coins)"
+                        : "BUY DUCK (Free)";
     }
 
     // -------------------------------------------------------------------------
 
     private string GetStatLabel(bool canUpgrade, int currentLevel, StatUpgradeLevelData[] levels)
     {
-        if (!canUpgrade) return "MAX";
+        if (currentLevel >= levels.Length) return "MAX";
+        // Always show cost — button interactable state communicates affordability
         int cost = levels[currentLevel].cost;
         return cost > 0 ? $"UPGRADE ({cost} coins)" : "UPGRADE (Free)";
     }
 
     private string GetAbilityLabel(UpgradeManager um, DuckDefinition def, bool locked)
     {
-        if (!um.CanUpgradeAbility) return "MAX";
-        int    cost   = def.abilityUpgrade.levels[um.AbilityLevel].cost;
+        if (def.ability == null) return "N/A";
+        if (um.AbilityLevel >= def.ability.MaxUpgradeLevels) return "MAX";
+        // Always show cost — button interactable state communicates affordability
+        int    cost   = def.ability.GetUpgradeCost(um.AbilityLevel);
         string action = locked ? "UNLOCK" : "UPGRADE";
         return cost > 0 ? $"{action} ({cost} coins)" : $"{action} (Free)";
     }

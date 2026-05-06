@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BombDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: BombDuck
-  basePurchaseCost: 50
-  purchaseCostMultiplier: 1.5
+  purchaseCosts: 320000004b0000007d000000e1000000770100008a020000dc050000b80b00004c1d000010270000
+  maxOwned: 10
   baseMaxSpeed: 30
   baseTurnSpeed: 50
   baseGlideGravity: 12
@@ -73,66 +73,3 @@ MonoBehaviour:
       cost: 1100
     - statIncrement: 5
       cost: 3500
-  abilityUpgrade:
-    upgradeName: Ability
-    levels:
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 0
-      damageIncrement: 0
-      explosionDelayReduction: 0
-      cost: 50
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 0.5
-      damageIncrement: 5
-      explosionDelayReduction: 0
-      cost: 75
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 0
-      damageIncrement: 5
-      explosionDelayReduction: 0.3
-      cost: 175
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 0.5
-      damageIncrement: 0
-      explosionDelayReduction: 0.3
-      cost: 400
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 0.5
-      damageIncrement: 10
-      explosionDelayReduction: 0
-      cost: 750
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 0
-      damageIncrement: 20
-      explosionDelayReduction: 0.3
-      cost: 1250
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 0.5
-      damageIncrement: 0
-      explosionDelayReduction: 0.3
-      cost: 2000
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 0.5
-      damageIncrement: 50
-      explosionDelayReduction: 0
-      cost: 3200
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 0
-      damageIncrement: 75
-      explosionDelayReduction: 0.3
-      cost: 5000
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      radiusIncrement: 1
-      damageIncrement: 100
-      explosionDelayReduction: 0.9
-      cost: 10000

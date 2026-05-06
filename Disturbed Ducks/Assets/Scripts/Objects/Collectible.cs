@@ -11,13 +11,18 @@ public class Collectible : MonoBehaviour
     [Header("Currency Reward")]
     [SerializeField] private int currencyOnCollect = 25;
 
+    [Header("Bobbing")]
+    [SerializeField] private float bobHeight = 0.15f;
+    [SerializeField] private float bobSpeed  = 2f;
+
     [Header("Visual")]
     [SerializeField] private Renderer objectRenderer;
 
     // StageManager subscribes to this — same pattern as TargetEnemy.OnDied
     public event Action OnCollected;
 
-    private bool _collected = false;
+    private bool    _collected     = false;
+    private Vector3 _startPosition;
 
     // -------------------------------------------------------------------------
 
@@ -26,18 +31,26 @@ public class Collectible : MonoBehaviour
         if (objectRenderer == null)
             objectRenderer = GetComponent<Renderer>();
 
-        // Make sure the collider is a trigger
         var col = GetComponent<Collider>();
         if (col != null) col.isTrigger = true;
+    }
+
+    private void Start()
+    {
+        _startPosition = transform.position;
+    }
+
+    private void Update()
+    {
+        if (_collected) return;
+        float y = _startPosition.y + Mathf.Sin(Time.time * bobSpeed) * bobHeight;
+        transform.position = new Vector3(_startPosition.x, y, _startPosition.z);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (_collected) return;
-
-        // Only the duck should collect it — duck has a Rigidbody
         if (other.GetComponent<Rigidbody>() == null) return;
-
         Collect();
     }
 
