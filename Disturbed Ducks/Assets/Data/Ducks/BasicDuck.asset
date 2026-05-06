@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BasicDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: Basic Duck
-  basePurchaseCost: 10
-  purchaseCostMultiplier: 1.5
+  purchaseCosts: 000000000a0000001900000032000000960000002c010000ee020000dc050000b80b000010270000
+  maxOwned: 10
   baseMaxSpeed: 30
   baseTurnSpeed: 40
   baseGlideGravity: 12
@@ -26,6 +26,7 @@ MonoBehaviour:
   crashSound: {fileID: 0}
   abilitySound: {fileID: 0}
   ability: {fileID: 11400000, guid: 1a62f0cd826a3ce4e897e73fe6a324ae, type: 2}
+  explosionDefinition: {fileID: 0}
   maxSpeedUpgrade:
     upgradeName: Max Speed
     levels:
@@ -72,36 +73,3 @@ MonoBehaviour:
       cost: 6000
     - statIncrement: 10
       cost: 10000
-  abilityUpgrade:
-    upgradeName: Ability
-    levels:
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0
-      cost: 5
-    - abilityBoostIncrement: 5
-      cooldownReduction: 0
-      cost: 10
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0.3
-      cost: 10
-    - abilityBoostIncrement: 5
-      cooldownReduction: 0
-      cost: 20
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0.3
-      cost: 20
-    - abilityBoostIncrement: 5
-      cooldownReduction: 0
-      cost: 50
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0.3
-      cost: 50
-    - abilityBoostIncrement: 5
-      cooldownReduction: 0
-      cost: 100
-    - abilityBoostIncrement: 0
-      cooldownReduction: 0.3
-      cost: 100
-    - abilityBoostIncrement: 5
-      cooldownReduction: 0.3
-      cost: 500

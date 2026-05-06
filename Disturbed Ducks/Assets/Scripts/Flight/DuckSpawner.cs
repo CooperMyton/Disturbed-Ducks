@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class DuckSpawner : MonoBehaviour
 {
+    public static DuckSpawner Instance { get; private set; }
+
     [Header("References")]
     [SerializeField] private GameObject duckRoot;
     [SerializeField] private DuckImpact duckImpact;
@@ -12,10 +14,15 @@ public class DuckSpawner : MonoBehaviour
     [Header("Keys")]
     [SerializeField] private Key nextDuckKey = Key.R;
 
-    // True while duck is in the air — prevents mid-flight definition swaps
     private bool _inFlight = false;
 
     // -------------------------------------------------------------------------
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -29,9 +36,6 @@ public class DuckSpawner : MonoBehaviour
             PlayerDuckInventory.Instance.OnSelectedTypeChanged -= OnSelectedTypeChanged;
     }
 
-    // When the player picks a different duck from the loadout UI while the duck
-    // is still on the launcher, immediately swap the definition so the correct
-    // duck launches.
     private void OnSelectedTypeChanged(DuckDefinition selected)
     {
         if (_inFlight) return;
@@ -50,6 +54,10 @@ public class DuckSpawner : MonoBehaviour
 
     public void TryNextDuck()
     {
+        // Block R while duck is on the launcher or in flight —
+        // only allow when it has actually crashed.
+        if (!duckImpact.HasCrashed) return;
+
         if (PlayerDuckInventory.Instance == null) return;
         PlayerDuckInventory.Instance.UseSelectedDuck();
         if (!PlayerDuckInventory.Instance.HasAnyRemaining())
@@ -86,26 +94,16 @@ public class DuckSpawner : MonoBehaviour
         Debug.Log("Duck reset to launcher.");
     }
 
-    // Call this from wherever launch is triggered (LauncherController or DuckController)
-    // so DuckSpawner knows not to swap definitions mid-flight.
     public void OnDuckLaunched()
     {
         _inFlight = true;
     }
 
-    /// Called by EndOfAttemptUI restart button
     public void RestartAttempt()
     {
         PlayerDuckInventory.Instance?.ResetRemainingCounts();
         StageManager.RestartCurrentStage();
         ResetDuck();
         LoadoutUI.Instance?.RebuildAndShow();
-    }
-    public static DuckSpawner Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
     }
 }

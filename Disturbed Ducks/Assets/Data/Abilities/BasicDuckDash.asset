@@ -15,3 +15,34 @@ MonoBehaviour:
   abilityName: Dash
   cooldown: 3
   baseSpeedBoost: 8
+  upgradeLevels:
+  - speedBoostIncrement: 0
+    cooldownReduction: 0
+    cost: 5
+  - speedBoostIncrement: 2
+    cooldownReduction: 0.2
+    cost: 50
+  - speedBoostIncrement: 2
+    cooldownReduction: 0.2
+    cost: 50
+  - speedBoostIncrement: 2
+    cooldownReduction: 0.2
+    cost: 50
+  - speedBoostIncrement: 2
+    cooldownReduction: 0.2
+    cost: 50
+  - speedBoostIncrement: 2
+    cooldownReduction: 0.2
+    cost: 50
+  - speedBoostIncrement: 2
+    cooldownReduction: 0.2
+    cost: 50
+  - speedBoostIncrement: 2
+    cooldownReduction: 0.2
+    cost: 50
+  - speedBoostIncrement: 2
+    cooldownReduction: 0.2
+    cost: 50
+  - speedBoostIncrement: 2
+    cooldownReduction: 0.2
+    cost: 50

@@ -69,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 02fce1bc59b80f048a44e9b025e82296, type: 2}
+  - {fileID: 2100000, guid: d8005397dd7586e48acd995306f86270, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -162,3 +162,5 @@ MonoBehaviour:
   objectRenderer: {fileID: 0}
   healthyColor: {r: 1, g: 1, b: 1, a: 1}
   damagedColor: {r: 1, g: 0, b: 0, a: 1}
+  currencyOnBreak: 10
+  explosionOnly: 0

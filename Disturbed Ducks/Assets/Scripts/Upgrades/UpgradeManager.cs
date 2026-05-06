@@ -26,12 +26,23 @@ public class UpgradeManager : MonoBehaviour
     public int ManeurLevel  => inventory != null && Def != null ? inventory.GetManeurLevel(Def)  : 0;
     public int AbilityLevel => inventory != null && Def != null ? inventory.GetAbilityLevel(Def) : 0;
 
+    // CanUpgrade now includes affordability — buttons grey out automatically
+    // when balance changes since OnBalanceChanged → Refresh() re-reads these.
     public bool CanUpgradeSpeed =>
-        Def != null && SpeedLevel < Def.maxSpeedUpgrade.levels.Length;
+        Def != null &&
+        SpeedLevel < Def.maxSpeedUpgrade.levels.Length &&
+        CanAfford(Def.maxSpeedUpgrade.levels[SpeedLevel].cost);
+
     public bool CanUpgradeManeur =>
-        Def != null && ManeurLevel < Def.manoeuvrabilityUpgrade.levels.Length;
+        Def != null &&
+        ManeurLevel < Def.manoeuvrabilityUpgrade.levels.Length &&
+        CanAfford(Def.manoeuvrabilityUpgrade.levels[ManeurLevel].cost);
+
     public bool CanUpgradeAbility =>
-        Def != null && AbilityLevel < Def.abilityUpgrade.levels.Length;
+        Def != null &&
+        Def.ability != null &&
+        AbilityLevel < Def.ability.MaxUpgradeLevels &&
+        CanAfford(Def.ability.GetUpgradeCost(AbilityLevel));
 
     // -------------------------------------------------------------------------
 
@@ -61,7 +72,6 @@ public class UpgradeManager : MonoBehaviour
     {
         if (!CanUpgradeSpeed) return false;
         var levelData = Def.maxSpeedUpgrade.levels[SpeedLevel];
-        if (!CanAfford(levelData.cost)) return false;
         if (levelData.cost > 0) CurrencyManager.Instance?.Spend(levelData.cost);
 
         int newLevel = SpeedLevel + 1;
@@ -78,7 +88,6 @@ public class UpgradeManager : MonoBehaviour
     {
         if (!CanUpgradeManeur) return false;
         var levelData = Def.manoeuvrabilityUpgrade.levels[ManeurLevel];
-        if (!CanAfford(levelData.cost)) return false;
         if (levelData.cost > 0) CurrencyManager.Instance?.Spend(levelData.cost);
 
         int newLevel = ManeurLevel + 1;
@@ -94,24 +103,16 @@ public class UpgradeManager : MonoBehaviour
     public bool TryUpgradeAbility()
     {
         if (!CanUpgradeAbility) return false;
-        var levelData = Def.abilityUpgrade.levels[AbilityLevel];
-        if (!CanAfford(levelData.cost)) return false;
-        if (levelData.cost > 0) CurrencyManager.Instance?.Spend(levelData.cost);
+        int cost = Def.ability.GetUpgradeCost(AbilityLevel);
+        if (cost > 0) CurrencyManager.Instance?.Spend(cost);
 
         int newLevel = AbilityLevel + 1;
         inventory.SetAbilityLevel(Def, newLevel);
 
         if (TabMatchesFlyingDuck)
         {
-            if (newLevel == 1)
-                Ability?.UnlockAbility();
-            else
-                Ability?.ApplyAbilityUpgrade(
-                    levelData.abilityBoostIncrement,
-                    levelData.cooldownReduction,
-                    levelData.radiusIncrement,
-                    levelData.damageIncrement,
-                    levelData.explosionDelayReduction);
+            if (newLevel == 1) Ability?.UnlockAbility();
+            Def.ability.ApplyAllUpgrades(newLevel, Ability);
         }
 
         UpgradeUI.Instance?.Refresh();
@@ -139,17 +140,9 @@ public class UpgradeManager : MonoBehaviour
             if (abilityLvl >= 1) Ability.UnlockAbility();
             else                 Ability.LockAbility();
 
-            float tBoost = 0, tCooldown = 0, tRadius = 0, tDamage = 0, tDelay = 0;
-            for (int i = 1; i < abilityLvl && i < def.abilityUpgrade.levels.Length; i++)
-            {
-                var lvl   = def.abilityUpgrade.levels[i];
-                tBoost   += lvl.abilityBoostIncrement;
-                tCooldown += lvl.cooldownReduction;
-                tRadius  += lvl.radiusIncrement;
-                tDamage  += lvl.damageIncrement;
-                tDelay   += lvl.explosionDelayReduction;
-            }
-            Ability.SetAbilityUpgrades(tBoost, tCooldown, tRadius, tDamage, tDelay);
+            // ApplyAllUpgrades computes totals from scratch and calls
+            // SetAbilityUpgrades internally — no accumulation bugs on duck switch.
+            def.ability?.ApplyAllUpgrades(abilityLvl, Ability);
         }
 
         Debug.Log($"ApplyCurrentStats — maxSpeed: {CalcSpeed(def, speedLvl)}, " +
