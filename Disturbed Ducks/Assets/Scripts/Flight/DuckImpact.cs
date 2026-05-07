@@ -54,7 +54,7 @@ public class DuckImpact : MonoBehaviour
             _flightController.enabled = false;
 
         _rb.useGravity = true;
-        _rb.freezeRotation = false;
+        _rb.freezeRotation = true;
 
         if (cameraTarget != null)
             cameraTarget.FreezeYaw();
