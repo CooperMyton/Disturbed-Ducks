@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1369b85f3e1e8345a4309fb48801948, type: 3}
+  m_Name: AnvilAbility
+  m_EditorClassIdentifier: Assembly-CSharp::AnvilAbility
+  abilityName: Anvil Drop
+  cooldown: 3
+  baseSlamForce: 75
+  baseHangTime: 0.75
+  upgradeLevels:
+  - slamForceIncrement: 0
+    hangTimeIncrement: 0
+    cost: 10
+  - slamForceIncrement: 10
+    hangTimeIncrement: 0
+    cost: 30
+  - slamForceIncrement: 15
+    hangTimeIncrement: 0
+    cost: 75
+  - slamForceIncrement: 25
+    hangTimeIncrement: 0
+    cost: 140
+  - slamForceIncrement: 50
+    hangTimeIncrement: 0
+    cost: 390
+  - slamForceIncrement: 100
+    hangTimeIncrement: 0
+    cost: 700
+  - slamForceIncrement: 200
+    hangTimeIncrement: 0
+    cost: 1300
+  - slamForceIncrement: 400
+    hangTimeIncrement: 0
+    cost: 2900
+  - slamForceIncrement: 500
+    hangTimeIncrement: 0
+    cost: 4000
+  - slamForceIncrement: 1000
+    hangTimeIncrement: 0
+    cost: 10000

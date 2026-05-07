@@ -17,7 +17,7 @@ MonoBehaviour:
   baseDelay: 0
   abilityRadius: 3
   abilityDamage: 50
-  abilityDelay: 2.5
+  abilityDelay: 2.7
   explosionMaterial: {fileID: 2100000, guid: 1477c3f5260cb23458d25fcc66b8e7b8, type: 2}
   explosionColor: {r: 1, g: 0.4, b: 0, a: 1}
   visualDuration: 0.4
