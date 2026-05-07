@@ -5433,6 +5433,14 @@ PrefabInstance:
       propertyPath: m_Interpolate
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1968352858135550584, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1968352858135550584, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
+      propertyPath: m_AngularDamping
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3132254214253507104, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
       propertyPath: m_Name
       value: 'DuckRoot '
@@ -5440,6 +5448,10 @@ PrefabInstance:
     - target: {fileID: 6061186580609233963, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
       propertyPath: yawSpeed
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6061186580609233963, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
+      propertyPath: modelRoot
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6061186580609233963, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
       propertyPath: pitchSpeed
@@ -5469,8 +5481,12 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedComponents:
+    - {fileID: 954069486482040657, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
+    - {fileID: 5557631496341205678, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
+    - {fileID: 1902032371580611567, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 4804288062920837182, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 413512791478639005, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
       insertIndex: -1
@@ -5497,6 +5513,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3132254214253507104, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1138141513}
+    - targetCorrespondingSourceObject: {fileID: 3132254214253507104, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1138141522}
   m_SourcePrefab: {fileID: 100100000, guid: a3988ff0245909a4aa51bd56bf4adbfb, type: 3}
 --- !u!4 &1138141511 stripped
 Transform:
@@ -5683,6 +5702,27 @@ MonoBehaviour:
   groundTag: Ground
   obstacleTag: obstacle
   cameraTarget: {fileID: 2038390454}
+--- !u!135 &1138141522
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138141512}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.99
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1172004497
 GameObject:
   m_ObjectHideFlags: 0
