@@ -55,31 +55,28 @@ public class StageManager : MonoBehaviour
         if (def == null) return;
 
         // --- TargetEnemy objectives ---
-        if (!string.IsNullOrEmpty(def.objectiveTag))
+        foreach (var tag in def.objectiveTags)
         {
-            foreach (var obj in GameObject.FindGameObjectsWithTag(def.objectiveTag))
+            if (string.IsNullOrEmpty(tag)) continue;
+            foreach (var obj in GameObject.FindGameObjectsWithTag(tag))
             {
-                // Only register objectives that belong to the active environment
                 if (!IsChildOfCurrentRoot(obj.transform)) continue;
-
                 var enemy = obj.GetComponent<TargetEnemy>();
                 if (enemy == null) continue;
-
                 _objectivesRemaining++;
                 enemy.OnDied += HandleObjectiveComplete;
             }
         }
 
         // --- Collectible objectives ---
-        if (!string.IsNullOrEmpty(def.collectibleTag))
+        foreach (var tag in def.collectibleTags)
         {
-            foreach (var obj in GameObject.FindGameObjectsWithTag(def.collectibleTag))
+            if (string.IsNullOrEmpty(tag)) continue;
+            foreach (var obj in GameObject.FindGameObjectsWithTag(tag))
             {
                 if (!IsChildOfCurrentRoot(obj.transform)) continue;
-
                 var col = obj.GetComponent<Collectible>();
                 if (col == null) continue;
-
                 _objectivesRemaining++;
                 col.OnCollected += HandleObjectiveComplete;
             }

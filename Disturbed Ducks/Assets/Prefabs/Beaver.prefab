@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8491148653507938835}
   - component: {fileID: 7075051871876863913}
   - component: {fileID: 8596488663375011852}
+  - component: {fileID: -3347343005231837983}
   m_Layer: 0
   m_Name: Beaver
   m_TagString: Beaver
@@ -162,3 +163,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-3347343005231837983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8124457343458700374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f54da9ab7679f4b9d16087063c22da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PacingEnemy
+  patrolDistance: 5
+  moveSpeed: 2
+  pauseDuration: 0.8

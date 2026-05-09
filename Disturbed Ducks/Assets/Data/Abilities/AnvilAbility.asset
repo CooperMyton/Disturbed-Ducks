@@ -20,30 +20,30 @@ MonoBehaviour:
   - slamForceIncrement: 0
     hangTimeIncrement: 0
     cost: 10
-  - slamForceIncrement: 10
-    hangTimeIncrement: 0
+  - slamForceIncrement: 5
+    hangTimeIncrement: 0.1
     cost: 30
-  - slamForceIncrement: 15
-    hangTimeIncrement: 0
+  - slamForceIncrement: 5
+    hangTimeIncrement: 0.1
     cost: 75
-  - slamForceIncrement: 25
-    hangTimeIncrement: 0
+  - slamForceIncrement: 10
+    hangTimeIncrement: 0.15
     cost: 140
-  - slamForceIncrement: 50
-    hangTimeIncrement: 0
+  - slamForceIncrement: 15
+    hangTimeIncrement: 0.15
     cost: 390
-  - slamForceIncrement: 100
-    hangTimeIncrement: 0
+  - slamForceIncrement: 15
+    hangTimeIncrement: 0.15
     cost: 700
-  - slamForceIncrement: 200
-    hangTimeIncrement: 0
+  - slamForceIncrement: 20
+    hangTimeIncrement: 0.2
     cost: 1300
-  - slamForceIncrement: 400
-    hangTimeIncrement: 0
+  - slamForceIncrement: 20
+    hangTimeIncrement: 0.15
     cost: 2900
-  - slamForceIncrement: 500
-    hangTimeIncrement: 0
+  - slamForceIncrement: 25
+    hangTimeIncrement: 0.2
     cost: 4000
-  - slamForceIncrement: 1000
-    hangTimeIncrement: 0
+  - slamForceIncrement: 30
+    hangTimeIncrement: 0.25
     cost: 10000
