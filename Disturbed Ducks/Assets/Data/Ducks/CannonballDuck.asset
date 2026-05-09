@@ -10,88 +10,88 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00a0964a359b4f2428a2558e31a4721a, type: 3}
-  m_Name: SplitDuck
+  m_Name: CannonballDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
-  duckName: Split Duck
+  duckName: Cannonball Duck
   purchaseCosts: 320000004b0000007d000000e1000000770100008a020000dc050000b80b00004c1d000010270000
   maxOwned: 10
-  baseMaxSpeed: 30
-  baseTurnSpeed: 40
-  baseGlideGravity: 12
+  baseMaxSpeed: 50
+  baseTurnSpeed: 0
+  baseGlideGravity: 13
   baseMinSpeed: 5
-  baseMass: 1
+  baseMass: 5
   neutralModel: {fileID: 919132149155446097, guid: ca4349f12576e0143bc7506b19b8a3ec, type: 3}
   flightModel: {fileID: 919132149155446097, guid: 1efe1b4acff58c64899ae00b1551ee76, type: 3}
   crashedModel: {fileID: 919132149155446097, guid: f739817ffb5e518458887491017743c2, type: 3}
   launchSound: {fileID: 0}
   crashSound: {fileID: 0}
   abilitySound: {fileID: 0}
-  ability: {fileID: 11400000, guid: 50cc4352ce3a3e84a87f8edb55aab4cb, type: 2}
+  ability: {fileID: 11400000, guid: 3802377bb4c31d04e953d8dd0711fc67, type: 2}
   explosionDefinition: {fileID: 0}
   maxSpeedUpgrade:
     upgradeName: Max Speed
     levels:
-    - statIncrement: 3
+    - statIncrement: 5
       massIncrement: 0
       cost: 0
-    - statIncrement: 3
+    - statIncrement: 5
       massIncrement: 0
       cost: 10
-    - statIncrement: 3
+    - statIncrement: 5
       massIncrement: 0
       cost: 20
-    - statIncrement: 3
+    - statIncrement: 5
       massIncrement: 0
       cost: 50
-    - statIncrement: 3
+    - statIncrement: 5
       massIncrement: 0
       cost: 100
-    - statIncrement: 3
+    - statIncrement: 5
       massIncrement: 0
       cost: 250
-    - statIncrement: 3
+    - statIncrement: 5
       massIncrement: 0
       cost: 500
-    - statIncrement: 3
+    - statIncrement: 5
       massIncrement: 0
       cost: 1000
-    - statIncrement: 3
+    - statIncrement: 5
       massIncrement: 0
       cost: 5000
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 10000
-  manoeuvrabilityUpgrade:
-    upgradeName: Manoeuvrability
-    levels:
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 5
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 15
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 35
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 75
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 125
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 300
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 650
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 1250
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 6000
     - statIncrement: 10
       massIncrement: 0
       cost: 10000
-  disableFlightControls: 0
+  manoeuvrabilityUpgrade:
+    upgradeName: Mass
+    levels:
+    - statIncrement: 0
+      massIncrement: 0.2
+      cost: 5
+    - statIncrement: 0
+      massIncrement: 0.2
+      cost: 15
+    - statIncrement: 0
+      massIncrement: 0.2
+      cost: 35
+    - statIncrement: 0
+      massIncrement: 0.2
+      cost: 75
+    - statIncrement: 0
+      massIncrement: 0.2
+      cost: 125
+    - statIncrement: 0
+      massIncrement: 0.2
+      cost: 300
+    - statIncrement: 0
+      massIncrement: 0.2
+      cost: 650
+    - statIncrement: 0
+      massIncrement: 0.2
+      cost: 1250
+    - statIncrement: 0
+      massIncrement: 0.2
+      cost: 6000
+    - statIncrement: 0
+      massIncrement: 0.2
+      cost: 10000
+  disableFlightControls: 1

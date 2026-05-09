@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d93482e53326e343bd23c57f5e40425, type: 3}
+  m_Name: CannonballDash
+  m_EditorClassIdentifier: Assembly-CSharp::DashAbility
+  abilityName: Thrust
+  cooldown: 3
+  baseSpeedBoost: 20
+  upgradeLevels:
+  - speedBoostIncrement: 4
+    cooldownReduction: 0
+    cost: 10
+  - speedBoostIncrement: 4
+    cooldownReduction: 0.2
+    cost: 15
+  - speedBoostIncrement: 4
+    cooldownReduction: 0.2
+    cost: 40
+  - speedBoostIncrement: 4
+    cooldownReduction: 0.2
+    cost: 95
+  - speedBoostIncrement: 4
+    cooldownReduction: 0.2
+    cost: 175
+  - speedBoostIncrement: 4
+    cooldownReduction: 0.2
+    cost: 300
+  - speedBoostIncrement: 4
+    cooldownReduction: 0.2
+    cost: 600
+  - speedBoostIncrement: 4
+    cooldownReduction: 0.2
+    cost: 1400
+  - speedBoostIncrement: 4
+    cooldownReduction: 0.2
+    cost: 2000
+  - speedBoostIncrement: 4
+    cooldownReduction: 0.2
+    cost: 10000

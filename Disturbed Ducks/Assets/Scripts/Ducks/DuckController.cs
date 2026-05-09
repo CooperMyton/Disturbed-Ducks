@@ -45,10 +45,15 @@ public class DuckController : MonoBehaviour
             definition.baseMinSpeed
         );
 
+        // Apply base mass from definition
+        var rb = GetComponent<Rigidbody>();
+        if (rb != null) rb.mass = definition.baseMass;
+
         _soundController?.SetDefinition(definition);
         _modelController?.SetDefinition(definition);
         _abilityController?.SetAbility(definition.ability);
-        AbilityUI.Instance?.RefreshName(); 
+        _flightController?.SetDisableInput(definition.disableFlightControls);
+        AbilityUI.Instance?.RefreshName();
         GetComponent<ExplosionOnCrash>()?.SetExplosionDefinition(definition.explosionDefinition);
     }
 
