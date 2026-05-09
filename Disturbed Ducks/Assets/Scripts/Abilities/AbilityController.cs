@@ -86,7 +86,7 @@ public class AbilityController : MonoBehaviour
     {
         float actualCooldown = CurrentCooldown;
         _ability.Use(gameObject, _upgradeBoost);
-        _cooldownTimer = actualCooldown;
+        _cooldownTimer = _ability.IsSingleUse ? float.MaxValue : actualCooldown;
 
         GetComponent<DuckController>()?.OnAbilityUsed();
 

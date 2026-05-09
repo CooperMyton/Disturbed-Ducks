@@ -72,14 +72,15 @@ public class DuckController : MonoBehaviour
         _flightTrail?.SetEmitting(false);
     }
 
-    public void OnReset()
-    {
-        _abilityController?.OnReset();
-        GetComponent<ExplosionOnCrash>()?.ResetFlight();
-        _modelController?.SetNeutral();
-        _flightTrail?.Clear();
-        _flightTrail?.SetEmitting(false);
-    }
+public void OnReset()
+{
+    _abilityController?.OnReset();
+    GetComponent<ExplosionOnCrash>()?.ResetFlight();
+    GetComponent<SplitController>()?.OnReset(); // clean up mini ducks
+    _modelController?.SetNeutral();
+    _flightTrail?.Clear();
+    _flightTrail?.SetEmitting(false);
+}
 
     public void OnAbilityUsed()
     {
