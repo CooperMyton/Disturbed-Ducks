@@ -52,6 +52,7 @@ public class DuckFlightController : MonoBehaviour
     private void Update()
     {
         if (!_isLaunched) return;
+        if (_inputDisabled) return;
 
         _moveInput = Vector2.zero;
 
@@ -214,5 +215,11 @@ public class DuckFlightController : MonoBehaviour
     {
         pitchSpeed = turnSpeed;
         yawSpeed   = turnSpeed;
+    }
+    private bool _inputDisabled = false;
+
+    public void SetDisableInput(bool disabled)
+    {
+        _inputDisabled = disabled;
     }
 }

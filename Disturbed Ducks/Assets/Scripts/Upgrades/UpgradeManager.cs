@@ -18,6 +18,8 @@ public class UpgradeManager : MonoBehaviour
         duckController?.GetComponent<DuckFlightController>();
     private AbilityController Ability =>
         duckController?.GetComponent<AbilityController>();
+    private Rigidbody DuckRigidbody =>
+        duckController?.GetComponent<Rigidbody>();
 
     public DuckDefinition Definition       => Def;
     public DuckDefinition FlyingDefinition => FlyingDef;
@@ -26,8 +28,6 @@ public class UpgradeManager : MonoBehaviour
     public int ManeurLevel  => inventory != null && Def != null ? inventory.GetManeurLevel(Def)  : 0;
     public int AbilityLevel => inventory != null && Def != null ? inventory.GetAbilityLevel(Def) : 0;
 
-    // CanUpgrade now includes affordability — buttons grey out automatically
-    // when balance changes since OnBalanceChanged → Refresh() re-reads these.
     public bool CanUpgradeSpeed =>
         Def != null &&
         SpeedLevel < Def.maxSpeedUpgrade.levels.Length &&
@@ -94,7 +94,12 @@ public class UpgradeManager : MonoBehaviour
         inventory.SetManeurLevel(Def, newLevel);
 
         if (TabMatchesFlyingDuck)
+        {
             Flight?.SetManoeuvrability(CalcTurnSpeed(Def, newLevel));
+
+            var rb = DuckRigidbody;
+            if (rb != null) rb.mass = CalcMass(Def, newLevel);
+        }
 
         UpgradeUI.Instance?.Refresh();
         return true;
@@ -128,25 +133,26 @@ public class UpgradeManager : MonoBehaviour
             return;
         }
 
-        int speedLvl   = inventory.GetSpeedLevel(def);
-        int maneurLvl  = inventory.GetManeurLevel(def);
+        int speedLvl  = inventory.GetSpeedLevel(def);
+        int maneurLvl = inventory.GetManeurLevel(def);
         int abilityLvl = inventory.GetAbilityLevel(def);
 
         Flight.SetMaxSpeed(CalcSpeed(def, speedLvl));
         Flight.SetManoeuvrability(CalcTurnSpeed(def, maneurLvl));
 
+        var rb = DuckRigidbody;
+        if (rb != null) rb.mass = CalcMass(def, maneurLvl);
+
         if (Ability != null)
         {
             if (abilityLvl >= 1) Ability.UnlockAbility();
             else                 Ability.LockAbility();
-
-            // ApplyAllUpgrades computes totals from scratch and calls
-            // SetAbilityUpgrades internally — no accumulation bugs on duck switch.
             def.ability?.ApplyAllUpgrades(abilityLvl, Ability);
         }
 
         Debug.Log($"ApplyCurrentStats — maxSpeed: {CalcSpeed(def, speedLvl)}, " +
-                  $"turnSpeed: {CalcTurnSpeed(def, maneurLvl)}, abilityLevel: {abilityLvl}");
+                  $"turnSpeed: {CalcTurnSpeed(def, maneurLvl)}, " +
+                  $"mass: {CalcMass(def, maneurLvl)}, abilityLevel: {abilityLvl}");
     }
 
     // -------------------------------------------------------------------------
@@ -164,6 +170,14 @@ public class UpgradeManager : MonoBehaviour
         float val = def.baseTurnSpeed;
         for (int i = 0; i < level && i < def.manoeuvrabilityUpgrade.levels.Length; i++)
             val += def.manoeuvrabilityUpgrade.levels[i].statIncrement;
+        return val;
+    }
+
+    private float CalcMass(DuckDefinition def, int level)
+    {
+        float val = def.baseMass;
+        for (int i = 0; i < level && i < def.manoeuvrabilityUpgrade.levels.Length; i++)
+            val += def.manoeuvrabilityUpgrade.levels[i].massIncrement;
         return val;
     }
 
