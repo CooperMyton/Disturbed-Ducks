@@ -8,6 +8,7 @@ TagManager:
   - obstacle
   - Beaver
   - Blueprint
+  - Duck
   layers:
   - Default
   - TransparentFX

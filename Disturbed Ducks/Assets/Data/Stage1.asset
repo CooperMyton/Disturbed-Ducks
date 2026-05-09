@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageDefinition
   stageId: stage_1
   stageName: Stage 1
-  objectiveTag: Beaver
-  collectibleTag: 
+  objectiveTags:
+  - Beaver
+  collectibleTags: []
   firstClearBonus: 100
   nextStage: {fileID: 11400000, guid: b7942472465ec034986c033b4f1a628b, type: 2}

@@ -55,11 +55,13 @@ public class TargetEnemy : MonoBehaviour
         TakeDamage(damage);
     }
 
+    public event Action OnDamaged;
+
     public void TakeDamage(float amount)
     {
         currentHP = Mathf.Max(currentHP - amount, 0f);
         UpdateColor();
-
+        OnDamaged?.Invoke();
         Debug.Log($"{gameObject.name} took {amount:F1} damage | HP: {currentHP:F1}/{maxHP}");
 
         if (currentHP <= 0f) Die();
