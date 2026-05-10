@@ -53,7 +53,6 @@ public class DuckController : MonoBehaviour
         _modelController?.SetDefinition(definition);
         _abilityController?.SetAbility(definition.ability);
         _flightController?.SetDisableInput(definition.disableFlightControls);
-        AbilityUI.Instance?.RefreshName();
         GetComponent<ExplosionOnCrash>()?.SetExplosionDefinition(definition.explosionDefinition);
     }
 

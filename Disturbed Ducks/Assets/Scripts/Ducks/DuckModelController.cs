@@ -47,4 +47,5 @@ public class DuckModelController : MonoBehaviour
         _activeModel = Instantiate(prefab, transform);
         _activeModel.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
+    public Transform ActiveModelTransform => _activeModel?.transform;
 }

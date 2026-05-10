@@ -16,6 +16,10 @@ public class PlayerDuckInventory : MonoBehaviour
     [Tooltip("Maximum total ducks the player can own across all types")]
     [SerializeField] private int maxTotalDucks = 10;
 
+    [Header("Sell Settings")]
+    [SerializeField] private DuckDefinition basicDuck;
+    [SerializeField] private float sellRefundPercent = 0.8f;
+
     private Dictionary<DuckDefinition, int> _remaining
         = new Dictionary<DuckDefinition, int>();
 
@@ -24,6 +28,7 @@ public class PlayerDuckInventory : MonoBehaviour
     public event Action OnInventoryChanged;
     public event Action<DuckDefinition> OnSelectedTypeChanged;
 
+    public static event System.Action OnDuckPurchased;
     public int MaxTotalDucks => maxTotalDucks;
     public DuckDefinition SelectedType => _selectedType;
 
@@ -137,6 +142,7 @@ public class PlayerDuckInventory : MonoBehaviour
 
         inventory.AddDuck(def, 1);
         ResetRemainingCounts();
+        OnDuckPurchased?.Invoke();
         return true;
     }
 
@@ -157,4 +163,27 @@ public class PlayerDuckInventory : MonoBehaviour
 
     public List<DuckDefinition> GetOwnedTypes()
         => inventory.ownedDuckTypes;
+
+    public bool CanSellDuck(DuckDefinition def)
+    {
+        if (GetOwned(def) <= 0) return false;
+        if (def == basicDuck && GetOwned(def) <= 1) return false;
+        return true;
+    }
+
+    public int GetSellPrice(DuckDefinition def)
+    {
+        int owned = GetOwned(def);
+        if (owned <= 0) return 0;
+        return Mathf.CeilToInt(def.GetPurchaseCost(owned - 1) * sellRefundPercent);
+    }
+
+    public bool TrySellDuck(DuckDefinition def)
+    {
+        if (!CanSellDuck(def)) return false;
+        CurrencyManager.Instance?.Add(GetSellPrice(def));
+        inventory.RemoveDuck(def, 1);
+        ResetRemainingCounts();
+        return true;
+    }
 }

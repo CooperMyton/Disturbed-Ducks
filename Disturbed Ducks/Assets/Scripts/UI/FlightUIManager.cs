@@ -31,17 +31,19 @@ public class FlightUIManager : MonoBehaviour
         upgradeUI?.Hide();
         EndOfAttemptUI.Instance?.Hide();
         LoadoutUI.Instance?.Show();
-        SetPrompt("Select duck and use WASD to aim, Space to launch");
+        SetPrompt("Select your duck and use WASD to set duck, X and Z to set launcher, and Space to launch");
     }
 
     public void OnLaunched()
     {
+        TutorialManager.Instance?.OnLaunched(); // add this
         LoadoutUI.Instance?.Hide();
         SetPrompt("");
     }
 
     public void OnCrashed()
     {
+        TutorialManager.Instance?.OnCrashed();
         bool hasRemaining = PlayerDuckInventory.Instance != null &&
                             PlayerDuckInventory.Instance.HasAnyRemaining();
 

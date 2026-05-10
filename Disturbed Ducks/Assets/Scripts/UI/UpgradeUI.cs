@@ -40,6 +40,9 @@ public class UpgradeUI : MonoBehaviour
     [SerializeField] private Button          purchaseUnlockButton;
     [SerializeField] private TextMeshProUGUI purchaseUnlockButtonText;
 
+    [Header("Sell Duck Button")]
+    [SerializeField] private Button          sellDuckButton;
+    [SerializeField] private TextMeshProUGUI sellDuckButtonText;
     private DuckDefinition _selectedTab;
 
     private readonly List<(Button btn, Image img)> _tabData
@@ -57,6 +60,7 @@ public class UpgradeUI : MonoBehaviour
         abilityButton?.onClick.AddListener(()=> OnUpgradeClicked(2));
         buyDuckButton?.onClick.AddListener(OnBuyDuckClicked);
         purchaseUnlockButton?.onClick.AddListener(OnPurchaseUnlockClicked);
+        sellDuckButton?.onClick.AddListener(OnSellDuckClicked);
 
         Hide();
     }
@@ -213,12 +217,13 @@ public class UpgradeUI : MonoBehaviour
         if (abilityLevelText != null)
             abilityLevelText.text = !hasAbility ? "No Ability"
                 : locked ? $"{def.ability.abilityName}: LOCKED"
-                         : $"{def.ability.abilityName}: {um.AbilityLevel} / {def.ability.MaxUpgradeLevels}";
+                        : $"{def.ability.abilityName}: {um.AbilityLevel} / {def.ability.MaxUpgradeLevels}";
 
         if (abilityButton != null)     abilityButton.interactable = um.CanUpgradeAbility;
         if (abilityButtonText != null) abilityButtonText.text     = GetAbilityLabel(um, def, locked);
 
         RefreshBuyDuck(def);
+        RefreshSellDuck(def);
     }
 
     private void RefreshPurchaseContent()
@@ -300,5 +305,27 @@ public class UpgradeUI : MonoBehaviour
         if (_selectedTab == null) return;
         if (PlayerDuckInventory.Instance?.TryBuyDuck(_selectedTab) == true)
             Refresh();
+    }
+
+    private void RefreshSellDuck(DuckDefinition def)
+    {
+        if (sellDuckButton == null || sellDuckButtonText == null) return;
+        var inv = PlayerDuckInventory.Instance;
+        if (inv == null) return;
+
+        bool canSell  = inv.CanSellDuck(def);
+        int  sellPrice = inv.GetSellPrice(def);
+
+        sellDuckButton.interactable = canSell;
+        sellDuckButtonText.text     = canSell
+            ? $"SELL DUCK (+{sellPrice} coins)"
+            : "CANNOT SELL";
+    }
+
+    private void OnSellDuckClicked()
+    {
+        if (_selectedTab == null) return;
+        PlayerDuckInventory.Instance?.TrySellDuck(_selectedTab);
+        Refresh();
     }
 }

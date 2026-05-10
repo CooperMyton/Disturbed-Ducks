@@ -105,4 +105,12 @@ public class PlayerInventory : ScriptableObject
         if (idx >= 0 && idx < levels.Count)
             levels[idx] = level;
     }
+    /// Reduces owned count by amount. Keeps type and upgrade levels
+    /// so upgrades persist if the player buys the duck again later.
+    public void RemoveDuck(DuckDefinition def, int count = 1)
+    {
+        int idx = ownedDuckTypes.IndexOf(def);
+        if (idx < 0) return;
+        ownedDuckCounts[idx] = Mathf.Max(0, ownedDuckCounts[idx] - count);
+    }
 }

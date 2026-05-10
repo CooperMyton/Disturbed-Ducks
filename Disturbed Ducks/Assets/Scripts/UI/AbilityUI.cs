@@ -7,18 +7,19 @@ public class AbilityUI : MonoBehaviour
     public static AbilityUI Instance { get; private set; }
 
     [Header("References")]
-    [SerializeField] private GameObject      abilityPanel;
-    [SerializeField] private TextMeshProUGUI abilityNameText;
-    [SerializeField] private Image           cooldownFill;
-    [SerializeField] private TextMeshProUGUI cooldownText;
+    [SerializeField] private GameObject        abilityPanel;
+    [SerializeField] private TextMeshProUGUI   abilityNameText;
+    [SerializeField] private Image             abilityIndicator;   // yellow/grey square
+    [SerializeField] private TextMeshProUGUI   statusText;         // READY / USED / countdown
     [SerializeField] private AbilityController abilityController;
 
-    private float _cooldownTotal     = 1f;
-    private float _cooldownRemaining = 0f;
-    private bool  _onCooldown        = false;
+    [Header("Colors")]
+    [SerializeField] private Color readyColor  = Color.yellow;
+    [SerializeField] private Color usedColor   = new Color(0.4f, 0.4f, 0.4f, 1f);
+    [SerializeField] private Color lockedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
 
-    // Bomb-specific: counts down to detonation instead of showing a recharge cooldown.
-    private bool  _isBombMode        = false;
+    private float _countdownRemaining = 0f;
+    private bool  _isCountingDown     = false;
 
     // -------------------------------------------------------------------------
 
@@ -35,103 +36,80 @@ public class AbilityUI : MonoBehaviour
 
     private void InitDisplay()
     {
-        if (abilityController != null && abilityNameText != null)
-            abilityNameText.text = abilityController.AbilityName;
-
-        SetFill(1f);
-        if (cooldownText != null) cooldownText.text = "READY";
+        RefreshName();
+        RefreshIndicator();
         if (abilityPanel != null) abilityPanel.SetActive(true);
     }
 
     private void Update()
     {
-        if (!_onCooldown && !_isBombMode) return;
+        if (!_isCountingDown) return;
 
-        _cooldownRemaining -= Time.deltaTime;
+        _countdownRemaining -= Time.deltaTime;
 
-        if (_cooldownRemaining <= 0f)
+        if (_countdownRemaining <= 0f)
         {
-            _cooldownRemaining = 0f;
-            SetFill(_isBombMode ? 0f : 1f);
-
-            if (_isBombMode)
-            {
-                // Duck is about to crash — brief confirmation before reset clears it
-                if (cooldownText != null) cooldownText.text = "BOOM";
-                _isBombMode = false;
-            }
-            else
-            {
-                _onCooldown = false;
-                if (cooldownText != null) cooldownText.text = "READY";
-            }
+            _countdownRemaining = 0f;
+            _isCountingDown     = false;
+            SetIndicator(usedColor, "BOOM");
             return;
         }
 
-        float ratio = _cooldownRemaining / _cooldownTotal;
-
-        if (_isBombMode)
-        {
-            // Fill drains toward empty as detonation approaches
-            SetFill(ratio);
-            if (cooldownText != null) cooldownText.text = $"{_cooldownRemaining:F1}s";
-        }
-        else
-        {
-            // Normal cooldown: fill refills toward full as recharge completes
-            SetFill(ratio);
-            if (cooldownText != null) cooldownText.text = $"{_cooldownRemaining:F1}s";
-        }
+        if (statusText != null) statusText.text = $"{_countdownRemaining:F1}s";
     }
 
     // -------------------------------------------------------------------------
 
-    /// <summary>Called by AbilityController for normal recharge abilities.</summary>
-    public void OnAbilityUsed(float cooldownDuration)
+    /// Called for all single-use abilities (split, dash etc) after firing.
+    public void OnAbilityUsed(float _)
     {
-        _isBombMode        = false;
-        _cooldownTotal     = cooldownDuration;
-        _cooldownRemaining = cooldownDuration;
-        _onCooldown        = true;
-
-        if (cooldownText != null) cooldownText.text = $"{_cooldownRemaining:F1}s";
+        if (_isCountingDown) return; // don't override bomb/anvil countdown
+        SetIndicator(usedColor, "USED");
     }
 
-    /// <summary>
-    /// Called by ExplosionOnCrash when the bomb countdown starts.
-    /// Replaces the normal cooldown display with a detonation timer.
-    /// </summary>
-    public void OnBombArmed(float detonationDelay)
+    /// Called by ExplosionOnCrash (bomb) and AnvilSlamController.
+    /// Replaces the indicator with a live countdown.
+    public void OnBombArmed(float duration)
     {
-        _onCooldown        = false;
-        _isBombMode        = true;
-        _cooldownTotal     = detonationDelay;
-        _cooldownRemaining = detonationDelay;
-
-        SetFill(1f);
-        if (cooldownText != null) cooldownText.text = $"{_cooldownRemaining:F1}s";
+        _isCountingDown     = true;
+        _countdownRemaining = duration;
+        SetIndicator(readyColor, $"{duration:F1}s");
     }
 
     public void ResetCooldown()
     {
-        _onCooldown        = false;
-        _isBombMode        = false;
-        _cooldownRemaining = 0f;
-        SetFill(1f);
+        _isCountingDown     = false;
+        _countdownRemaining = 0f;
+        RefreshIndicator();
+    }
 
-        if (cooldownText != null) cooldownText.text = "READY";
+    public void RefreshName()
+    {
+        if (abilityNameText != null && abilityController != null)
+            abilityNameText.text = abilityController.AbilityName;
+        RefreshIndicator();
     }
 
     public void Show() { if (abilityPanel != null) abilityPanel.SetActive(true); }
     public void Hide() { if (abilityPanel != null) abilityPanel.SetActive(false); }
 
-    private void SetFill(float ratio)
+    // -------------------------------------------------------------------------
+
+    private void RefreshIndicator()
     {
-        if (cooldownFill != null) cooldownFill.fillAmount = ratio;
+        if (abilityController == null) return;
+
+        if (!abilityController.IsUnlocked)
+            SetIndicator(lockedColor, "Upgrade to Unlock");
+        else if (abilityController.IsReady)
+            SetIndicator(readyColor, "READY");
+        else
+            SetIndicator(usedColor, "USED");
     }
-    public void RefreshName()
+
+    private void SetIndicator(Color color, string text)
     {
-        if (abilityNameText != null && abilityController != null)
-            abilityNameText.text = abilityController.AbilityName;
+        if (abilityIndicator != null) abilityIndicator.color = color;
+        if (statusText       != null) statusText.text        = text;
     }
 }

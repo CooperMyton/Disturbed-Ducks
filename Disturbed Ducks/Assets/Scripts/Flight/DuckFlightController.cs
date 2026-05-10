@@ -25,7 +25,7 @@ public class DuckFlightController : MonoBehaviour
 
     [Header("Visual Bank")]
     [SerializeField] private Transform modelRoot;
-    [SerializeField] private float maxBankAngle = 25f;
+    [SerializeField] private float maxBankAngle = 10f;
     [SerializeField] private float bankSmoothing = 6f;
 
     private Rigidbody _rb;
@@ -194,12 +194,17 @@ public class DuckFlightController : MonoBehaviour
 
     private void ApplyVisualBank(float yawInput)
     {
-        if (modelRoot == null) return;
+        // Falls back to DuckModelController's active model if modelRoot not assigned
+        Transform bankTarget = modelRoot;
+        if (bankTarget == null)
+            bankTarget = GetComponent<DuckModelController>()?.ActiveModelTransform;
+        if (bankTarget == null) return;
+
         float targetBank = -yawInput * maxBankAngle;
         _currentBankAngle = Mathf.Lerp(_currentBankAngle, targetBank, bankSmoothing * Time.deltaTime);
-        Vector3 localEuler = modelRoot.localEulerAngles;
+        Vector3 localEuler = bankTarget.localEulerAngles;
         localEuler.z = _currentBankAngle;
-        modelRoot.localEulerAngles = localEuler;
+        bankTarget.localEulerAngles = localEuler;
     }
 
     public void SetBaseStats(float maxSpeed, float turnSpeed, float gravity, float minSpeed)
