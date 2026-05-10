@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c8e5338135c96945aa44ef19f52654e, type: 3}
-  m_Name: Stage4
+  m_Name: Stage5
   m_EditorClassIdentifier: Assembly-CSharp::StageDefinition
-  stageId: stage_4
-  stageName: Stage 4
+  stageId: stage_5
+  stageName: Stage 5
   objectiveTags:
+  - Beaver
   - Beaver
   - Beaver
   - Beaver
   collectibleTags:
   - Blueprint
-  firstClearBonus: 1000
-  nextStage: {fileID: 11400000, guid: 55d85a58e8e1b924e87acbfb66957d8f, type: 2}
+  firstClearBonus: 100
+  nextStage: {fileID: 0}
