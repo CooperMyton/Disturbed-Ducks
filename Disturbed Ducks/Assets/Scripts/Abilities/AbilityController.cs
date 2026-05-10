@@ -90,12 +90,10 @@ public class AbilityController : MonoBehaviour
 
         GetComponent<DuckController>()?.OnAbilityUsed();
 
-        // Single-use abilities (e.g. bomb) skip the normal cooldown UI.
-        // They notify AbilityUI directly (e.g. OnBombArmed) from within Use().
-        if (!_ability.IsSingleUse)
-            AbilityUI.Instance?.OnAbilityUsed(actualCooldown);
+        // Always notify AbilityUI — bomb/anvil will override with
+        // OnBombArmed shortly after, which replaces grey with countdown
+        AbilityUI.Instance?.OnAbilityUsed(actualCooldown);
     }
-
     public void SetAbilityUpgrades(float totalBoost, float totalCooldown,
         float totalRadius = 0f, float totalDamage = 0f, float totalDelay = 0f)
     {

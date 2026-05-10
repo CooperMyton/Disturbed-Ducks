@@ -57,6 +57,7 @@ public class AnvilSlamController : MonoBehaviour
         _rb.linearVelocity        = Vector3.zero;
         _rb.useGravity            = false;
         _isHovering               = true;
+        AbilityUI.Instance?.OnBombArmed(hangTime);
 
         yield return new WaitForSeconds(hangTime);
 

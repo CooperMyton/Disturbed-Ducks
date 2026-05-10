@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class StageManager : MonoBehaviour
 {
     public static StageManager Instance { get; private set; }
-
+    public static event System.Action<int> OnStageInitialized;
     // Pairs each StageDefinition with its root GameObject in the scene.
     // Element 0 = Stage 1, Element 1 = Stage 2, etc.
     [System.Serializable]
@@ -21,6 +21,9 @@ public class StageManager : MonoBehaviour
     private int  _currentIndex       = 0;
     private int  _objectivesRemaining = 0;
     private bool _isCleared           = false;
+
+    private int _objectivesTotal = 0;
+    public static event System.Action<int, int> OnObjectivesChanged; // remaining, total
 
     // Convenience
     private StageDefinition CurrentDef  => stages[_currentIndex].definition;
@@ -83,6 +86,10 @@ public class StageManager : MonoBehaviour
         }
 
         Debug.Log($"Stage {def.stageName} — {_objectivesRemaining} objectives");
+        OnStageInitialized?.Invoke(_currentIndex);
+
+        _objectivesTotal = _objectivesRemaining;
+        OnObjectivesChanged?.Invoke(_objectivesRemaining, _objectivesTotal);
     }
 
     private bool IsChildOfCurrentRoot(Transform t)
@@ -94,6 +101,7 @@ public class StageManager : MonoBehaviour
     private void HandleObjectiveComplete()
     {
         _objectivesRemaining--;
+        OnObjectivesChanged?.Invoke(_objectivesRemaining, _objectivesTotal);
         Debug.Log($"Objective complete — {_objectivesRemaining} remaining");
         if (_objectivesRemaining <= 0)
             TriggerStageClear();
@@ -109,6 +117,13 @@ public class StageManager : MonoBehaviour
         {
             inventory.MarkStageCleared(CurrentDef.stageId);
             CurrencyManager.Instance?.Add(CurrentDef.firstClearBonus);
+        }
+
+        // Final stage — show win screen instead of stage clear
+        if (CurrentDef.nextStage == null)
+        {
+            WinScreenUI.Instance?.Show();
+            return;
         }
 
         StageClearUI.Instance?.Show(CurrentDef, isFirstClear);
@@ -127,20 +142,25 @@ public class StageManager : MonoBehaviour
             return;
         }
 
-        // Consume the duck that cleared the stage — it may still be in flight
-        // when the final objective dies (e.g. bomb kill), so R was never pressed.
         PlayerDuckInventory.Instance?.UseSelectedDuck();
 
-        // Hide current environment, show next
         CurrentRoot?.SetActive(false);
         _currentIndex = nextIndex;
         CurrentRoot?.SetActive(true);
 
-        // Reset duck to launcher for the new stage
+        InitializeStage();
+
+        // Check BEFORE resetting to launcher — if no ducks remain,
+        // show end of attempt without placing a duck in the launcher
+        if (PlayerDuckInventory.Instance != null &&
+            !PlayerDuckInventory.Instance.HasAnyRemaining())
+        {
+            FlightUIManager.Instance?.OnCrashed();
+            return;
+        }
+
         DuckSpawner.Instance?.ResetDuck();
         FlightUIManager.Instance?.ShowLaunchPrompt();
-
-        InitializeStage();
     }
 
     /// Reloads the scene — resets all environments and duck counts back to stage 1.

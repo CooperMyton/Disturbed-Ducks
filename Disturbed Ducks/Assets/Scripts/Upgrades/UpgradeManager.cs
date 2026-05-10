@@ -4,6 +4,7 @@ public class UpgradeManager : MonoBehaviour
 {
     public static UpgradeManager Instance { get; private set; }
 
+    public static event System.Action OnAbilityFirstUnlocked;
     [Header("References")]
     [SerializeField] private DuckController duckController;
     [SerializeField] private PlayerInventory inventory;
@@ -112,6 +113,7 @@ public class UpgradeManager : MonoBehaviour
         if (cost > 0) CurrencyManager.Instance?.Spend(cost);
 
         int newLevel = AbilityLevel + 1;
+        if (newLevel == 1) OnAbilityFirstUnlocked?.Invoke();
         inventory.SetAbilityLevel(Def, newLevel);
 
         if (TabMatchesFlyingDuck)
@@ -149,6 +151,8 @@ public class UpgradeManager : MonoBehaviour
             else                 Ability.LockAbility();
             def.ability?.ApplyAllUpgrades(abilityLvl, Ability);
         }
+
+        AbilityUI.Instance?.RefreshName();
 
         Debug.Log($"ApplyCurrentStats — maxSpeed: {CalcSpeed(def, speedLvl)}, " +
                   $"turnSpeed: {CalcTurnSpeed(def, maneurLvl)}, " +

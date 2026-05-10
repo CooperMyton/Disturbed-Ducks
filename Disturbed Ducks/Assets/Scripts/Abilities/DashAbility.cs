@@ -45,4 +45,6 @@ public class DashAbility : AbilityBase
         if (flight == null) return;
         flight.ApplySpeedBoost(baseSpeedBoost + upgradeBoost);
     }
+
+    public override bool IsSingleUse => true;
 }
