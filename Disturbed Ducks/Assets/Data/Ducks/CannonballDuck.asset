@@ -19,10 +19,10 @@ MonoBehaviour:
   baseTurnSpeed: 0
   baseGlideGravity: 12
   baseMinSpeed: 5
-  baseMass: 4
-  neutralModel: {fileID: 919132149155446097, guid: ca4349f12576e0143bc7506b19b8a3ec, type: 3}
-  flightModel: {fileID: 919132149155446097, guid: 1efe1b4acff58c64899ae00b1551ee76, type: 3}
-  crashedModel: {fileID: 919132149155446097, guid: f739817ffb5e518458887491017743c2, type: 3}
+  baseMass: 5
+  neutralModel: {fileID: 919132149155446097, guid: 516060d811671e246992dbf5660f5e56, type: 3}
+  flightModel: {fileID: 919132149155446097, guid: 069348a6824d5a14c8f667f7f5296dc9, type: 3}
+  crashedModel: {fileID: 919132149155446097, guid: 1ea5e48d913f5084590c2d249dcd6ce6, type: 3}
   launchSound: {fileID: 0}
   crashSound: {fileID: 0}
   abilitySound: {fileID: 0}
