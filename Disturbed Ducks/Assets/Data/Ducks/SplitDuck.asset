@@ -23,9 +23,9 @@ MonoBehaviour:
   neutralModel: {fileID: 919132149155446097, guid: e14328625727df846ba5609f59a74dcb, type: 3}
   flightModel: {fileID: 919132149155446097, guid: f79e11a53021ce34d96d43de24544144, type: 3}
   crashedModel: {fileID: 919132149155446097, guid: 7e673a63fade0a84e91db95d5d512a57, type: 3}
-  launchSound: {fileID: 0}
-  crashSound: {fileID: 0}
-  abilitySound: {fileID: 0}
+  launchSound: {fileID: 8300000, guid: 03dc50274a1d54b4099e46764febb98c, type: 3}
+  crashSound: {fileID: 8300000, guid: 50318d6d338432249984908c3e139067, type: 3}
+  abilitySound: {fileID: 8300000, guid: 822328fb0b7ea684cbcc69e814dc26e8, type: 3}
   ability: {fileID: 11400000, guid: 50cc4352ce3a3e84a87f8edb55aab4cb, type: 2}
   explosionDefinition: {fileID: 0}
   maxSpeedUpgrade:
