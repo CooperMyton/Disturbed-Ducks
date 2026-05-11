@@ -16,7 +16,7 @@ MonoBehaviour:
   purchaseCosts: 320000004b0000007d000000e1000000770100008a020000dc050000b80b00004c1d000010270000
   maxOwned: 10
   baseMaxSpeed: 30
-  baseTurnSpeed: 40
+  baseTurnSpeed: 10
   baseGlideGravity: 12
   baseMinSpeed: 5
   baseMass: 2
@@ -64,34 +64,41 @@ MonoBehaviour:
   manoeuvrabilityUpgrade:
     upgradeName: Manoeuvrability
     levels:
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 5
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 15
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 35
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 75
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 125
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 300
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 650
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 1250
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 6000
-    - statIncrement: 10
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 10000
   disableFlightControls: 0
+  statDisplay:
+    showMaxSpeed: 1
+    showTurnSpeed: 1
+    showMass: 1
+    showGravity: 0
+    showMinSpeed: 0
+    showAbilityStats: 1

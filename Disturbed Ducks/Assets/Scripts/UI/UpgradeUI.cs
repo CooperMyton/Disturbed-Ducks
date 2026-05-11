@@ -48,6 +48,9 @@ public class UpgradeUI : MonoBehaviour
     private readonly List<(Button btn, Image img)> _tabData
         = new List<(Button, Image)>();
 
+    [Header("Stats Panel")]
+    [SerializeField] private Transform statsContainer;
+
     // -------------------------------------------------------------------------
 
     private void Awake()
@@ -116,6 +119,7 @@ public class UpgradeUI : MonoBehaviour
         if (upgradeContent  != null) upgradeContent.SetActive(owned);
         if (purchaseContent != null) purchaseContent.SetActive(!owned);
         if (duckNameText    != null) duckNameText.text = _selectedTab.duckName;
+        if (statsContainer  != null) statsContainer.gameObject.SetActive(owned);
 
         if (owned) RefreshUpgradeContent();
         else       RefreshPurchaseContent();
@@ -200,7 +204,8 @@ public class UpgradeUI : MonoBehaviour
                 $"{def.maxSpeedUpgrade.upgradeName}: {um.SpeedLevel} / {def.maxSpeedUpgrade.levels.Length}";
         if (speedButton != null)     speedButton.interactable = um.CanUpgradeSpeed;
         if (speedButtonText != null) speedButtonText.text =
-            GetStatLabel(um.CanUpgradeSpeed, um.SpeedLevel, def.maxSpeedUpgrade.levels);
+            GetStatLabel(um.CanUpgradeSpeed, um.SpeedLevel,
+                        def.maxSpeedUpgrade.levels, "Speed");
 
         // Manoeuvrability
         if (maneurLevelText != null)
@@ -208,8 +213,8 @@ public class UpgradeUI : MonoBehaviour
                 $"{def.manoeuvrabilityUpgrade.upgradeName}: {um.ManeurLevel} / {def.manoeuvrabilityUpgrade.levels.Length}";
         if (maneurButton != null)     maneurButton.interactable = um.CanUpgradeManeur;
         if (maneurButtonText != null) maneurButtonText.text =
-            GetStatLabel(um.CanUpgradeManeur, um.ManeurLevel, def.manoeuvrabilityUpgrade.levels);
-
+            GetStatLabel(um.CanUpgradeManeur, um.ManeurLevel,
+                        def.manoeuvrabilityUpgrade.levels, "Turn", hasMass: true);
         // Ability — data now comes from the ability asset itself
         bool hasAbility = def.ability != null;
         bool locked     = um.AbilityLevel == 0;
@@ -224,6 +229,7 @@ public class UpgradeUI : MonoBehaviour
 
         RefreshBuyDuck(def);
         RefreshSellDuck(def);
+        BuildStatsPanel(def);
     }
 
     private void RefreshPurchaseContent()
@@ -264,22 +270,32 @@ public class UpgradeUI : MonoBehaviour
 
     // -------------------------------------------------------------------------
 
-    private string GetStatLabel(bool canUpgrade, int currentLevel, StatUpgradeLevelData[] levels)
+    private string GetStatLabel(bool canUpgrade, int currentLevel,
+                                StatUpgradeLevelData[] levels,
+                                string statName, bool hasMass = false)
     {
         if (currentLevel >= levels.Length) return "MAX";
-        // Always show cost — button interactable state communicates affordability
-        int cost = levels[currentLevel].cost;
-        return cost > 0 ? $"UPGRADE ({cost} coins)" : "UPGRADE (Free)";
+        var level = levels[currentLevel];
+        var parts = new List<string>();
+        if (level.statIncrement > 0 && !string.IsNullOrEmpty(statName))
+            parts.Add($"+{level.statIncrement:F0} {statName}");
+        if (hasMass && level.massIncrement > 0)
+            parts.Add($"+{level.massIncrement:F2} Mass");
+        string preview = parts.Count > 0 ? $" ({string.Join(", ", parts)})" : "";
+        string costStr  = level.cost > 0 ? $" — {level.cost} coins" : "";
+        return $"UPGRADE{preview}{costStr}";
     }
 
     private string GetAbilityLabel(UpgradeManager um, DuckDefinition def, bool locked)
     {
         if (def.ability == null) return "N/A";
         if (um.AbilityLevel >= def.ability.MaxUpgradeLevels) return "MAX";
-        // Always show cost — button interactable state communicates affordability
-        int    cost   = def.ability.GetUpgradeCost(um.AbilityLevel);
-        string action = locked ? "UNLOCK" : "UPGRADE";
-        return cost > 0 ? $"{action} ({cost} coins)" : $"{action} (Free)";
+        string preview  = def.ability.GetUpgradePreview(um.AbilityLevel);
+        string previewStr = !string.IsNullOrEmpty(preview) ? $" ({preview})" : "";
+        int    cost     = def.ability.GetUpgradeCost(um.AbilityLevel);
+        string action   = locked ? "UNLOCK" : "UPGRADE";
+        string costStr  = cost > 0 ? $" — {cost} coins" : "";
+        return $"{action}{previewStr}{costStr}";
     }
 
     private void OnUpgradeClicked(int track)
@@ -327,5 +343,40 @@ public class UpgradeUI : MonoBehaviour
         if (_selectedTab == null) return;
         PlayerDuckInventory.Instance?.TrySellDuck(_selectedTab);
         Refresh();
+    }
+    private void BuildStatsPanel(DuckDefinition def)
+    {
+        if (statsContainer == null) return;
+        foreach (Transform child in statsContainer) Destroy(child.gameObject);
+
+        var um      = UpgradeManager.Instance;
+        if (um == null) return;
+        var display = def.statDisplay;
+
+        if (display.showMaxSpeed)  AddStatRow($"Max Speed:   {um.CurrentMaxSpeed:F1}");
+        if (display.showTurnSpeed) AddStatRow($"Turn Speed:  {um.CurrentTurnSpeed:F1}");
+        if (display.showMass)      AddStatRow($"Mass:        {um.CurrentMass:F2}");
+        if (display.showGravity)   AddStatRow($"Gravity:     {def.baseGlideGravity:F1}");
+        if (display.showMinSpeed)  AddStatRow($"Min Speed:   {def.baseMinSpeed:F1}");
+
+        if (display.showAbilityStats && def.ability != null && um.AbilityLevel > 0)
+        {
+            var stats = def.ability.GetCurrentStats(def, um.AbilityLevel);
+            foreach (var (label, value) in stats)
+                AddStatRow($"{label}: {value}");
+        }
+    }
+
+    private void AddStatRow(string text)
+    {
+        var go            = new GameObject("StatRow");
+        go.transform.SetParent(statsContainer, false);
+        var tmp           = go.AddComponent<TextMeshProUGUI>();
+        tmp.text          = text;
+        tmp.fontSize      = 13;
+        tmp.alignment     = TextAlignmentOptions.Left;
+        tmp.raycastTarget = false;
+        var le            = go.AddComponent<LayoutElement>();
+        le.preferredHeight = 20f;
     }
 }

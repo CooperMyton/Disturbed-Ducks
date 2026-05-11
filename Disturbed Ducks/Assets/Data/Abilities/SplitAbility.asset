@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SplitAbility
   abilityName: SplitAbility
   cooldown: 3
-  baseSpeed: 30
+  baseSpeed: 75
   splitAngle: 15
-  baseMass: 0.5
+  baseMass: 0.8
   upgradeLevels:
   - speedIncrement: 3
     massIncrement: 0.1
@@ -32,9 +32,6 @@ MonoBehaviour:
     cost: 115
   - speedIncrement: 3
     massIncrement: 0.1
-    cost: 0
-  - speedIncrement: 3
-    massIncrement: 0.1
     cost: 280
   - speedIncrement: 3
     massIncrement: 0.1
@@ -47,5 +44,8 @@ MonoBehaviour:
     cost: 1500
   - speedIncrement: 3
     massIncrement: 0.1
+    cost: 4000
+  - speedIncrement: 3
+    massIncrement: 0.1
     cost: 10000
-  extraDuckUnlockLevel: 6
+  extraDuckUnlockLevel: 4

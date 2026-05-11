@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BasicDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: Basic Duck
-  purchaseCosts: 000000000a000000320000007d000000e10000005e010000ee020000dc050000b80b000010270000
+  purchaseCosts: 000000000a0000004b000000c8000000770100008a020000dc050000b80b00004c1d000010270000
   maxOwned: 10
   baseMaxSpeed: 30
   baseTurnSpeed: 10
@@ -95,3 +95,10 @@ MonoBehaviour:
       massIncrement: 0.1
       cost: 10000
   disableFlightControls: 0
+  statDisplay:
+    showMaxSpeed: 1
+    showTurnSpeed: 1
+    showMass: 1
+    showGravity: 0
+    showMinSpeed: 0
+    showAbilityStats: 1

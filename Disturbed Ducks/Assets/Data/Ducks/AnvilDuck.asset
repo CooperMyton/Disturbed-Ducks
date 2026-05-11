@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: AnvilDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: Anvil Duck
-  purchaseCosts: 4b000000960000004501000026020000200300000e06000060090000a00f0000401f000010270000
+  purchaseCosts: 320000004b0000007d000000e1000000770100008a020000dc050000b80b00004c1d000010270000
   maxOwned: 10
   baseMaxSpeed: 29
-  baseTurnSpeed: 35
-  baseGlideGravity: 13
+  baseTurnSpeed: 10
+  baseGlideGravity: 12
   baseMinSpeed: 5
   baseMass: 4
   neutralModel: {fileID: 919132149155446097, guid: 95f84fb5d97cb0a41b8b1389660c6582, type: 3}
@@ -31,67 +31,74 @@ MonoBehaviour:
   maxSpeedUpgrade:
     upgradeName: Max Speed
     levels:
-    - statIncrement: 2
+    - statIncrement: 3
       massIncrement: 0
       cost: 10
-    - statIncrement: 2
+    - statIncrement: 3
       massIncrement: 0
       cost: 25
-    - statIncrement: 2
+    - statIncrement: 3
       massIncrement: 0
       cost: 50
-    - statIncrement: 2
+    - statIncrement: 3
       massIncrement: 0
       cost: 110
-    - statIncrement: 2
+    - statIncrement: 3
       massIncrement: 0
       cost: 200
-    - statIncrement: 2
+    - statIncrement: 3
       massIncrement: 0
       cost: 340
-    - statIncrement: 2
+    - statIncrement: 3
       massIncrement: 0
       cost: 620
-    - statIncrement: 2
+    - statIncrement: 3
       massIncrement: 0
       cost: 1050
-    - statIncrement: 2
+    - statIncrement: 3
       massIncrement: 0
       cost: 2000
-    - statIncrement: 10
+    - statIncrement: 3
       massIncrement: 0
       cost: 10000
   manoeuvrabilityUpgrade:
     upgradeName: Manoeuvrability
     levels:
-    - statIncrement: 4
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 5
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 15
-    - statIncrement: 4
-      massIncrement: 0
-      cost: 30
-    - statIncrement: 4
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 35
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 75
-    - statIncrement: 4
-      massIncrement: 0
-      cost: 180
-    - statIncrement: 4
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 125
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 300
-    - statIncrement: 4
-      massIncrement: 0
-      cost: 525
-    - statIncrement: 4
-      massIncrement: 0
-      cost: 750
-    - statIncrement: 4
-      massIncrement: 0
-      cost: 1025
-    - statIncrement: 4
-      massIncrement: 0
-      cost: 3000
-    - statIncrement: 10
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 650
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 1250
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 6000
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 10000
   disableFlightControls: 0
+  statDisplay:
+    showMaxSpeed: 1
+    showTurnSpeed: 1
+    showMass: 1
+    showGravity: 0
+    showMinSpeed: 0
+    showAbilityStats: 1

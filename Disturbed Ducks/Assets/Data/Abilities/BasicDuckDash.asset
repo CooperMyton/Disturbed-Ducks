@@ -20,29 +20,29 @@ MonoBehaviour:
     cooldownReduction: 0
     cost: 5
   - speedBoostIncrement: 2
-    cooldownReduction: 0.2
+    cooldownReduction: 0
     cost: 15
   - speedBoostIncrement: 2
-    cooldownReduction: 0.2
+    cooldownReduction: 0
     cost: 40
   - speedBoostIncrement: 2
-    cooldownReduction: 0.2
+    cooldownReduction: 0
     cost: 95
   - speedBoostIncrement: 2
-    cooldownReduction: 0.2
+    cooldownReduction: 0
     cost: 175
   - speedBoostIncrement: 2
-    cooldownReduction: 0.2
+    cooldownReduction: 0
     cost: 300
   - speedBoostIncrement: 2
-    cooldownReduction: 0.2
+    cooldownReduction: 0
     cost: 600
   - speedBoostIncrement: 2
-    cooldownReduction: 0.2
+    cooldownReduction: 0
     cost: 1400
   - speedBoostIncrement: 2
-    cooldownReduction: 0.2
+    cooldownReduction: 0
     cost: 2000
   - speedBoostIncrement: 10
-    cooldownReduction: 0.2
+    cooldownReduction: 0
     cost: 10000

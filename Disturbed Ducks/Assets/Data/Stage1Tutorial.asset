@@ -25,7 +25,7 @@ MonoBehaviour:
       new ducks!
     showOnce: 0
   onCrashNoUpgradesMessage:
-    message: Your duck couldn't reach! Buy an upgrade to help
+    message: ' If your duck couldn''t reach, try buying an upgrade to help'
     showOnce: 0
   onAbilityUnlockedMessage:
     message: Press Shift to activate your ability! Each duck has a unique one  buy

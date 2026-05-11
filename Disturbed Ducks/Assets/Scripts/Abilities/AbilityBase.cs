@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+
 
 /// Abstract base for all duck abilities.
 /// To add a new ability: create a new class that inherits from this,
@@ -26,4 +28,14 @@ public abstract class AbilityBase : ScriptableObject
     /// Called by AbilityController when the player presses the ability key.
     /// user is the duck's root GameObject — grab whatever components you need.
     public abstract void Use(GameObject user, float upgradeBoost);
+
+    /// Returns increment preview text for the upgrade button.
+    /// Called with the current level — shows what the NEXT level gives.
+    /// Return empty string for unlock level or if nothing meaningful to show.
+    public virtual string GetUpgradePreview(int currentLevel) => string.Empty;
+
+    /// Returns labelled current stat values for the stats panel.
+    /// Only called when ability is unlocked (level >= 1).
+    public virtual List<(string label, string value)> GetCurrentStats(DuckDefinition def, int abilityLevel)
+        => new List<(string label, string value)>();
 }

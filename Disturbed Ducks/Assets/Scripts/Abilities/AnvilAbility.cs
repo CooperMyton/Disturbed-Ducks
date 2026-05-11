@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections.Generic;
+
 
 [System.Serializable]
 public class AnvilUpgradeLevel
@@ -53,5 +55,31 @@ public class AnvilAbility : AbilityBase
         float force  = baseSlamForce + upgradeBoost;
 
         slam.StartSlam(hang, force);
+    }
+    public override string GetUpgradePreview(int currentLevel)
+    {
+        if (currentLevel == 0 || upgradeLevels == null || currentLevel >= upgradeLevels.Length)
+            return string.Empty;
+        var level = upgradeLevels[currentLevel];
+        var parts = new List<string>();
+        if (level.slamForceIncrement > 0) parts.Add($"+{level.slamForceIncrement:F0} Force");
+        if (level.hangTimeIncrement  > 0) parts.Add($"+{level.hangTimeIncrement:F2}s Hang");
+        return string.Join(", ", parts);
+    }
+
+    public override List<(string, string)> GetCurrentStats(DuckDefinition def, int abilityLevel)
+    {
+        float totalForce = baseSlamForce;
+        float totalHang  = baseHangTime;
+        for (int i = 1; i < abilityLevel && i < upgradeLevels.Length; i++)
+        {
+            totalForce += upgradeLevels[i].slamForceIncrement;
+            totalHang  += upgradeLevels[i].hangTimeIncrement;
+        }
+        return new List<(string, string)>
+        {
+            ("Slam Force", $"{totalForce:F0}"),
+            ("Hang Time",  $"{totalHang:F2}s")
+        };
     }
 }
