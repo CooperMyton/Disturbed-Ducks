@@ -15,11 +15,11 @@ MonoBehaviour:
   duckName: Cannonball Duck
   purchaseCosts: 320000004b0000007d000000e1000000770100008a020000dc050000b80b00004c1d000010270000
   maxOwned: 10
-  baseMaxSpeed: 50
+  baseMaxSpeed: 45
   baseTurnSpeed: 0
-  baseGlideGravity: 13
+  baseGlideGravity: 12
   baseMinSpeed: 5
-  baseMass: 5
+  baseMass: 4
   neutralModel: {fileID: 919132149155446097, guid: ca4349f12576e0143bc7506b19b8a3ec, type: 3}
   flightModel: {fileID: 919132149155446097, guid: 1efe1b4acff58c64899ae00b1551ee76, type: 3}
   crashedModel: {fileID: 919132149155446097, guid: f739817ffb5e518458887491017743c2, type: 3}
@@ -95,3 +95,10 @@ MonoBehaviour:
       massIncrement: 0.2
       cost: 10000
   disableFlightControls: 1
+  statDisplay:
+    showMaxSpeed: 1
+    showTurnSpeed: 0
+    showMass: 1
+    showGravity: 0
+    showMinSpeed: 0
+    showAbilityStats: 1

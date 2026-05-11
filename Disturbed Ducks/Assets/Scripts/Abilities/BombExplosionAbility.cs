@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class BombUpgradeLevel
@@ -54,4 +55,37 @@ public class BombExplosionAbility : AbilityBase
             controller?.DamageBoost    ?? 0f,
             controller?.DelayReduction ?? 0f);
     }
-}
+    public override string GetUpgradePreview(int currentLevel)
+    {
+        if (currentLevel == 0 || currentLevel >= upgradeLevels.Length) return string.Empty;
+        var level = upgradeLevels[currentLevel];
+        var parts = new List<string>();
+        if (level.radiusIncrement > 0) parts.Add($"+{level.radiusIncrement:F1} Radius");
+        if (level.damageIncrement > 0) parts.Add($"+{level.damageIncrement:F0} Damage");
+        if (level.delayReduction  > 0) parts.Add($"-{level.delayReduction:F1}s Fuse");
+        return string.Join(", ", parts);
+    }
+
+    public override List<(string, string)> GetCurrentStats(DuckDefinition def, int abilityLevel)
+    {
+        float totalRadius = 0f, totalDamage = 0f, totalDelay = 0f;
+        for (int i = 1; i < abilityLevel && i < upgradeLevels.Length; i++)
+        {
+            totalRadius += upgradeLevels[i].radiusIncrement;
+            totalDamage += upgradeLevels[i].damageIncrement;
+            totalDelay  += upgradeLevels[i].delayReduction;
+        }
+
+        var result = new List<(string, string)>();
+        if (def.explosionDefinition != null)
+        {
+            float radius = def.explosionDefinition.abilityRadius + totalRadius;
+            float damage = def.explosionDefinition.abilityDamage + totalDamage;
+            float fuse   = Mathf.Max(0f, def.explosionDefinition.abilityDelay - totalDelay);
+            result.Add(("Blast Radius", $"{radius:F1}"));
+            result.Add(("Blast Damage", $"{damage:F0}"));
+            result.Add(("Fuse Length",  $"{fuse:F1}s"));
+        }
+        return result;
+    }
+    }

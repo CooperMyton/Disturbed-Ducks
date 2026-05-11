@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class DashUpgradeLevel
@@ -47,4 +48,22 @@ public class DashAbility : AbilityBase
     }
 
     public override bool IsSingleUse => true;
+
+    public override string GetUpgradePreview(int currentLevel)
+    {
+        if (currentLevel == 0 || currentLevel >= upgradeLevels.Length) return string.Empty;
+        var level = upgradeLevels[currentLevel];
+        var parts = new List<string>();
+        if (level.speedBoostIncrement > 0) parts.Add($"+{level.speedBoostIncrement:F0} Boost");
+        if (level.cooldownReduction   > 0) parts.Add($"-{level.cooldownReduction:F1}s Cooldown");
+        return string.Join(", ", parts);
+    }
+
+    public override List<(string, string)> GetCurrentStats(DuckDefinition def, int abilityLevel)
+    {
+        float totalBoost = baseSpeedBoost;
+        for (int i = 1; i < abilityLevel && i < upgradeLevels.Length; i++)
+            totalBoost += upgradeLevels[i].speedBoostIncrement;
+        return new List<(string, string)> { ("Dash Boost", $"{totalBoost:F0}") };
+    }
 }

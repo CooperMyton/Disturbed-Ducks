@@ -45,6 +45,10 @@ public class UpgradeManager : MonoBehaviour
         AbilityLevel < Def.ability.MaxUpgradeLevels &&
         CanAfford(Def.ability.GetUpgradeCost(AbilityLevel));
 
+    public float CurrentMaxSpeed  => Def != null ? CalcSpeed(Def, SpeedLevel)     : 0f;
+    public float CurrentTurnSpeed => Def != null ? CalcTurnSpeed(Def, ManeurLevel) : 0f;
+    public float CurrentMass      => Def != null ? CalcMass(Def, ManeurLevel)      : 0f;
+
     // -------------------------------------------------------------------------
 
     private void Awake()

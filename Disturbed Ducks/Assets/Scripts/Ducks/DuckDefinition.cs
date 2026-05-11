@@ -52,6 +52,9 @@ public class DuckDefinition : ScriptableObject
 
     [Header("Flight")]
     public bool disableFlightControls = false;
+
+    [Header("Stats Display")]
+    public DuckStatDisplay statDisplay = new DuckStatDisplay();
 }
 
 // -------------------------------------------------------------------------
@@ -69,4 +72,15 @@ public class StatUpgradeTrack
 {
     public string               upgradeName = "Upgrade";
     public StatUpgradeLevelData[] levels    = new StatUpgradeLevelData[10];
+}
+// Add this class at the bottom of DuckDefinition.cs alongside StatUpgradeTrack
+[System.Serializable]
+public class DuckStatDisplay
+{
+    public bool showMaxSpeed     = true;
+    public bool showTurnSpeed    = true;
+    public bool showMass         = true;
+    public bool showGravity      = false;
+    public bool showMinSpeed     = false;
+    public bool showAbilityStats = true;
 }

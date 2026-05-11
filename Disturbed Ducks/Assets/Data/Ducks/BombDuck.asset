@@ -64,34 +64,41 @@ MonoBehaviour:
   manoeuvrabilityUpgrade:
     upgradeName: Manoeuvrability
     levels:
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 5
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 10
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 20
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 30
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 80
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 130
-    - statIncrement: 5
-      massIncrement: 0
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 15
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 35
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 75
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 125
+    - statIncrement: 3
+      massIncrement: 0.1
       cost: 300
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 600
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 1100
-    - statIncrement: 5
-      massIncrement: 0
-      cost: 3500
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 650
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 1250
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 6000
+    - statIncrement: 3
+      massIncrement: 0.1
+      cost: 10000
   disableFlightControls: 0
+  statDisplay:
+    showMaxSpeed: 1
+    showTurnSpeed: 1
+    showMass: 1
+    showGravity: 0
+    showMinSpeed: 0
+    showAbilityStats: 1
