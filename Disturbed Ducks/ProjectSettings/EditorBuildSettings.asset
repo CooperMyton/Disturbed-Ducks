@@ -17,9 +17,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Stage2Test.unity
     guid: d481d2d069292084ab48ed5bc3dd187d
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Anvil_duck.unity
     guid: 83f2d3fb70b01084f95a2dd6a7cae4f0
+  - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: 9b7429b607bd92b4384557bc9505b46c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
