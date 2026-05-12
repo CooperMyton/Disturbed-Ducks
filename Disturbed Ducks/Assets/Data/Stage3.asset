@@ -16,7 +16,6 @@ MonoBehaviour:
   stageName: Stage 3
   objectiveTags:
   - Beaver
-  - Beaver
   collectibleTags:
   - Blueprint
   firstClearBonus: 500

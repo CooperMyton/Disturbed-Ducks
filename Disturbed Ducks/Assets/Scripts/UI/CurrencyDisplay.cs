@@ -26,6 +26,6 @@ public class CurrencyDisplay : MonoBehaviour
     private void UpdateDisplay(int balance)
     {
         if (_text != null)
-            _text.text = $"Currency: {balance}";
+            _text.text = $"Coins: {balance}";
     }
 }
