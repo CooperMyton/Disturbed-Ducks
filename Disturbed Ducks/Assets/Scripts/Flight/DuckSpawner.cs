@@ -10,6 +10,8 @@ public class DuckSpawner : MonoBehaviour
     [SerializeField] private DuckImpact duckImpact;
     [SerializeField] private DuckController duckController;
     [SerializeField] private LauncherController launcherController;
+    [SerializeField] private CameraTarget cameraTarget;
+
 
     [Header("Keys")]
     [SerializeField] private Key nextDuckKey = Key.R;
@@ -88,6 +90,7 @@ public class DuckSpawner : MonoBehaviour
         UpgradeManager.Instance?.ApplyCurrentStats();
 
         launcherController.ResetToLauncher();
+        cameraTarget?.SnapToDuck();
         duckImpact.Reset();
         FlightUIManager.Instance?.ShowLaunchPrompt();
 

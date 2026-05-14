@@ -13,26 +13,26 @@ MonoBehaviour:
   m_Name: Stage1Tutorial
   m_EditorClassIdentifier: Assembly-CSharp::StageTutorialData
   stageStartMessage:
-    message: Beaver Inc has taken over the Willamette River! Take out Beavers and
-      collect Blueprints to move through stages and bring them down.
+    message: 'Beaver Inc has taken over the Willamette River! Take out Beavers and
+      collect Dam Blueprints to move through stages and bring them down.
+
+      While
+      flying use WASD to steer and Shift to use your ability.'
     showOnce: 0
   onLaunchMessage:
-    message: Use W/S to pitch up and down, A/D to turn left and right, and shift
-      to use your ability
+    message: 
     showOnce: 0
   onFirstCrashMessage:
     message: Destroy crates and enemies to earn currency use it to buy upgrades and
       new ducks!
     showOnce: 0
   onCrashNoUpgradesMessage:
-    message: ' If your duck couldn''t reach, try buying an upgrade to help'
+    message: ' If you can''t reach, try buying an upgrade to help'
     showOnce: 0
   onAbilityUnlockedMessage:
-    message: Press Shift to activate your ability! Each duck has a unique one  buy
-      new ducks to try them all. You can own up to 10 of each type, and 20 ducks
-      total.
+    message: 'Press Shift to activate your ability! Each duck has a unique one  buy
+      new ducks to try them all. '
     showOnce: 1
   onDuckPurchasedMessage:
-    message: "You can buy multiple of the same duck type \u2014 up to 10 each, 20
-      total in your loadout!"
+    message: You can buy multiple of the same duck type, up to 10 each!
     showOnce: 1

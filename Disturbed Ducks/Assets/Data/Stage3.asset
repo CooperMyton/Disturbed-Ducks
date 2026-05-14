@@ -18,5 +18,5 @@ MonoBehaviour:
   - Beaver
   collectibleTags:
   - Blueprint
-  firstClearBonus: 500
+  firstClearBonus: 750
   nextStage: {fileID: 11400000, guid: e9242aa9778a274409976dc4a89a8241, type: 2}

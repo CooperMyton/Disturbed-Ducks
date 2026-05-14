@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Stage5Tutorial
   m_EditorClassIdentifier: Assembly-CSharp::StageTutorialData
   stageStartMessage:
-    message: This is it! Take out the big Beaver and his crew, collect the final
-      Blueprint, and bring down Beaver Inc for good. Use everything you've got!
+    message: This is it! Take out the project head Beaver and his crew, collect the
+      final Blueprint, and end the dam project for good. Use everything you've got!
     showOnce: 0
   onLaunchMessage:
     message: 

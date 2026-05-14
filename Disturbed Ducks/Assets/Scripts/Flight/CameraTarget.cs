@@ -45,4 +45,19 @@ public class CameraTarget : MonoBehaviour
 
     // Call this when resetting the duck for the next launch
     public void UnfreezeYaw() => _frozen = false;
+
+    public void SnapToDuck()
+    {
+        if (duckRoot == null) return;
+
+        transform.position = duckRoot.position;
+
+        Vector3 flatForward = new Vector3(duckRoot.forward.x, 0f, duckRoot.forward.z);
+        if (flatForward.sqrMagnitude > 0.01f)
+            _smoothedYaw = Quaternion.LookRotation(flatForward).eulerAngles.y;
+
+        transform.rotation = Quaternion.Euler(0f, _smoothedYaw, 0f);
+        _frozen = false;
+    }
+
 }

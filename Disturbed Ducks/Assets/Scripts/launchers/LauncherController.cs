@@ -26,6 +26,9 @@ public class LauncherController : MonoBehaviour
     private Vector3 _originalLaunchPosition;
     private Vector3 _launchPosition;
 
+    private Vector3 _launchLocalOffset;
+
+
     // parameters for the string linerender
     [SerializeField] private Transform leftBarPosition;
     [SerializeField] private Transform rightBarPosition;
@@ -33,10 +36,12 @@ public class LauncherController : MonoBehaviour
 
     // -------------------------------------------------------------------------
 
-    private void Start()
+    private void Awake()
     {
         _flightScript = duckToLaunch.GetComponent<DuckFlightController>();
         _rb = duckToLaunch.GetComponent<Rigidbody>();
+
+        _launchLocalOffset = transform.InverseTransformPoint(duckToLaunch.transform.position);
 
         _originalLaunchPosition = duckToLaunch.transform.position;
         _launchPosition = _originalLaunchPosition;
@@ -44,6 +49,7 @@ public class LauncherController : MonoBehaviour
         slingshotString = GetComponent<LineRenderer>();
         slingshotString.positionCount = 4;
     }
+
 
     private void Update()
     {
@@ -109,6 +115,9 @@ public class LauncherController : MonoBehaviour
     {
         // Notify DuckSpawner that the duck is now in flight so pre-launch
         // definition swaps are blocked until the next reset.
+        if (duckSpawner == null)
+            duckSpawner = DuckSpawner.Instance;
+
         duckSpawner?.OnDuckLaunched();
 
         if (launchDirectionTarget == null)
@@ -152,4 +161,23 @@ public class LauncherController : MonoBehaviour
 
         MoveSlingshotString();
     }
+    public void MoveToStageLaunchPoint(Transform launchPoint)
+    {
+        if (launchPoint == null)
+        {
+            Debug.LogError("LauncherController: launchPoint was null.");
+            return;
+        }
+
+        transform.position = launchPoint.position;
+
+        _originalLaunchPosition = transform.TransformPoint(_launchLocalOffset);
+        _launchPosition = _originalLaunchPosition;
+
+        Debug.Log($"Launcher moved to {transform.position}; duck reset point is {_originalLaunchPosition}");
+
+        ResetToLauncher();
+    }
+
+
 }

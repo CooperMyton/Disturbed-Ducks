@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageTutorialData
   stageStartMessage:
     message: Watch out, some Beavers are on the move! Time your shots carefully to
-      hit them mid-patrol
+      hit them mid-patrol. That tower seems like there might be something in there,
+      how can you reach the bottom?
     showOnce: 0
   onLaunchMessage:
     message: 

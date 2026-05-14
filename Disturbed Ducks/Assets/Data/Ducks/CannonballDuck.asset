@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CannonballDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: Cannonball Duck
-  purchaseCosts: 320000004b0000007d000000e1000000770100008a020000dc050000b80b00004c1d000010270000
+  purchaseCosts: 320000004b0000006400000096000000e10000002c010000f4010000ee020000e8030000c4090000
   maxOwned: 10
   baseMaxSpeed: 45
   baseTurnSpeed: 0
@@ -33,13 +33,10 @@ MonoBehaviour:
     levels:
     - statIncrement: 5
       massIncrement: 0
-      cost: 0
-    - statIncrement: 5
-      massIncrement: 0
       cost: 10
     - statIncrement: 5
       massIncrement: 0
-      cost: 20
+      cost: 25
     - statIncrement: 5
       massIncrement: 0
       cost: 50
@@ -48,19 +45,22 @@ MonoBehaviour:
       cost: 100
     - statIncrement: 5
       massIncrement: 0
-      cost: 250
+      cost: 225
     - statIncrement: 5
       massIncrement: 0
-      cost: 500
+      cost: 375
+    - statIncrement: 5
+      massIncrement: 0
+      cost: 525
+    - statIncrement: 5
+      massIncrement: 0
+      cost: 750
     - statIncrement: 5
       massIncrement: 0
       cost: 1000
     - statIncrement: 5
       massIncrement: 0
-      cost: 5000
-    - statIncrement: 10
-      massIncrement: 0
-      cost: 10000
+      cost: 2500
   manoeuvrabilityUpgrade:
     upgradeName: Mass
     levels:
@@ -84,16 +84,16 @@ MonoBehaviour:
       cost: 300
     - statIncrement: 0
       massIncrement: 0.2
-      cost: 650
+      cost: 500
     - statIncrement: 0
       massIncrement: 0.2
-      cost: 1250
+      cost: 700
     - statIncrement: 0
       massIncrement: 0.2
-      cost: 6000
+      cost: 1000
     - statIncrement: 0
       massIncrement: 0.2
-      cost: 10000
+      cost: 2000
   disableFlightControls: 1
   statDisplay:
     showMaxSpeed: 1

@@ -17,5 +17,5 @@ MonoBehaviour:
   objectiveTags:
   - Beaver
   collectibleTags: []
-  firstClearBonus: 75
+  firstClearBonus: 100
   nextStage: {fileID: 11400000, guid: b7942472465ec034986c033b4f1a628b, type: 2}

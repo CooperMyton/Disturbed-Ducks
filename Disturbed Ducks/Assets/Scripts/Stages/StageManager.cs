@@ -13,10 +13,16 @@ public class StageManager : MonoBehaviour
     {
         public StageDefinition definition;
         public GameObject      environmentRoot;
+
+        public Transform launcherPoint;
+
     }
 
     [SerializeField] private StageEntry[] stages;
     [SerializeField] private PlayerInventory inventory;
+
+    [SerializeField] private LauncherController launcherController;
+
 
     private int  _currentIndex       = 0;
     private int  _objectivesRemaining = 0;
@@ -44,6 +50,7 @@ public class StageManager : MonoBehaviour
             stages[i].environmentRoot?.SetActive(i == 0);
 
         _currentIndex = 0;
+        ApplyStageLaunchPoint();
         InitializeStage();
     }
 
@@ -148,6 +155,8 @@ public class StageManager : MonoBehaviour
         _currentIndex = nextIndex;
         CurrentRoot?.SetActive(true);
 
+        ApplyStageLaunchPoint();
+
         InitializeStage();
 
         // Check BEFORE resetting to launcher — if no ducks remain,
@@ -170,4 +179,25 @@ public class StageManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    private void ApplyStageLaunchPoint()
+    {
+        if (launcherController == null)
+        {
+            Debug.LogError("StageManager: Launcher Controller is not assigned.");
+            return;
+        }
+
+        Transform launchPoint = stages[_currentIndex].launcherPoint;
+        if (launchPoint == null)
+        {
+            Debug.LogError($"StageManager: Launcher Point is not assigned for stage index {_currentIndex}.");
+            return;
+        }
+
+        Debug.Log($"Moving launcher to {launchPoint.name} at {launchPoint.position}");
+        launcherController.MoveToStageLaunchPoint(launchPoint);
+    }
+
+
 }
