@@ -16,6 +16,13 @@ public class StageManager : MonoBehaviour
 
         public Transform launcherPoint;
 
+        public bool saveProgressOnEnter;
+        public bool showEnvironmentCompleteOnClear;
+
+        [TextArea(3, 8)]
+        public string environmentCompleteMessage;
+
+
     }
 
     [SerializeField] private StageEntry[] stages;
@@ -45,14 +52,17 @@ public class StageManager : MonoBehaviour
 
     private void Start()
     {
-        // Activate only stage 0 on scene load — all others off
-        for (int i = 0; i < stages.Length; i++)
-            stages[i].environmentRoot?.SetActive(i == 0);
+        _currentIndex = inventory != null
+            ? Mathf.Clamp(inventory.SavedStageIndex, 0, stages.Length - 1)
+            : 0;
 
-        _currentIndex = 0;
+        for (int i = 0; i < stages.Length; i++)
+            stages[i].environmentRoot?.SetActive(i == _currentIndex);
+
         ApplyStageLaunchPoint();
         InitializeStage();
     }
+
 
     // -------------------------------------------------------------------------
 
@@ -125,6 +135,12 @@ public class StageManager : MonoBehaviour
             inventory.MarkStageCleared(CurrentDef.stageId);
             CurrencyManager.Instance?.Add(CurrentDef.firstClearBonus);
         }
+        if (stages[_currentIndex].showEnvironmentCompleteOnClear && CurrentDef.nextStage != null)
+        {
+            EnvironmentCompleteUI.Instance?.Show(stages[_currentIndex].environmentCompleteMessage);
+            return;
+        }
+
 
         // Final stage — show win screen instead of stage clear
         if (CurrentDef.nextStage == null)
@@ -153,7 +169,16 @@ public class StageManager : MonoBehaviour
 
         CurrentRoot?.SetActive(false);
         _currentIndex = nextIndex;
+
+        if (stages[_currentIndex].saveProgressOnEnter)
+        {
+            inventory?.SaveStageIndex(_currentIndex);
+            PlayerDuckInventory.Instance?.ResetRemainingCounts();
+            LoadoutUI.Instance?.RebuildAndShow();
+        }
+
         CurrentRoot?.SetActive(true);
+
 
         ApplyStageLaunchPoint();
 
@@ -198,6 +223,15 @@ public class StageManager : MonoBehaviour
         Debug.Log($"Moving launcher to {launchPoint.name} at {launchPoint.position}");
         launcherController.MoveToStageLaunchPoint(launchPoint);
     }
+
+    public void DebugCompleteCurrentStage()
+    {
+        if (_isCleared) return;
+
+        TriggerStageClear();
+    }
+
+
 
 
 }

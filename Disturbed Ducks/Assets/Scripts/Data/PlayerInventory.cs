@@ -29,6 +29,14 @@ public class PlayerInventory : ScriptableObject
 
     [Header("Stage Progress")]
     public List<string> clearedStageIds = new List<string>();
+    [SerializeField] private int savedStageIndex = 0;
+    public int SavedStageIndex => savedStageIndex;
+
+    public void SaveStageIndex(int stageIndex)
+    {
+        savedStageIndex = Mathf.Max(0, stageIndex);
+    }
+
 
     // -------------------------------------------------------------------------
 
@@ -85,6 +93,7 @@ public class PlayerInventory : ScriptableObject
         maneurLevels.Clear();
         abilityLevels.Clear();
         clearedStageIds.Clear();
+        savedStageIndex = 0;
 
         // Re-add starting duck so player isn't left with nothing
         if (startingDuck != null)

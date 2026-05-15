@@ -76,6 +76,10 @@ public class DuckSpawner : MonoBehaviour
     {
         _inFlight = false;
 
+
+        ClearProjectiles();
+
+
         Rigidbody rb = duckRoot.GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -109,4 +113,11 @@ public class DuckSpawner : MonoBehaviour
         ResetDuck();
         LoadoutUI.Instance?.RebuildAndShow();
     }
+    private void ClearProjectiles()
+    {
+        foreach (var projectile in FindObjectsByType<BeaverProjectile>(FindObjectsSortMode.None))
+            Destroy(projectile.gameObject);
+    }
+
+
 }
