@@ -22,36 +22,36 @@ MonoBehaviour:
   - radiusIncrement: 0.5
     damageIncrement: 10
     delayReduction: 0.3
-    cost: 40
+    cost: 30
   - radiusIncrement: 0.5
     damageIncrement: 20
     delayReduction: 0.3
-    cost: 80
+    cost: 65
   - radiusIncrement: 0.5
     damageIncrement: 50
     delayReduction: 0.3
-    cost: 140
+    cost: 115
   - radiusIncrement: 0.5
     damageIncrement: 100
     delayReduction: 0.3
-    cost: 310
+    cost: 250
   - radiusIncrement: 0.5
     damageIncrement: 250
     delayReduction: 0.3
-    cost: 550
+    cost: 375
   - radiusIncrement: 0.5
     damageIncrement: 400
     delayReduction: 0.3
-    cost: 800
+    cost: 550
   - radiusIncrement: 0.5
     damageIncrement: 600
     delayReduction: 0.3
-    cost: 1650
+    cost: 800
   - radiusIncrement: 0.5
     damageIncrement: 800
     delayReduction: 0.3
-    cost: 4750
+    cost: 1000
   - radiusIncrement: 0.5
     damageIncrement: 1000
     delayReduction: 0.3
-    cost: 10000
+    cost: 2500

@@ -29,6 +29,15 @@ public abstract class AbilityBase : ScriptableObject
     /// user is the duck's root GameObject — grab whatever components you need.
     public abstract void Use(GameObject user, float upgradeBoost);
 
+    public virtual bool UsesHeldInput => false;
+
+    public virtual void OnHeldStarted(GameObject user, float upgradeBoost) { }
+
+    public virtual void OnHeld(GameObject user, float upgradeBoost) { }
+
+    public virtual void OnHeldEnded(GameObject user, float upgradeBoost) { }
+
+
     /// Returns increment preview text for the upgrade button.
     /// Called with the current level — shows what the NEXT level gives.
     /// Return empty string for unlock level or if nothing meaningful to show.

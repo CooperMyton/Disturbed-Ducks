@@ -10,6 +10,11 @@ public class DuckDefinition : ScriptableObject
     public int[] purchaseCosts = new int[] { 50 };
     public int maxOwned = 3;
 
+    [Header("Unlock Requirement")]
+    public int unlockStageIndex = 0;
+    public string unlockRequirementText = "Locked";
+
+
     [Header("Base Stats")]
     public float baseMaxSpeed     = 35f;
     public float baseTurnSpeed    = 70f;

@@ -32,20 +32,20 @@ MonoBehaviour:
     cost: 115
   - speedIncrement: 3
     massIncrement: 0.1
-    cost: 280
+    cost: 250
   - speedIncrement: 3
     massIncrement: 0.1
-    cost: 425
+    cost: 400
   - speedIncrement: 3
     massIncrement: 0.1
-    cost: 750
+    cost: 575
   - speedIncrement: 3
     massIncrement: 0.1
-    cost: 1500
+    cost: 800
   - speedIncrement: 3
     massIncrement: 0.1
-    cost: 4000
+    cost: 1000
   - speedIncrement: 3
     massIncrement: 0.1
-    cost: 10000
-  extraDuckUnlockLevel: 4
+    cost: 2500
+  extraDuckUnlockLevel: 3

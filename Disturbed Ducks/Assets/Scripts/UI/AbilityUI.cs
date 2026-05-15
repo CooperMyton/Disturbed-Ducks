@@ -19,6 +19,9 @@ public class AbilityUI : MonoBehaviour
     [SerializeField] private Color lockedColor = new Color(0.3f, 0.3f, 0.3f, 1f);
 
     private float _countdownRemaining = 0f;
+
+    private string _countdownCompleteText = "BOOM";
+
     private bool  _isCountingDown     = false;
 
     // -------------------------------------------------------------------------
@@ -51,7 +54,8 @@ public class AbilityUI : MonoBehaviour
         {
             _countdownRemaining = 0f;
             _isCountingDown     = false;
-            SetIndicator(usedColor, "BOOM");
+            SetIndicator(usedColor, _countdownCompleteText);
+
             return;
         }
 
@@ -71,10 +75,22 @@ public class AbilityUI : MonoBehaviour
     /// Replaces the indicator with a live countdown.
     public void OnBombArmed(float duration)
     {
-        _isCountingDown     = true;
+        StartCountdown(duration, "BOOM");
+    }
+
+    public void OnPhaseStarted(float duration)
+    {
+        StartCountdown(duration, "USED");
+    }
+
+    private void StartCountdown(float duration, string completeText)
+    {
+        _isCountingDown = true;
         _countdownRemaining = duration;
+        _countdownCompleteText = completeText;
         SetIndicator(readyColor, $"{duration:F1}s");
     }
+
 
     public void ResetCooldown()
     {

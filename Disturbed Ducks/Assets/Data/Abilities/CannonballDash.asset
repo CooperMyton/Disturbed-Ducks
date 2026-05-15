@@ -36,13 +36,13 @@ MonoBehaviour:
     cost: 300
   - speedBoostIncrement: 4
     cooldownReduction: 0.2
-    cost: 600
+    cost: 525
   - speedBoostIncrement: 4
     cooldownReduction: 0.2
-    cost: 1400
+    cost: 800
   - speedBoostIncrement: 4
     cooldownReduction: 0.2
-    cost: 2000
+    cost: 1000
   - speedBoostIncrement: 4
     cooldownReduction: 0.2
-    cost: 10000
+    cost: 2500

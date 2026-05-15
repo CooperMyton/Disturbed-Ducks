@@ -11,6 +11,9 @@ public class AbilityController : MonoBehaviour
     private bool _isFlying = false;
     private bool _isUnlocked = false;
 
+    private bool _heldAbilityActive = false;
+
+
     // Accumulated from upgrade levels
     private float _upgradeBoost = 0f;
     private float _cooldownReduction = 0f;
@@ -37,6 +40,27 @@ public class AbilityController : MonoBehaviour
     {
         if (_cooldownTimer > 0f)
             _cooldownTimer -= Time.deltaTime;
+
+        if (_ability != null && _ability.UsesHeldInput)
+        {
+            if (Keyboard.current[abilityKey].wasPressedThisFrame && IsReady && _isFlying)
+            {
+                _heldAbilityActive = true;
+                _ability.OnHeldStarted(gameObject, _upgradeBoost);
+            }
+
+            if (_heldAbilityActive && Keyboard.current[abilityKey].isPressed)
+            {
+                _ability.OnHeld(gameObject, _upgradeBoost);
+            }
+
+            if (_heldAbilityActive && Keyboard.current[abilityKey].wasReleasedThisFrame)
+            {
+                EndHeldAbility();
+            }
+
+            return;
+        }
 
         if (Keyboard.current[abilityKey].wasPressedThisFrame)
         {
@@ -72,11 +96,23 @@ public class AbilityController : MonoBehaviour
     }
 
     public void OnLaunched()  => _isFlying = true;
-    public void OnCrashed()   => _isFlying = false;
+    public void OnCrashed()
+    {
+        if (_heldAbilityActive)
+            EndHeldAbility();
+
+        _isFlying = false;
+    }
+
     public void OnReset()
     {
         _isFlying = false;
         _cooldownTimer = 0f;
+        if (_heldAbilityActive)
+            EndHeldAbility();
+
+        _heldAbilityActive = false;
+
         AbilityUI.Instance?.ResetCooldown();
     }
 
@@ -110,4 +146,16 @@ public class AbilityController : MonoBehaviour
     {
         _isUnlocked = false;
     }
+    public void EndHeldAbility()
+    {
+        if (!_heldAbilityActive || _ability == null) return;
+
+        _heldAbilityActive = false;
+        _ability.OnHeldEnded(gameObject, _upgradeBoost);
+        _cooldownTimer = _ability.IsSingleUse ? float.MaxValue : CurrentCooldown;
+
+        GetComponent<DuckController>()?.OnAbilityUsed();
+        AbilityUI.Instance?.OnAbilityUsed(CurrentCooldown);
+    }
+
 }

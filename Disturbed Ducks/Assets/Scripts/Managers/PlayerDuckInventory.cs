@@ -123,6 +123,12 @@ public class PlayerDuckInventory : MonoBehaviour
 
     public bool TryBuyDuck(DuckDefinition def)
     {
+        if (!IsDuckUnlocked(def))
+    {
+        Debug.Log($"{def.duckName} is locked: {def.unlockRequirementText}");
+        return false;
+    }
+
         // Global loadout cap
         if (TotalOwned >= maxTotalDucks)
         {
@@ -186,4 +192,15 @@ public class PlayerDuckInventory : MonoBehaviour
         ResetRemainingCounts();
         return true;
     }
+
+    public bool IsDuckUnlocked(DuckDefinition def)
+    {
+        if (def == null) return false;
+
+        var inventoryAsset = inventory;
+        if (inventoryAsset == null) return false;
+
+        return inventoryAsset.SavedStageIndex >= def.unlockStageIndex;
+    }
+
 }

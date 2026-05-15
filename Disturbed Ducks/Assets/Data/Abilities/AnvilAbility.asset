@@ -25,25 +25,25 @@ MonoBehaviour:
     cost: 30
   - slamForceIncrement: 5
     hangTimeIncrement: 0.1
-    cost: 75
+    cost: 60
   - slamForceIncrement: 10
     hangTimeIncrement: 0.15
-    cost: 140
+    cost: 110
   - slamForceIncrement: 15
     hangTimeIncrement: 0.15
-    cost: 390
+    cost: 250
   - slamForceIncrement: 15
     hangTimeIncrement: 0.15
-    cost: 700
+    cost: 375
   - slamForceIncrement: 20
     hangTimeIncrement: 0.2
-    cost: 1300
+    cost: 550
   - slamForceIncrement: 20
     hangTimeIncrement: 0.15
-    cost: 2900
+    cost: 800
   - slamForceIncrement: 25
     hangTimeIncrement: 0.2
-    cost: 4000
+    cost: 1000
   - slamForceIncrement: 30
     hangTimeIncrement: 0.25
-    cost: 10000
+    cost: 2500

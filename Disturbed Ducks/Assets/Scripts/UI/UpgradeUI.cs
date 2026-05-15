@@ -18,6 +18,8 @@ public class UpgradeUI : MonoBehaviour
     [SerializeField] private Color tabSelectedColor   = Color.white;
     [SerializeField] private Color tabUnselectedColor = new Color(0.6f, 0.6f, 0.6f, 1f);
     [SerializeField] private Color tabUnownedColor    = new Color(0.35f, 0.35f, 0.35f, 1f);
+    [SerializeField] private Color lockedColor = new Color(0.18f, 0.18f, 0.18f, 1f);
+
 
     [Header("Upgrade Content — shown when duck is owned")]
     [SerializeField] private GameObject      upgradeContent;
@@ -115,6 +117,7 @@ public class UpgradeUI : MonoBehaviour
         RefreshTabs();
 
         bool owned = (PlayerDuckInventory.Instance?.GetOwned(_selectedTab) ?? 0) > 0;
+        bool unlocked = PlayerDuckInventory.Instance?.IsDuckUnlocked(_selectedTab) ?? false;
 
         if (upgradeContent  != null) upgradeContent.SetActive(owned);
         if (purchaseContent != null) purchaseContent.SetActive(!owned);
@@ -122,7 +125,8 @@ public class UpgradeUI : MonoBehaviour
         if (statsContainer  != null) statsContainer.gameObject.SetActive(owned);
 
         if (owned) RefreshUpgradeContent();
-        else       RefreshPurchaseContent();
+        else       RefreshPurchaseContent(unlocked);
+
     }
 
     // -------------------------------------------------------------------------
@@ -184,11 +188,14 @@ public class UpgradeUI : MonoBehaviour
             var duck        = gameDefinition.allDucks[i];
             var (_, img)    = _tabData[i];
             bool isSelected = duck == _selectedTab;
-            bool owned      = (PlayerDuckInventory.Instance?.GetOwned(duck) ?? 0) > 0;
+            bool owned = (PlayerDuckInventory.Instance?.GetOwned(duck) ?? 0) > 0;
+            bool unlocked = PlayerDuckInventory.Instance?.IsDuckUnlocked(duck) ?? false;
 
             img.color = isSelected ? tabSelectedColor
-                      : owned      ? tabUnselectedColor
-                                   : tabUnownedColor;
+                        : owned      ? tabUnselectedColor
+                        : unlocked   ? tabUnownedColor
+                                    : lockedColor;
+
         }
     }
 
@@ -232,11 +239,25 @@ public class UpgradeUI : MonoBehaviour
         BuildStatsPanel(def);
     }
 
-    private void RefreshPurchaseContent()
+    private void RefreshPurchaseContent(bool unlocked)
     {
         if (_selectedTab == null) return;
-        int  cost      = _selectedTab.GetPurchaseCost(0);
+
+        int cost = _selectedTab.GetPurchaseCost(0);
         bool canAfford = CurrencyManager.Instance?.CanAfford(cost) ?? false;
+
+        if (!unlocked)
+        {
+            if (purchaseTitleText != null)
+                purchaseTitleText.text = $"Locked: {_selectedTab.duckName}";
+            if (purchaseCostText != null)
+                purchaseCostText.text = _selectedTab.unlockRequirementText;
+            if (purchaseUnlockButton != null)
+                purchaseUnlockButton.interactable = false;
+            if (purchaseUnlockButtonText != null)
+                purchaseUnlockButtonText.text = "LOCKED";
+            return;
+        }
 
         if (purchaseTitleText != null)
             purchaseTitleText.text = $"Unlock {_selectedTab.duckName}";
@@ -247,6 +268,7 @@ public class UpgradeUI : MonoBehaviour
         if (purchaseUnlockButtonText != null)
             purchaseUnlockButtonText.text = cost > 0 ? $"PURCHASE ({cost} coins)" : "PURCHASE (Free)";
     }
+
 
     private void RefreshBuyDuck(DuckDefinition def)
     {
