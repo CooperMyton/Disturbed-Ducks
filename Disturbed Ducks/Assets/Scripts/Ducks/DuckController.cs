@@ -70,6 +70,7 @@ public class DuckController : MonoBehaviour
     public void OnCrashed()
     {
         GetComponent<ExplosionOnCrash>()?.OnCrashed();
+        GetComponent<ShieldController>()?.ForceEnd();
         _abilityController?.OnCrashed();
         _soundController?.PlayCrash();
         _modelController?.SetCrashed();
@@ -81,6 +82,8 @@ public void OnReset()
     _abilityController?.OnReset();
     GetComponent<ExplosionOnCrash>()?.ResetFlight();
     GetComponent<SplitController>()?.OnReset(); // clean up mini ducks
+    GetComponent<ShieldController>()?.ForceEnd();
+
     _modelController?.SetNeutral();
     _flightTrail?.Clear();
     _flightTrail?.SetEmitting(false);

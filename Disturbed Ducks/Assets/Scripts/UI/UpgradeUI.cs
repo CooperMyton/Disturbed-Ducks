@@ -161,7 +161,7 @@ public class UpgradeUI : MonoBehaviour
             var tmp           = textGo.AddComponent<TextMeshProUGUI>();
             tmp.text          = duck.duckName;
             tmp.alignment     = TextAlignmentOptions.Center;
-            tmp.fontSize      = 14;
+            tmp.fontSize      = 13;
             tmp.raycastTarget = false;
 
             var capturedDuck = duck;

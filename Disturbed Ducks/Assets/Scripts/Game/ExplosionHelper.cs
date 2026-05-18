@@ -13,6 +13,8 @@ public static class ExplosionHelper
             // fromExplosion: true — allows explosion-only destructibles to take damage
             hit.GetComponent<Destructible>()?.TakeDamage(damage, true);
             hit.GetComponent<TargetEnemy>()?.TakeDamage(damage);
+            hit.GetComponent<ExplosiveCar>()?.TakeDamage(damage, true);
+
         }
 
         Debug.Log($"Explosion at {position} — radius: {radius:F1}, " +

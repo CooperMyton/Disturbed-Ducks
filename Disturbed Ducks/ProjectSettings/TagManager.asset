@@ -9,6 +9,7 @@ TagManager:
   - Beaver
   - Blueprint
   - Duck
+  - File
   layers:
   - Default
   - TransparentFX

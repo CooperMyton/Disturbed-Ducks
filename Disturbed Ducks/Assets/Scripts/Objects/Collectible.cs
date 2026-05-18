@@ -50,7 +50,10 @@ public class Collectible : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (_collected) return;
-        if (other.GetComponent<Rigidbody>() == null) return;
+
+        if (other.GetComponent<DuckImpact>() == null)
+            return;
+
         Collect();
     }
 

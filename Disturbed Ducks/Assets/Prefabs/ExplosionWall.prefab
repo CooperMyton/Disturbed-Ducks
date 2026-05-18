@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 795226712797286886}
   - component: {fileID: 9078238281304759780}
   - component: {fileID: 395614733761315049}
+  - component: {fileID: -294510760302571103}
   m_Layer: 0
   m_Name: ExplosionWall
   m_TagString: obstacle
@@ -136,3 +137,15 @@ MonoBehaviour:
   damagedColor: {r: 1, g: 0, b: 0, a: 1}
   currencyOnBreak: 25
   explosionOnly: 1
+--- !u!114 &-294510760302571103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641290933807227208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e36205f909d5674cb2b588c072e78e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DuckCrashObstacle
