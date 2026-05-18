@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8124457343458700374
+--- !u!1 &5889575414625266162
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,52 +8,51 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3852447413893970105}
-  - component: {fileID: 847642579201452701}
-  - component: {fileID: 5557034141183517809}
-  - component: {fileID: 8491148653507938835}
-  - component: {fileID: 7075051871876863913}
-  - component: {fileID: 8596488663375011852}
-  - component: {fileID: -3347343005231837983}
-  - component: {fileID: 5943839670380161262}
-  - component: {fileID: 5538783714204069562}
+  - component: {fileID: 5482402742637167500}
+  - component: {fileID: 6376136200627562387}
+  - component: {fileID: 8816342182609224741}
+  - component: {fileID: 3479003821292488878}
+  - component: {fileID: 5275318650987282803}
+  - component: {fileID: 8242663657870929142}
+  - component: {fileID: -1879020076746193407}
+  - component: {fileID: 29237948241299863}
   m_Layer: 0
-  m_Name: Beaver
-  m_TagString: Beaver
+  m_Name: Car
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3852447413893970105
+--- !u!4 &5482402742637167500
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8124457343458700374}
+  m_GameObject: {fileID: 5889575414625266162}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 19.5, y: 10.25, z: -8.204048}
-  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
-  m_ConstrainProportionsScale: 1
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 22.87}
+  m_LocalScale: {x: 4, y: 3, z: 8}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &847642579201452701
+--- !u!33 &6376136200627562387
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8124457343458700374}
+  m_GameObject: {fileID: 5889575414625266162}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &5557034141183517809
+--- !u!23 &8816342182609224741
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8124457343458700374}
+  m_GameObject: {fileID: 5889575414625266162}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -96,13 +95,13 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8491148653507938835
+--- !u!65 &3479003821292488878
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8124457343458700374}
+  m_GameObject: {fileID: 5889575414625266162}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -117,37 +116,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7075051871876863913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8124457343458700374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6609f459f4f3e624ab4355445b246524, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TargetEnemy
-  maxHP: 75
-  currentHP: 0
-  currencyOnKill: 10
-  minSpeedToTakeDamage: 3
-  damageMultiplier: 1
-  damageCooldown: 0.1
-  objectRenderer: {fileID: 0}
-  healthyColor: {r: 1, g: 0.52312607, b: 0.015686274, a: 1}
-  damagedColor: {r: 1, g: 0, b: 0, a: 1}
---- !u!54 &8596488663375011852
+--- !u!54 &5275318650987282803
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8124457343458700374}
+  m_GameObject: {fileID: 5889575414625266162}
   serializedVersion: 5
-  m_Mass: 3
-  m_LinearDamping: 1
+  m_Mass: 1
+  m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -160,49 +138,66 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-3347343005231837983
+--- !u!114 &8242663657870929142
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8124457343458700374}
+  m_GameObject: {fileID: 5889575414625266162}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48f54da9ab7679f4b9d16087063c22da, type: 3}
+  m_Script: {fileID: 11500000, guid: 927b91268192d034b90ec1065e3b47fb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PacingEnemy
-  patrolDistance: 5
-  moveSpeed: 2
-  pauseDuration: 0.8
---- !u!114 &5943839670380161262
+  m_EditorClassIdentifier: Assembly-CSharp::MovingCar
+  pathPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  movementMode: 0
+  speed: 12
+  turnSpeed: 8
+  waypointReachDistance: 0.25
+  startingTargetIndex: 0
+  damage: 999
+  unbreakableTags:
+  - Ground
+  - obstacle
+--- !u!114 &-1879020076746193407
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8124457343458700374}
+  m_GameObject: {fileID: 5889575414625266162}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0ab0dba5dc015446b33ef69c72e9f85, type: 3}
+  m_Script: {fileID: 11500000, guid: 95d1fa7105ec4eb458ab14eed039cdd2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShootingBeaver
-  projectilePrefab: {fileID: 1977220693691106962, guid: 9fb4c3c6cbf45f8429910881f0cbd383, type: 3}
-  fireRate: 1.5
-  bulletSpeed: 20
-  firePoint: {fileID: 0}
---- !u!114 &5538783714204069562
+  m_EditorClassIdentifier: Assembly-CSharp::ExplosiveCar
+  maxHP: 100
+  currentHP: 0
+  minSpeedToTakeDamage: 3
+  impactDamageMultiplier: 1
+  damageCooldown: 0.1
+  explosionRadius: 6
+  explosionDamage: 150
+  explosionVisualDefinition: {fileID: 11400000, guid: afa34d5071420224e8c83699680a0517, type: 2}
+  explosionDelay: 1
+  objectRenderer: {fileID: 0}
+  healthyColor: {r: 1, g: 1, b: 1, a: 1}
+  damagedColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &29237948241299863
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8124457343458700374}
+  m_GameObject: {fileID: 5889575414625266162}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e36205f909d5674cb2b588c072e78e5, type: 3}

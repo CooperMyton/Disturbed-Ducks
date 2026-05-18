@@ -50,7 +50,9 @@ public class TargetEnemy : MonoBehaviour
         float speed = hitRb.linearVelocity.magnitude;
         if (speed < minSpeedToTakeDamage) return;
 
-        float damage = speed * hitRb.mass * damageMultiplier;
+        float shieldMultiplier = hitRb.GetComponent<ShieldController>()?.DamageMultiplier ?? 1f;
+        float damage = speed * hitRb.mass * damageMultiplier * shieldMultiplier;
+
         _lastDamageTime = Time.time;
         TakeDamage(damage);
     }

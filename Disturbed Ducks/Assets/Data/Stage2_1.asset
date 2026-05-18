@@ -16,6 +16,7 @@ MonoBehaviour:
   stageName: Stage 2.1
   objectiveTags:
   - Beaver
-  collectibleTags: []
-  firstClearBonus: 100
+  collectibleTags:
+  - File
+  firstClearBonus: 1200
   nextStage: {fileID: 0}

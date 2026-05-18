@@ -52,7 +52,9 @@ public class Destructible : MonoBehaviour
         float impactSpeed = hitRb.linearVelocity.magnitude;
         if (impactSpeed < minSpeedToTakeDamage) return;
 
-        float damage = impactSpeed * hitRb.mass * damageMultiplier;
+        float shieldMultiplier = hitRb.GetComponent<ShieldController>()?.DamageMultiplier ?? 1f;
+        float damage = impactSpeed * hitRb.mass * damageMultiplier * shieldMultiplier;
+
         _lastDamageTime = Time.time;
 
         TakeDamage(damage, false, hitRb);

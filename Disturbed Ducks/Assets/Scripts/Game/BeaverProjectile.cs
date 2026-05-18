@@ -31,6 +31,13 @@ public class BeaverProjectile : MonoBehaviour
         var impact = other.GetComponent<DuckImpact>();
         if (impact == null) return;
         if (impact.HasCrashed) return;
+        var shield = other.GetComponent<ShieldController>();
+        if (shield != null && shield.IsActive)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
 
         impact.Crash();
         Destroy(gameObject);

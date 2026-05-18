@@ -28,6 +28,10 @@ public class LauncherController : MonoBehaviour
 
     private Vector3 _launchLocalOffset;
 
+    private Quaternion _launchLocalRotationOffset;
+    private Quaternion _originalLaunchRotation;
+
+
 
     // parameters for the string linerender
     [SerializeField] private Transform leftBarPosition;
@@ -42,6 +46,9 @@ public class LauncherController : MonoBehaviour
         _rb = duckToLaunch.GetComponent<Rigidbody>();
 
         _launchLocalOffset = transform.InverseTransformPoint(duckToLaunch.transform.position);
+
+        _launchLocalRotationOffset = Quaternion.Inverse(transform.rotation) * duckToLaunch.transform.rotation;
+        _originalLaunchRotation = duckToLaunch.transform.rotation;
 
         _originalLaunchPosition = duckToLaunch.transform.position;
         _launchPosition = _originalLaunchPosition;
@@ -73,43 +80,51 @@ public class LauncherController : MonoBehaviour
     {
         float step = aimSpeed * Time.deltaTime;
 
+        Vector3 localLaunchPosition = transform.InverseTransformPoint(_launchPosition);
+        Vector3 localTargetPosition = transform.InverseTransformPoint(launchDirectionTarget.position);
+
         if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
-            _launchPosition.y += step;
+            localLaunchPosition.y += step;
         else if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
-            _launchPosition.y -= step;
+            localLaunchPosition.y -= step;
 
         if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-            _launchPosition.x += step;
+            localLaunchPosition.x += step;
         else if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
-            _launchPosition.x -= step;
+            localLaunchPosition.x -= step;
 
         if (Keyboard.current.zKey.isPressed)
-            _launchPosition.z += step;
+            localLaunchPosition.z += step;
         else if (Keyboard.current.xKey.isPressed)
-            _launchPosition.z -= step;
+            localLaunchPosition.z -= step;
 
-        // Clamp total draw distance first
-        Vector3 offset = _launchPosition - launchDirectionTarget.position;
-        Vector3 limitedOffset = Vector3.ClampMagnitude(offset, maxDrawDistance);
-        _launchPosition = launchDirectionTarget.position + limitedOffset;
+        Vector3 localOffset = localLaunchPosition - localTargetPosition;
+        Vector3 limitedOffset = Vector3.ClampMagnitude(localOffset, maxDrawDistance);
+        localLaunchPosition = localTargetPosition + limitedOffset;
 
-        // Then clamp Z — prevents pulling behind the launcher after magnitude clamp
-        if (_launchPosition.z > launchDirectionTarget.position.z)
-            _launchPosition.z = launchDirectionTarget.position.z;
+        if (localLaunchPosition.z > localTargetPosition.z)
+            localLaunchPosition.z = localTargetPosition.z;
+
+        _launchPosition = transform.TransformPoint(localLaunchPosition);
     }
+
 
     private void MoveSlingshotString()
     {
         if (leftBarPosition && rightBarPosition)
         {
             slingshotString.SetPosition(0, leftBarPosition.position);
-            Vector3 slingshotBackLeft  = new Vector3(_launchPosition.x - 0.25f, _launchPosition.y, _launchPosition.z - .6f);
-            Vector3 slingshotBackRight = new Vector3(_launchPosition.x + 0.25f, _launchPosition.y, _launchPosition.z - .6f);
-            slingshotString.SetPosition(1, slingshotBackLeft);
-            slingshotString.SetPosition(2, slingshotBackRight);
+
+            Vector3 localLaunchPosition = transform.InverseTransformPoint(_launchPosition);
+            Vector3 slingshotBackLeftLocal  = localLaunchPosition + new Vector3(-0.25f, 0f, -0.6f);
+            Vector3 slingshotBackRightLocal = localLaunchPosition + new Vector3( 0.25f, 0f, -0.6f);
+
+            slingshotString.SetPosition(1, transform.TransformPoint(slingshotBackLeftLocal));
+            slingshotString.SetPosition(2, transform.TransformPoint(slingshotBackRightLocal));
             slingshotString.SetPosition(3, rightBarPosition.position);
         }
     }
+
 
     private void LaunchDuck()
     {
@@ -150,14 +165,26 @@ public class LauncherController : MonoBehaviour
         if (_rb != null)
         {
             _rb.position = _originalLaunchPosition;
-            _rb.rotation = Quaternion.identity;
+            _rb.rotation = _originalLaunchRotation;
             _rb.linearVelocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
         }
         else
         {
-            duckToLaunch.transform.position = _originalLaunchPosition;
+            duckToLaunch.transform.SetPositionAndRotation(_originalLaunchPosition, _originalLaunchRotation);
+
         }
+
+        if (launchDirectionTarget != null)
+        {
+            Vector3 launchForward = transform.forward;
+            Vector3 duckForward = duckToLaunch.transform.forward;
+            float alignment = Vector3.Dot(launchForward.normalized, duckForward.normalized);
+
+            if (alignment < 0.75f)
+                Debug.LogWarning($"Duck and launcher directions are misaligned. Dot: {alignment:F2}");
+        }
+
 
         MoveSlingshotString();
     }
@@ -169,15 +196,18 @@ public class LauncherController : MonoBehaviour
             return;
         }
 
-        transform.position = launchPoint.position;
+        transform.SetPositionAndRotation(launchPoint.position, launchPoint.rotation);
+
 
         _originalLaunchPosition = transform.TransformPoint(_launchLocalOffset);
         _launchPosition = _originalLaunchPosition;
+
+        _originalLaunchRotation = transform.rotation * _launchLocalRotationOffset;
+
 
         Debug.Log($"Launcher moved to {transform.position}; duck reset point is {_originalLaunchPosition}");
 
         ResetToLauncher();
     }
-
 
 }
