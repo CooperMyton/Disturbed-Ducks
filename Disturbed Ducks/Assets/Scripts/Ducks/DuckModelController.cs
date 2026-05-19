@@ -17,6 +17,8 @@ public class DuckModelController : MonoBehaviour
 
     public void SetNeutral()  => SwapTo(_definition?.neutralModel);
     public void SetFlight()   => SwapTo(_definition?.flightModel);
+
+    public void SetAbility()  => SwapTo(_definition?.abilityModel != null ? _definition.abilityModel : _definition?.flightModel);
     public void SetCrashed()  => SwapTo(_definition?.crashedModel);
 
     /// Tints all renderers on the active model. Call each frame during a lerp
@@ -48,4 +50,6 @@ public class DuckModelController : MonoBehaviour
         _activeModel.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
     public Transform ActiveModelTransform => _activeModel?.transform;
+
+
 }

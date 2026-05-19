@@ -14,7 +14,8 @@ public class ShieldController : MonoBehaviour
     {
         if (_shieldRoutine != null)
             StopCoroutine(_shieldRoutine);
-
+            
+        GetComponent<DuckModelController>()?.SetAbility();
         _shieldRoutine = StartCoroutine(ShieldRoutine(duration, damageMultiplier));
     }
 
@@ -27,6 +28,11 @@ public class ShieldController : MonoBehaviour
         }
 
         _isActive = false;
+        var impact = GetComponent<DuckImpact>();
+        var flight = GetComponent<DuckFlightController>();
+
+        if ((impact == null || !impact.HasCrashed) && flight != null && flight.IsLaunched)
+            GetComponent<DuckModelController>()?.SetFlight();
         _damageMultiplier = 1f;
     }
 

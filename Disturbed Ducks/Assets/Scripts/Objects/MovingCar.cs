@@ -18,9 +18,15 @@ public class MovingCar : MonoBehaviour
     [Header("Damage")]
     [SerializeField] private float damage = 999f;
 
+    [SerializeField] private Vector3 movementRotationOffset;
+    [SerializeField] private bool rotateWithPath = true;
+
     [Header("Collision")]
     [SerializeField] private string[] unbreakableTags = { "Ground", "obstacle" };
-
+    
+    [Header("Visual")]
+    [SerializeField] private Transform visualRoot;
+    [SerializeField] private Vector3 visualLocalEulerOffset;
     private Rigidbody _rb;
     private Vector3[] _pathPositions;
     private int _targetIndex;
@@ -35,6 +41,7 @@ public class MovingCar : MonoBehaviour
             _rb.isKinematic = true;
             _rb.useGravity = false;
         }
+        ApplyVisualOffset();
     }
 
     private void Start()
@@ -68,10 +75,18 @@ public class MovingCar : MonoBehaviour
         Vector3 nextPosition = current + direction * speed * Time.fixedDeltaTime;
 
         Quaternion nextRotation = transform.rotation;
-        if (direction.sqrMagnitude > 0.001f)
+
+        if (rotateWithPath && direction.sqrMagnitude > 0.001f)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-            nextRotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime);
+            Quaternion targetRotation =
+                Quaternion.LookRotation(direction, Vector3.up) *
+                Quaternion.Euler(movementRotationOffset);
+
+            nextRotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                turnSpeed * Time.fixedDeltaTime
+            );
         }
 
         if (_rb != null)
@@ -167,5 +182,16 @@ public class MovingCar : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void ApplyVisualOffset()
+    {
+        if (visualRoot != null)
+            visualRoot.localRotation = Quaternion.Euler(visualLocalEulerOffset);
+    }
+
+    private void OnValidate()
+    {
+        ApplyVisualOffset();
     }
 }

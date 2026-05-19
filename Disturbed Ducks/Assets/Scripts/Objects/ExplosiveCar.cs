@@ -17,6 +17,9 @@ public class ExplosiveCar : MonoBehaviour
     [SerializeField] private ExplosionDefinition explosionVisualDefinition;
     [SerializeField] private float explosionDelay = 1f;
 
+    [SerializeField] private ParticleSystem idleSmoke;
+    [SerializeField] private ParticleSystem warningSmoke;
+
     [Header("Visual Feedback")]
     [SerializeField] private Renderer objectRenderer;
     [SerializeField] private Color healthyColor = Color.white;
@@ -35,6 +38,7 @@ public class ExplosiveCar : MonoBehaviour
             objectRenderer = GetComponent<Renderer>();
 
         UpdateColor();
+        idleSmoke?.Play();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -45,7 +49,7 @@ public class ExplosiveCar : MonoBehaviour
         Rigidbody hitRb = collision.rigidbody;
         if (hitRb == null) return;
 
-        float speed = hitRb.linearVelocity.magnitude;
+        float speed = collision.relativeVelocity.magnitude;
         if (speed < minSpeedToTakeDamage) return;
 
         float shieldMultiplier = hitRb.GetComponent<ShieldController>()?.DamageMultiplier ?? 1f;
@@ -76,6 +80,8 @@ public class ExplosiveCar : MonoBehaviour
     {
         if (_exploded) return;
         _exploded = true;
+        idleSmoke?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        warningSmoke?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 
         if (explosionVisualDefinition != null)
         {
@@ -124,8 +130,12 @@ public class ExplosiveCar : MonoBehaviour
     private void StartExplosionDelay()
     {
         if (_exploded || _pendingExplosion != null) return;
+
         if (objectRenderer != null)
             objectRenderer.material.color = damagedColor;
+
+        warningSmoke?.Play();
+
         _pendingExplosion = StartCoroutine(ExplosionDelayRoutine());
     }
 

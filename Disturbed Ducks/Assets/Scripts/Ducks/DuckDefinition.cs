@@ -26,6 +26,7 @@ public class DuckDefinition : ScriptableObject
     public GameObject neutralModel;
     public GameObject flightModel;
     public GameObject crashedModel;
+    public GameObject abilityModel;
 
     [Header("Sounds — drag AudioClips here when ready")]
     public AudioClip launchSound;

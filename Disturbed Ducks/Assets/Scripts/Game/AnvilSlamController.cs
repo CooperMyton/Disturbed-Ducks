@@ -19,6 +19,8 @@ public class AnvilSlamController : MonoBehaviour
     private DuckImpact           _duckImpact;
     private bool                 _isHovering = false;
 
+    public bool IsSlamActive { get; private set; }
+
     private void Awake()
     {
         _rb               = GetComponent<Rigidbody>();
@@ -57,6 +59,7 @@ public class AnvilSlamController : MonoBehaviour
         _rb.linearVelocity        = Vector3.zero;
         _rb.useGravity            = false;
         _isHovering               = true;
+        IsSlamActive = true;
         AbilityUI.Instance?.OnBombArmed(hangTime);
 
         yield return new WaitForSeconds(hangTime);
@@ -84,7 +87,14 @@ public class AnvilSlamController : MonoBehaviour
         // Reset mass here — covers both natural crash and timeout
         _rb.mass = originalMass;
 
+        IsSlamActive = false;
+
         if (!_duckImpact.HasCrashed)
             _duckImpact.Crash();
+    }
+
+    public bool BlocksWind()
+    {
+        return IsSlamActive || _isHovering;
     }
 }

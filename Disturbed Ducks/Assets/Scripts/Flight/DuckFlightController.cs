@@ -38,6 +38,8 @@ public class DuckFlightController : MonoBehaviour
 
     public bool IsLaunched => _isLaunched;
 
+    private Vector3 _windVelocity;
+
     // -------------------------------------------------------------------------
 
     private void Awake()
@@ -163,7 +165,8 @@ public class DuckFlightController : MonoBehaviour
         _verticalVelocity = Mathf.Max(_verticalVelocity, -maxFallSpeed);
 
         // --- Final velocity: forward thrust + gravity component ---
-        Vector3 velocity = transform.forward * _currentSpeed + Vector3.up * _verticalVelocity;
+        Vector3 velocity = transform.forward * _currentSpeed + Vector3.up * _verticalVelocity + _windVelocity;
+        _windVelocity = Vector3.zero;
         _rb.linearVelocity = velocity;
 
         // --- Nose follow: gradually align to actual velocity arc ---
@@ -226,5 +229,9 @@ public class DuckFlightController : MonoBehaviour
     public void SetDisableInput(bool disabled)
     {
         _inputDisabled = disabled;
+    }
+    public void AddWindVelocity(Vector3 velocity)
+    {
+        _windVelocity += velocity;
     }
 }

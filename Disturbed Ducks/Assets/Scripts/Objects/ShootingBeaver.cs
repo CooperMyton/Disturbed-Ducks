@@ -4,6 +4,8 @@ using UnityEngine;
 /// Add alongside TargetEnemy — does not replace it.
 public class ShootingBeaver : MonoBehaviour
 {
+    [Header("Aiming")]
+    [SerializeField] private float facingYawOffset = 180f;
     [Header("Shooting")]
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float fireRate    = 1.5f;
@@ -45,7 +47,9 @@ public class ShootingBeaver : MonoBehaviour
         Vector3 dirToDuck = _duck.position - transform.position;
         dirToDuck.y = 0f;
         if (dirToDuck.sqrMagnitude > 0.01f)
-            transform.rotation = Quaternion.LookRotation(dirToDuck);
+            transform.rotation =
+                Quaternion.LookRotation(dirToDuck, Vector3.up) *
+                Quaternion.Euler(0f, facingYawOffset, 0f);
 
         _fireTimer -= Time.deltaTime;
         if (_fireTimer <= 0f)
