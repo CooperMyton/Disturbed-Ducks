@@ -65,6 +65,7 @@ public class DuckController : MonoBehaviour
         _soundController?.PlayLaunch();
         _modelController?.SetFlight();
         _flightTrail?.SetEmitting(true);
+        GetComponent<DuckFamilyController>()?.OnLaunched();
     }
 
     public void OnCrashed()
@@ -75,6 +76,7 @@ public class DuckController : MonoBehaviour
         _soundController?.PlayCrash();
         _modelController?.SetCrashed();
         _flightTrail?.SetEmitting(false);
+        GetComponent<DuckFamilyController>()?.OnLeaderCrashed();
     }
 
 public void OnReset()
@@ -83,7 +85,8 @@ public void OnReset()
     GetComponent<ExplosionOnCrash>()?.ResetFlight();
     GetComponent<SplitController>()?.OnReset(); // clean up mini ducks
     GetComponent<ShieldController>()?.ForceEnd();
-
+    GetComponent<DuckFamilyController>()?.OnReset();
+    
     _modelController?.SetNeutral();
     _flightTrail?.Clear();
     _flightTrail?.SetEmitting(false);
