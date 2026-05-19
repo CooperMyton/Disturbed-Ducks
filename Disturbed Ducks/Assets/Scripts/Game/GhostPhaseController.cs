@@ -57,6 +57,7 @@ public class GhostPhaseController : MonoBehaviour
             if (other == null) continue;
             if (other == _duckCollider) continue;
             if (other.transform.IsChildOf(transform)) continue;
+            if (other.isTrigger) continue;
             if (other.CompareTag(groundTag)) continue;
 
             bool layerAllowed = (phaseableLayers.value & (1 << other.gameObject.layer)) != 0;
