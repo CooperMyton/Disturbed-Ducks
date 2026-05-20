@@ -20,8 +20,16 @@ public class PacingEnemy : MonoBehaviour
     {
         // Patrol along world X axis — adjust Vector3.right to
         // Vector3.forward if your stage runs along the Z axis instead
-        _pointA = transform.position - Vector3.right * patrolDistance;
-        _pointB = transform.position + Vector3.right * patrolDistance;
+        Vector3 strafeDirection = transform.right;
+        strafeDirection.y = 0f;
+
+        if (strafeDirection.sqrMagnitude < 0.01f)
+            strafeDirection = Vector3.right;
+        else
+            strafeDirection.Normalize();
+
+        _pointA = transform.position - strafeDirection * patrolDistance;
+        _pointB = transform.position + strafeDirection * patrolDistance;
         _target = _pointB;
 
         // Kinematic so the beaver stays on its path and isn't
