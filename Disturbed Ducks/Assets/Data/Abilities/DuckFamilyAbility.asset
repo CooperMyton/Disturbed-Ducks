@@ -16,8 +16,8 @@ MonoBehaviour:
   cooldown: 3
   startingFamilyCount: 3
   familyDuckMass: 1.2
-  vAngle: 40
-  spacing: 1.2
+  vAngle: 65
+  spacing: 1.5
   upgradeLevels:
   - massIncrement: 0
     cost: 10
