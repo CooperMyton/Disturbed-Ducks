@@ -31,8 +31,11 @@ public class DuckImpact : MonoBehaviour
     {
         if (_hasCrashed) return;
 
-        // Ground always crashes regardless of speed
-        if (collision.gameObject.CompareTag(groundTag) || collision.gameObject.CompareTag(obstacleTag))
+
+       // Ground, obstacle tags, or explicit crash markers always crash.
+        if (collision.gameObject.CompareTag(groundTag) ||
+            collision.gameObject.CompareTag(obstacleTag) ||
+            collision.gameObject.GetComponentInParent<DuckCrashObstacle>() != null)
         {
             Crash();
             return;

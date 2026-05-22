@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2825539563499471115}
   - component: {fileID: 3317970483487770498}
   - component: {fileID: 6813066611694331839}
+  - component: {fileID: 7175281872891403692}
   m_Layer: 0
   m_Name: DestructibleBox
   m_TagString: Untagged
@@ -164,3 +165,19 @@ MonoBehaviour:
   damagedColor: {r: 1, g: 0, b: 0, a: 1}
   currencyOnBreak: 10
   explosionOnly: 0
+--- !u!114 &7175281872891403692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4277904013046133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08e5bfbe31f6064f9993b04a19823b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionSoundPlayer
+  audioSource: {fileID: 0}
+  hitSound: {fileID: 0}
+  minImpactSpeed: 2
+  cooldown: 0.15

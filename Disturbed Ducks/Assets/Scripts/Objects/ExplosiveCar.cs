@@ -25,6 +25,10 @@ public class ExplosiveCar : MonoBehaviour
     [SerializeField] private Color healthyColor = Color.white;
     [SerializeField] private Color damagedColor = Color.red;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hitSound;
+    [SerializeField] private AudioClip explosionSound;
     private bool _exploded = false;
     private float _lastDamageTime = -999f;
 
@@ -32,6 +36,8 @@ public class ExplosiveCar : MonoBehaviour
 
     private void Awake()
     {
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
         currentHP = maxHP;
 
         if (objectRenderer == null)
@@ -57,6 +63,8 @@ public class ExplosiveCar : MonoBehaviour
 
         _lastDamageTime = Time.time;
         TakeDamage(damage, false);
+        if (hitSound != null)
+            AudioSource.PlayClipAtPoint(hitSound, transform.position);
     }
 
     public void TakeDamage(float amount, bool fromExplosion = false)
@@ -80,6 +88,8 @@ public class ExplosiveCar : MonoBehaviour
     {
         if (_exploded) return;
         _exploded = true;
+        if (explosionSound != null && audioSource != null)
+            audioSource.PlayOneShot(explosionSound);
         idleSmoke?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         warningSmoke?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
 

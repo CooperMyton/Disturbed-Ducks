@@ -107,6 +107,8 @@ public class StageManager : MonoBehaviour
 
         _objectivesTotal = _objectivesRemaining;
         OnObjectivesChanged?.Invoke(_objectivesRemaining, _objectivesTotal);
+
+        StageAudioManager.Instance?.PlayStageAudio(CurrentDef);
     }
 
     private bool IsChildOfCurrentRoot(Transform t)
@@ -128,6 +130,8 @@ public class StageManager : MonoBehaviour
     {
         if (_isCleared) return;
         _isCleared = true;
+
+        StageAudioManager.Instance?.PlayClearSong(CurrentDef);
 
         bool isFirstClear = !inventory.HasClearedStage(CurrentDef.stageId);
         if (isFirstClear)

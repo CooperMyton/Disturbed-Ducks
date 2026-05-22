@@ -19,4 +19,9 @@ public class StageDefinition : ScriptableObject
 
     [Header("Stage Flow")]
     public StageDefinition nextStage;
+
+    [Header("Audio")]
+    public AudioClip backgroundMusic;
+    public AudioClip ambienceLoop;
+    public AudioClip clearSong;
 }

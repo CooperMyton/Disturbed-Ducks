@@ -102,7 +102,12 @@ public class AbilityUI : MonoBehaviour
     public void RefreshName()
     {
         if (abilityNameText != null && abilityController != null)
-            abilityNameText.text = abilityController.AbilityName;
+        {
+            abilityNameText.text = abilityController.AbilityInputEnabled
+                ? abilityController.AbilityName
+                : "No Ability";
+        }
+
         RefreshIndicator();
     }
 
@@ -114,7 +119,13 @@ public class AbilityUI : MonoBehaviour
     private void RefreshIndicator()
     {
         if (abilityController == null) return;
-
+        
+        if (!abilityController.AbilityInputEnabled)
+        {
+            SetIndicator(lockedColor, "NO ABILITY");
+            return;
+        }
+        
         if (!abilityController.IsUnlocked)
             SetIndicator(lockedColor, "Upgrade to Unlock");
         else if (abilityController.IsReady)

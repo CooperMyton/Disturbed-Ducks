@@ -22,14 +22,16 @@ MonoBehaviour:
   baseGlideGravity: 12
   baseMinSpeed: 5
   baseMass: 2
-  neutralModel: {fileID: 919132149155446097, guid: ca4349f12576e0143bc7506b19b8a3ec, type: 3}
-  flightModel: {fileID: 919132149155446097, guid: 9797e79db52e127479b3f40357cede97, type: 3}
-  crashedModel: {fileID: 919132149155446097, guid: f739817ffb5e518458887491017743c2, type: 3}
+  neutralModel: {fileID: 919132149155446097, guid: baab6c0b18438c34f89c67f6a6aad0ee, type: 3}
+  flightModel: {fileID: 919132149155446097, guid: eab6f7145a043bd429599440b7a721ee, type: 3}
+  crashedModel: {fileID: 919132149155446097, guid: 071861ad35ec60943ac55d236ea3c11e, type: 3}
   abilityModel: {fileID: 0}
   launchSound: {fileID: 0}
   crashSound: {fileID: 0}
   abilitySound: {fileID: 0}
+  flyingLoopSound: {fileID: 0}
   ability: {fileID: 11400000, guid: 7c5bf5623662eed41a505edc827b7ce1, type: 2}
+  disableAbilityInput: 1
   explosionDefinition: {fileID: 0}
   maxSpeedUpgrade:
     upgradeName: Max Speed

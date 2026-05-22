@@ -3,6 +3,13 @@ using UnityEngine.InputSystem;
 
 public class LauncherController : MonoBehaviour
 {
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip drawBackSound;
+    [SerializeField] private AudioClip launchSound;
+
+    private bool _wasDrawingBack;
     [SerializeField] private GameObject duckToLaunch;
 
     [Tooltip("Empty child GameObject — rotate this in the scene to aim the launch direction")]
@@ -55,12 +62,17 @@ public class LauncherController : MonoBehaviour
 
         slingshotString = GetComponent<LineRenderer>();
         slingshotString.positionCount = 4;
+
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
     }
 
 
     private void Update()
     {
         if (_inFlight) return;
+
+        HandleLauncherAudio();
 
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
@@ -132,7 +144,8 @@ public class LauncherController : MonoBehaviour
         // definition swaps are blocked until the next reset.
         if (duckSpawner == null)
             duckSpawner = DuckSpawner.Instance;
-
+        if (launchSound != null && audioSource != null)
+            audioSource.PlayOneShot(launchSound);
         duckSpawner?.OnDuckLaunched();
 
         if (launchDirectionTarget == null)
@@ -208,6 +221,19 @@ public class LauncherController : MonoBehaviour
         Debug.Log($"Launcher moved to {transform.position}; duck reset point is {_originalLaunchPosition}");
 
         ResetToLauncher();
+    }
+
+    private void HandleLauncherAudio()
+    {
+        bool isDrawingBack = Vector3.Distance(_launchPosition, launchDirectionTarget.position) > 0.2f;
+
+        if (isDrawingBack && !_wasDrawingBack)
+        {
+            if (drawBackSound != null && audioSource != null)
+                audioSource.PlayOneShot(drawBackSound);
+        }
+
+        _wasDrawingBack = isDrawingBack;
     }
 
 }

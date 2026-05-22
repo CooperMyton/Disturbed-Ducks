@@ -32,9 +32,11 @@ public class DuckDefinition : ScriptableObject
     public AudioClip launchSound;
     public AudioClip crashSound;
     public AudioClip abilitySound;
+    public AudioClip flyingLoopSound;
 
     [Header("Ability")]
     public AbilityBase ability;
+    public bool disableAbilityInput = false;
 
     [Header("Explosion — Bomb Duck only, leave null for Basic Duck")]
     public ExplosionDefinition explosionDefinition;

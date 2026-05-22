@@ -7,7 +7,8 @@ public class DuckFamilyController : MonoBehaviour
     [SerializeField] private GameObject familyDuckPrefab;
 
     [Tooltip("Optional model prefab placed under each family duck. Leave empty to use the prefab visuals.")]
-    [SerializeField] private GameObject familyDuckModel;
+    [SerializeField] private GameObject familyDuckFlightModel;
+    [SerializeField] private GameObject familyDuckCrashedModel;
 
     [Header("Formation")]
     [SerializeField] private float followSharpness = 18f;
@@ -140,12 +141,12 @@ public class DuckFamilyController : MonoBehaviour
 
         member.Initialize(this);
 
-        if (familyDuckModel != null)
+        if (familyDuckFlightModel != null)
         {
             foreach (Renderer renderer in duck.GetComponentsInChildren<Renderer>())
                 renderer.enabled = false;
 
-            Instantiate(familyDuckModel, duck.transform.position, duck.transform.rotation, duck.transform);
+            Instantiate(familyDuckFlightModel, duck.transform.position, duck.transform.rotation, duck.transform);
         }
 
         foreach (GameObject otherDuck in _familyDucks)
@@ -190,6 +191,14 @@ public class DuckFamilyController : MonoBehaviour
             GameObject duck = _familyDucks[i];
             if (duck == null)
                 continue;
+
+            if (familyDuckCrashedModel != null)
+            {
+                foreach (Transform child in duck.transform)
+                    Destroy(child.gameObject);
+
+                Instantiate(familyDuckCrashedModel, duck.transform.position, duck.transform.rotation, duck.transform);
+            }
 
             Rigidbody rb = duck.GetComponent<Rigidbody>();
             if (rb == null)

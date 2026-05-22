@@ -25,6 +25,14 @@ public class TargetEnemy : MonoBehaviour
     [SerializeField] private Color healthyColor = Color.yellow;
     [SerializeField] private Color damagedColor = Color.red;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip passiveSound;
+    [SerializeField] private float passiveInterval = 5f;
+    [SerializeField] private AudioClip hitSound;
+    [SerializeField] private AudioClip deathSound;
+
+    private float _nextPassiveTime;
     // StageManager subscribes to this
     public event Action OnDied;
 
@@ -38,6 +46,9 @@ public class TargetEnemy : MonoBehaviour
         if (objectRenderer == null)
             objectRenderer = GetComponent<Renderer>();
         UpdateColor();
+
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -64,6 +75,8 @@ public class TargetEnemy : MonoBehaviour
         currentHP = Mathf.Max(currentHP - amount, 0f);
         UpdateColor();
         OnDamaged?.Invoke();
+        if (hitSound != null && audioSource != null)
+            audioSource.PlayOneShot(hitSound);
         Debug.Log($"{gameObject.name} took {amount:F1} damage | HP: {currentHP:F1}/{maxHP}");
 
         if (currentHP <= 0f) Die();
@@ -74,6 +87,8 @@ public class TargetEnemy : MonoBehaviour
         CurrencyManager.Instance?.Add(currencyOnKill);
         OnDied?.Invoke();
         Debug.Log($"{gameObject.name} killed! +{currencyOnKill} currency");
+        if (deathSound != null)
+            AudioSource.PlayClipAtPoint(deathSound, transform.position);
         Destroy(gameObject);
     }
 
@@ -82,5 +97,14 @@ public class TargetEnemy : MonoBehaviour
         if (objectRenderer == null) return;
         float pct = currentHP / maxHP;
         objectRenderer.material.color = Color.Lerp(damagedColor, healthyColor, pct);
+    }
+
+    private void Update()
+    {
+        if (passiveSound == null || audioSource == null) return;
+        if (Time.time < _nextPassiveTime) return;
+
+        audioSource.PlayOneShot(passiveSound);
+        _nextPassiveTime = Time.time + passiveInterval;
     }
 }

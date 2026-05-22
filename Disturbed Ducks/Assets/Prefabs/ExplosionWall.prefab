@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9078238281304759780}
   - component: {fileID: 395614733761315049}
   - component: {fileID: -294510760302571103}
+  - component: {fileID: -7056570965862224446}
   m_Layer: 0
   m_Name: ExplosionWall
   m_TagString: obstacle
@@ -149,3 +150,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e36205f909d5674cb2b588c072e78e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DuckCrashObstacle
+--- !u!114 &-7056570965862224446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641290933807227208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08e5bfbe31f6064f9993b04a19823b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionSoundPlayer
+  audioSource: {fileID: 0}
+  hitSound: {fileID: 0}
+  minImpactSpeed: 2
+  cooldown: 0.15

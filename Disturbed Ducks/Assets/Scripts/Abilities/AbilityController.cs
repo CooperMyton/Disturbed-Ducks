@@ -33,7 +33,7 @@ public class AbilityController : MonoBehaviour
     public float DamageBoost    => _damageBoost;
     public float DelayReduction => _delayReduction;
     public string AbilityName       => _ability != null ? _ability.abilityName : "";
-
+    public bool AbilityInputEnabled { get; private set; } = true;
     // -------------------------------------------------------------------------
 
     private void Update()
@@ -41,6 +41,8 @@ public class AbilityController : MonoBehaviour
         if (_cooldownTimer > 0f)
             _cooldownTimer -= Time.deltaTime;
 
+        if (!_abilityInputEnabled)
+            return;
         if (_ability != null && _ability.UsesHeldInput)
         {
             if (Keyboard.current[abilityKey].wasPressedThisFrame && IsReady && _isFlying)
@@ -156,6 +158,13 @@ public class AbilityController : MonoBehaviour
 
         GetComponent<DuckController>()?.OnAbilityUsed();
         AbilityUI.Instance?.OnAbilityUsed(CurrentCooldown);
+    }
+
+    private bool _abilityInputEnabled = true;
+
+    public void SetAbilityInputEnabled(bool enabled)
+    {
+        _abilityInputEnabled = enabled;
     }
 
 }

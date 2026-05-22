@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class Destructible : MonoBehaviour
 {
-    [Header("Health")]
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hitSound;
+    [SerializeField] private AudioClip destroyedSound;
+        [Header("Health")]
     [SerializeField] private float maxHP = 100f;
     [SerializeField] private float currentHP;
 
@@ -33,6 +37,8 @@ public class Destructible : MonoBehaviour
 
     private void Awake()
     {
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
         currentHP = maxHP;
         if (objectRenderer == null)
             objectRenderer = GetComponent<Renderer>();
@@ -74,6 +80,8 @@ public class Destructible : MonoBehaviour
         currentHP = Mathf.Max(currentHP, 0f);
         UpdateColor();
 
+        if (hitSound != null && audioSource != null)
+            audioSource.PlayOneShot(hitSound);
         if (currentHP <= 0f)
             Break(attacker);
     }
@@ -90,6 +98,8 @@ public class Destructible : MonoBehaviour
 
         Debug.Log($"{gameObject.name} destroyed! +{currencyOnBreak} currency");
         Destroy(gameObject);
+        if (destroyedSound != null)
+            AudioSource.PlayClipAtPoint(destroyedSound, transform.position);
     }
 
     private void UpdateColor()

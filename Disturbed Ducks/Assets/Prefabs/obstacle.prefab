@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6439993011309603210}
   - component: {fileID: 3098307752887747617}
   - component: {fileID: -7703171604911063899}
+  - component: {fileID: 1896735951142312317}
   m_Layer: 0
   m_Name: obstacle
   m_TagString: obstacle
@@ -125,3 +126,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e36205f909d5674cb2b588c072e78e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DuckCrashObstacle
+--- !u!114 &1896735951142312317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4451107859320397652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08e5bfbe31f6064f9993b04a19823b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionSoundPlayer
+  audioSource: {fileID: 0}
+  hitSound: {fileID: 0}
+  minImpactSpeed: 2
+  cooldown: 0.15

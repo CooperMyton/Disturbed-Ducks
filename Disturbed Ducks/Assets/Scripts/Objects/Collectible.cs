@@ -8,6 +8,8 @@ using System;
 /// </summary>
 public class Collectible : MonoBehaviour
 {
+    [Header("Audio")]
+    [SerializeField] private AudioClip collectSound;
     [Header("Currency Reward")]
     [SerializeField] private int currencyOnCollect = 25;
 
@@ -63,6 +65,8 @@ public class Collectible : MonoBehaviour
         CurrencyManager.Instance?.Add(currencyOnCollect);
         Debug.Log($"{gameObject.name} collected! +{currencyOnCollect} currency");
         OnCollected?.Invoke();
+        if (collectSound != null)
+            AudioSource.PlayClipAtPoint(collectSound, transform.position);
         Destroy(gameObject);
     }
 }

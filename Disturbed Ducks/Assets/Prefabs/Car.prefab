@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8242663657870929142}
   - component: {fileID: -1879020076746193407}
   - component: {fileID: 29237948241299863}
+  - component: {fileID: -4968546521496701987}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -164,9 +165,13 @@ MonoBehaviour:
   waypointReachDistance: 0.25
   startingTargetIndex: 0
   damage: 999
+  movementRotationOffset: {x: 0, y: 0, z: 0}
+  rotateWithPath: 1
   unbreakableTags:
   - Ground
   - obstacle
+  visualRoot: {fileID: 0}
+  visualLocalEulerOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &-1879020076746193407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,9 +193,13 @@ MonoBehaviour:
   explosionDamage: 150
   explosionVisualDefinition: {fileID: 11400000, guid: afa34d5071420224e8c83699680a0517, type: 2}
   explosionDelay: 1
+  idleSmoke: {fileID: 0}
+  warningSmoke: {fileID: 0}
   objectRenderer: {fileID: 0}
   healthyColor: {r: 1, g: 1, b: 1, a: 1}
   damagedColor: {r: 1, g: 0, b: 0, a: 1}
+  hitSound: {fileID: 0}
+  explosionSound: {fileID: 0}
 --- !u!114 &29237948241299863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,3 +212,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e36205f909d5674cb2b588c072e78e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DuckCrashObstacle
+--- !u!114 &-4968546521496701987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5889575414625266162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08e5bfbe31f6064f9993b04a19823b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CollisionSoundPlayer
+  audioSource: {fileID: 0}
+  hitSound: {fileID: 0}
+  minImpactSpeed: 2
+  cooldown: 0.15
