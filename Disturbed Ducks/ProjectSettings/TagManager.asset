@@ -12,6 +12,7 @@ TagManager:
   - File
   - DuckCrashObstacle
   - Husky
+  - Captured Duck
   layers:
   - Default
   - TransparentFX

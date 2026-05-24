@@ -14,6 +14,8 @@ public class StageLightingOverride : MonoBehaviour
     [SerializeField] private Color darkAmbientColor = new Color(0.01f, 0.01f, 0.015f);
     [SerializeField] private float darkReflectionIntensity = 0f;
 
+    [Header("Restore")]
+    [SerializeField] private bool restoreLightsOnDisable = true;
     private bool[] _previousLightStates;
 
     private AmbientMode _previousAmbientMode;
@@ -47,7 +49,7 @@ public class StageLightingOverride : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_previousLightStates != null)
+        if (restoreLightsOnDisable && _previousLightStates != null)
         {
             for (int i = 0; i < lightsToDisable.Length; i++)
             {
