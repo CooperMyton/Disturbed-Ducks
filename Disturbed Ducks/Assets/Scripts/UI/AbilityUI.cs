@@ -139,4 +139,13 @@ public class AbilityUI : MonoBehaviour
         if (abilityIndicator != null) abilityIndicator.color = color;
         if (statusText       != null) statusText.text        = text;
     }
+    public void SetAmmo(int currentAmmo, int maxAmmo)
+    {
+        _isCountingDown = false;
+
+        if (currentAmmo > 0)
+            SetIndicator(readyColor, $"AMMO {currentAmmo}/{maxAmmo}");
+        else
+            SetIndicator(usedColor, "NO AMMO");
+    }
 }

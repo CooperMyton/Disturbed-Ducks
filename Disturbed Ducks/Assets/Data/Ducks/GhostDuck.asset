@@ -18,7 +18,7 @@ MonoBehaviour:
   unlockStageIndex: 5
   unlockRequirementText: Locked - Reach Level 2 to unlock
   baseMaxSpeed: 30
-  baseTurnSpeed: 8
+  baseTurnSpeed: 9
   baseGlideGravity: 12
   baseMinSpeed: 5
   baseMass: 1.5
@@ -29,7 +29,9 @@ MonoBehaviour:
   launchSound: {fileID: 0}
   crashSound: {fileID: 0}
   abilitySound: {fileID: 0}
+  flyingLoopSound: {fileID: 0}
   ability: {fileID: 11400000, guid: 2a950017698cf8449bc6c51f4b0b5783, type: 2}
+  disableAbilityInput: 0
   explosionDefinition: {fileID: 0}
   maxSpeedUpgrade:
     upgradeName: Max Speed
@@ -67,34 +69,34 @@ MonoBehaviour:
   manoeuvrabilityUpgrade:
     upgradeName: Manoeuvrability & Mass
     levels:
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 5
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 20
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 35
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 80
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 150
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 300
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 500
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 725
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 1000
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 2000
   disableFlightControls: 0

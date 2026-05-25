@@ -234,4 +234,11 @@ public class DuckFlightController : MonoBehaviour
     {
         _windVelocity += velocity;
     }
+
+    public void ApplyGravityOrb(float gravityMultiplier, float downwardSpeed)
+    {
+        glideGravity *= gravityMultiplier;
+        maxFallSpeed = Mathf.Max(maxFallSpeed, Mathf.Abs(downwardSpeed));
+        _verticalVelocity = -Mathf.Abs(downwardSpeed);
+    }
 }

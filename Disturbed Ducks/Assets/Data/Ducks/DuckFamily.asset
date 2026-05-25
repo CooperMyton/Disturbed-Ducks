@@ -18,7 +18,7 @@ MonoBehaviour:
   unlockStageIndex: 0
   unlockRequirementText: Locked
   baseMaxSpeed: 30
-  baseTurnSpeed: 5
+  baseTurnSpeed: 7
   baseGlideGravity: 12
   baseMinSpeed: 5
   baseMass: 2
@@ -69,34 +69,34 @@ MonoBehaviour:
   manoeuvrabilityUpgrade:
     upgradeName: Manoeuvrability & Mass
     levels:
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 5
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 20
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 35
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 80
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 150
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 300
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 500
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 725
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 1000
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 2000
   disableFlightControls: 0

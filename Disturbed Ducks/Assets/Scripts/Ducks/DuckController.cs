@@ -67,7 +67,9 @@ public class DuckController : MonoBehaviour
         _modelController?.SetFlight();
         _flightTrail?.SetEmitting(true);
         GetComponent<DuckFamilyController>()?.OnLaunched();
-    }
+        if (definition.ability is ProjectileDuckAbility && _abilityController != null && _abilityController.IsUnlocked)
+            GetComponent<ProjectileDuckShooter>()?.OnLaunched();
+            }
 
     public void OnCrashed()
     {
@@ -87,6 +89,8 @@ public void OnReset()
     GetComponent<SplitController>()?.OnReset(); // clean up mini ducks
     GetComponent<ShieldController>()?.ForceEnd();
     GetComponent<DuckFamilyController>()?.OnReset();
+    if (definition.ability is ProjectileDuckAbility)
+        GetComponent<ProjectileDuckShooter>()?.OnReset();
 
     _modelController?.SetNeutral();
     _flightTrail?.Clear();

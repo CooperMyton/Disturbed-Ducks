@@ -15,18 +15,23 @@ MonoBehaviour:
   duckName: Basic Duck
   purchaseCosts: 000000000a000000320000006400000096000000fa0000007701000058020000e8030000d0070000
   maxOwned: 10
+  unlockStageIndex: 0
+  unlockRequirementText: Locked
   baseMaxSpeed: 30
-  baseTurnSpeed: 8
+  baseTurnSpeed: 9
   baseGlideGravity: 12
   baseMinSpeed: 5
   baseMass: 2
   neutralModel: {fileID: 919132149155446097, guid: ca4349f12576e0143bc7506b19b8a3ec, type: 3}
   flightModel: {fileID: 919132149155446097, guid: 9797e79db52e127479b3f40357cede97, type: 3}
   crashedModel: {fileID: 919132149155446097, guid: f739817ffb5e518458887491017743c2, type: 3}
+  abilityModel: {fileID: 0}
   launchSound: {fileID: 8300000, guid: 62ddd4505560b2b418cd1f896c13eab6, type: 3}
   crashSound: {fileID: 8300000, guid: 787e77ced8e36814bb64f83e3460ac3b, type: 3}
   abilitySound: {fileID: 8300000, guid: de400b70b9c160141bf0f375400c370a, type: 3}
+  flyingLoopSound: {fileID: 0}
   ability: {fileID: 11400000, guid: 1a62f0cd826a3ce4e897e73fe6a324ae, type: 2}
+  disableAbilityInput: 0
   explosionDefinition: {fileID: 0}
   maxSpeedUpgrade:
     upgradeName: Max Speed
@@ -64,34 +69,34 @@ MonoBehaviour:
   manoeuvrabilityUpgrade:
     upgradeName: Manoeuvrability and Mass
     levels:
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 5
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 20
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 35
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 80
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 150
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 300
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 500
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 725
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 1000
-    - statIncrement: 2
+    - statIncrement: 2.5
       massIncrement: 0.1
       cost: 2000
   disableFlightControls: 0

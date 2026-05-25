@@ -19,31 +19,31 @@ MonoBehaviour:
   upgradeLevels:
   - durationIncrement: 0.5
     damageMultiplierIncrement: 0.25
-    cost: 100
+    cost: 15
   - durationIncrement: 0.5
     damageMultiplierIncrement: 0.25
-    cost: 100
+    cost: 30
   - durationIncrement: 0.5
     damageMultiplierIncrement: 0.25
-    cost: 100
+    cost: 60
   - durationIncrement: 0.5
     damageMultiplierIncrement: 0.25
-    cost: 100
+    cost: 105
   - durationIncrement: 0.5
     damageMultiplierIncrement: 0.25
-    cost: 100
+    cost: 240
+  - durationIncrement: 0.5
+    damageMultiplierIncrement: 390
+    cost: 390
   - durationIncrement: 0.5
     damageMultiplierIncrement: 0.25
-    cost: 100
+    cost: 550
   - durationIncrement: 0.5
     damageMultiplierIncrement: 0.25
-    cost: 100
+    cost: 800
   - durationIncrement: 0.5
     damageMultiplierIncrement: 0.25
-    cost: 100
+    cost: 1000
   - durationIncrement: 0.5
     damageMultiplierIncrement: 0.25
-    cost: 100
-  - durationIncrement: 0.5
-    damageMultiplierIncrement: 0.25
-    cost: 100
+    cost: 2500

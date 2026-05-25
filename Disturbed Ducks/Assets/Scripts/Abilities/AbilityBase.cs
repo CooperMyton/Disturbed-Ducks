@@ -13,6 +13,7 @@ public abstract class AbilityBase : ScriptableObject
     public float  cooldown    = 3f;
 
     public virtual bool IsSingleUse => false;
+    public virtual bool UsesCustomStatusText => false;
 
     /// Total number of upgrade levels available (level 1 = unlock).
     public abstract int MaxUpgradeLevels { get; }

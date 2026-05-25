@@ -128,9 +128,8 @@ public class AbilityController : MonoBehaviour
 
         GetComponent<DuckController>()?.OnAbilityUsed();
 
-        // Always notify AbilityUI — bomb/anvil will override with
-        // OnBombArmed shortly after, which replaces grey with countdown
-        AbilityUI.Instance?.OnAbilityUsed(actualCooldown);
+        if (!_ability.UsesCustomStatusText)
+            AbilityUI.Instance?.OnAbilityUsed(actualCooldown);
     }
     public void SetAbilityUpgrades(float totalBoost, float totalCooldown,
         float totalRadius = 0f, float totalDamage = 0f, float totalDelay = 0f)
