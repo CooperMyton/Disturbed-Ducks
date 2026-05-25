@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c8e5338135c96945aa44ef19f52654e, type: 3}
-  m_Name: Stage3_2
+  m_Name: Stage3_3
   m_EditorClassIdentifier: Assembly-CSharp::StageDefinition
-  stageId: stage3_2
-  stageName: Stage 3.2
+  stageId: stage 3_3
+  stageName: Stage 3.3
   objectiveTags:
   - Husky
   collectibleTags:
   - Captured Duck
-  firstClearBonus: 3500
-  nextStage: {fileID: 11400000, guid: 502accaf4af6b7749acee9fb371945f8, type: 2}
+  firstClearBonus: 4000
+  nextStage: {fileID: 0}
   backgroundMusic: {fileID: 0}
   ambienceLoop: {fileID: 0}
   clearSong: {fileID: 0}
