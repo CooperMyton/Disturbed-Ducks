@@ -47,7 +47,13 @@ public class ProjectileDuckShooter : MonoBehaviour
             return;
         }
 
-        Vector3 direction = transform.forward.normalized;
+        Vector3 direction = transform.forward;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.01f)
+            direction = transform.root.forward;
+
+        direction = direction.normalized;
         Vector3 spawnPosition = projectileSpawnPoint != null
             ? projectileSpawnPoint.position
             : transform.position + direction * spawnForwardOffset;

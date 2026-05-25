@@ -117,6 +117,9 @@ public class DuckSpawner : MonoBehaviour
     {
         foreach (var projectile in FindObjectsByType<BeaverProjectile>(FindObjectsSortMode.None))
             Destroy(projectile.gameObject);
+
+        foreach (var projectile in FindObjectsByType<DuckProjectile>(FindObjectsSortMode.None))
+            Destroy(projectile.gameObject);
     }
 
 

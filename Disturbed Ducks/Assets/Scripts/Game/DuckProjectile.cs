@@ -31,6 +31,13 @@ public class DuckProjectile : MonoBehaviour
     {
         if (other.GetComponent<DuckImpact>() != null)
             return;
+        var shield = other.GetComponentInParent<ShieldHuskyFrontShield>();
+        if (shield != null)
+        {
+            shield.TakeDamage(_damage);
+            Destroy(gameObject);
+            return;
+        }
 
         bool hitSomething = false;
 
