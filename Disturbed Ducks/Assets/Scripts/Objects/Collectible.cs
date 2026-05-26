@@ -53,7 +53,10 @@ public class Collectible : MonoBehaviour
     {
         if (_collected) return;
 
-        if (other.GetComponent<DuckImpact>() == null)
+        bool isMainDuck = other.GetComponent<DuckImpact>() != null;
+        bool isFamilyDuck = other.GetComponentInParent<DuckFamilyMember>() != null;
+
+        if (!isMainDuck && !isFamilyDuck)
             return;
 
         Collect();

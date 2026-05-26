@@ -16,6 +16,13 @@ public class DuckFamilyMember : MonoBehaviour
         if (_hasCrashed || _family == null) return;
         if (collision.gameObject.GetComponent<DuckFamilyMember>() != null) return;
 
+        TargetEnemy enemy = collision.gameObject.GetComponentInParent<TargetEnemy>();
+        if (enemy != null)
+            enemy.TakeDamage(25f);
+
+        Destructible destructible = collision.gameObject.GetComponentInParent<Destructible>();
+        if (destructible != null)
+            destructible.TakeDamage(25f);
         _hasCrashed = true;
         _family.OnFamilyDuckCrashed();
     }

@@ -7,7 +7,8 @@ public class BlackHoleFinale : MonoBehaviour
     [SerializeField] private float growDuration = 3f;
     [SerializeField] private Vector3 finalScale = new Vector3(30f, 30f, 30f);
     [SerializeField] private float holdBlackSeconds = 0.5f;
-
+    [SerializeField] [TextArea(3, 8)]
+    private string finalWinMessage = "YOU WIN!\nThe King Duck sacrificed himself to take down the mecha and Husky Inc.\nHusky and Beaver Inc are gone for good! The Willamette River is free!";
     private bool _running;
     private bool _holdingBlack;
     private float _timer;
@@ -55,7 +56,10 @@ public class BlackHoleFinale : MonoBehaviour
         {
             _running = false;
             blackHolePanel?.SetActive(false);
-            WinScreenUI.Instance?.Show();
+            if (blackCircle != null)
+                blackCircle.gameObject.SetActive(false);
+
+            WinScreenUI.Instance?.Show(finalWinMessage);
         }
     }
 }

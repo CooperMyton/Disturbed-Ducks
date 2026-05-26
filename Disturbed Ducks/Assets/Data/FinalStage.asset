@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StageDefinition
   stageId: finalStage
   stageName: Final stage
-  objectiveTags:
-  - Husky
-  collectibleTags:
-  - Captured Duck
+  objectiveTags: []
+  collectibleTags: []
   firstClearBonus: 0
   nextStage: {fileID: 0}
   backgroundMusic: {fileID: 0}

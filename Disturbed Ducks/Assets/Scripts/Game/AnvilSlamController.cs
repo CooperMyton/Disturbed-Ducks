@@ -18,7 +18,8 @@ public class AnvilSlamController : MonoBehaviour
     private DuckFlightController _flightController;
     private DuckImpact           _duckImpact;
     private bool                 _isHovering = false;
-
+    private Vector3 _hoverForward;
+    private Vector3 _hoverRight;
     public bool IsSlamActive { get; private set; }
 
     private void Awake()
@@ -35,14 +36,14 @@ public class AnvilSlamController : MonoBehaviour
         Vector3 drift = Vector3.zero;
 
         if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
-            drift += Vector3.forward;
+            drift += _hoverForward;
         else if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
-            drift -= Vector3.forward;
+            drift -= _hoverForward;
 
         if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-            drift += Vector3.right;
+            drift += _hoverRight;
         else if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
-            drift -= Vector3.right;
+            drift -= _hoverRight;
 
         _rb.linearVelocity = drift.normalized * driftSpeed;
     }
@@ -54,6 +55,17 @@ public class AnvilSlamController : MonoBehaviour
 
     private IEnumerator SlamRoutine(float hangTime, float slamForce)
     {
+        _hoverForward = transform.forward;
+        _hoverForward.y = 0f;
+        if (_hoverForward.sqrMagnitude < 0.01f)
+            _hoverForward = Vector3.forward;
+        _hoverForward.Normalize();
+
+        _hoverRight = transform.right;
+        _hoverRight.y = 0f;
+        if (_hoverRight.sqrMagnitude < 0.01f)
+            _hoverRight = Vector3.right;
+        _hoverRight.Normalize();
         // --- Freeze in place ---
         _flightController.enabled = false;
         _rb.linearVelocity        = Vector3.zero;

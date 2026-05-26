@@ -15,8 +15,8 @@ MonoBehaviour:
   duckName: ProjectileDuck
   purchaseCosts: 320000004b0000006400000096000000e10000002c010000f4010000ee020000e8030000c4090000
   maxOwned: 10
-  unlockStageIndex: 0
-  unlockRequirementText: Locked
+  unlockStageIndex: 11
+  unlockRequirementText: Locked - Reach Level 3 to unlock
   baseMaxSpeed: 30
   baseTurnSpeed: 9
   baseGlideGravity: 12

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d7974f00378f5c4d8b13a8a8b55a5b1, type: 3}
+  m_Name: Stage3_6tutorial
+  m_EditorClassIdentifier: Assembly-CSharp::StageTutorialData
+  stageStartMessage:
+    message: We made it, the CEO's penthouse. Is that.... it is! our old king hero
+      duck, he was captured and taken here. We need to save him, then take out those
+      2 generators so we can damage and take out the Huskies mecha!
+    showOnce: 0
+  onLaunchMessage:
+    message: 
+    showOnce: 0
+  onFirstCrashMessage:
+    message: 
+    showOnce: 0
+  onCrashNoUpgradesMessage:
+    message: 
+    showOnce: 0
+  onAbilityUnlockedMessage:
+    message: 
+    showOnce: 0
+  onDuckPurchasedMessage:
+    message: 
+    showOnce: 0

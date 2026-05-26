@@ -16,6 +16,8 @@ public class FinalBossPhaseManager : MonoBehaviour
     [SerializeField] private LauncherController launcherController;
 
     [Header("UI")]
+    [SerializeField] [TextArea(2, 5)]
+    private string finalSacrificeTutorialMessage = "Aim the King Duck at the Mecha Husky and launch him into the core.";
     [SerializeField] private FinalStageMessageUI messageUI;
 
     private bool _partTwoStarted;
@@ -57,6 +59,8 @@ public class FinalBossPhaseManager : MonoBehaviour
     {
         _heroObjectiveComplete = true;
         PublishObjectiveProgress();
+
+        TryShowFinalSacrificePrompt();
     }
 
     private bool AllGeneratorsDestroyed()
@@ -75,11 +79,7 @@ public class FinalBossPhaseManager : MonoBehaviour
         _bossObjectiveComplete = true;
         PublishObjectiveProgress();
 
-        messageUI?.Show(
-            "The Mecha Husky is down, but the machine is still holding together. The rescued king duck steps forward.",
-            "Finish This",
-            StartFinalSacrificePhase
-        );
+        TryShowFinalSacrificePrompt();
     }
 
     private void StartFinalSacrificePhase()
@@ -94,6 +94,7 @@ public class FinalBossPhaseManager : MonoBehaviour
         launcherController?.ResetToLauncher();
         duckImpact?.Reset();
         FlightUIManager.Instance?.ShowFinalHeroPrompt();
+        TutorialManager.Instance?.ShowCustomTutorialText(finalSacrificeTutorialMessage);
     }
 
     private void PublishObjectiveProgress()
@@ -131,5 +132,20 @@ public class FinalBossPhaseManager : MonoBehaviour
         }
 
         OnFinalObjectivesChanged?.Invoke(total - complete, total);
+    }
+    private void TryShowFinalSacrificePrompt()
+    {
+        if (!_bossObjectiveComplete)
+            return;
+
+        bool heroRescued = _heroObjectiveComplete || (heroRescue != null && heroRescue.IsRescued);
+        if (!heroRescued)
+            return;
+
+        messageUI?.Show(
+            "The Mecha Husky is down, but the machine is still holding together. The rescued king duck steps forward and tells the other ducks to get away.",
+            "Finish This",
+            StartFinalSacrificePhase
+        );
     }
 }

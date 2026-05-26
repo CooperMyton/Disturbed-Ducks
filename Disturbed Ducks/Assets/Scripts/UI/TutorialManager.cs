@@ -17,6 +17,8 @@ public class TutorialManager : MonoBehaviour
     private bool                 _hasLaunched;
     private bool                 _hasCrashed;
 
+    private bool _customTutorialActive;
+
     // -------------------------------------------------------------------------
 
     private void Awake()
@@ -81,6 +83,7 @@ public class TutorialManager : MonoBehaviour
 
     private void ShowMessage(TutorialMessage msg)
     {
+        if (_customTutorialActive) return;
         if (msg == null || string.IsNullOrEmpty(msg.message)) return;
 
         if (msg.showOnce)
@@ -99,5 +102,26 @@ public class TutorialManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         if (tutorialText != null) tutorialText.text = "";
+    }
+    public void ShowCustomTutorialText(string message)
+    {
+        _customTutorialActive = true;
+
+        if (_hideCoroutine != null)
+        {
+            StopCoroutine(_hideCoroutine);
+            _hideCoroutine = null;
+        }
+
+        if (tutorialText != null)
+            tutorialText.text = message;
+    }
+
+    public void ClearCustomTutorialText()
+    {
+        _customTutorialActive = false;
+
+        if (tutorialText != null)
+            tutorialText.text = "";
     }
 }

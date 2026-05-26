@@ -16,7 +16,7 @@ public class WinScreenUI : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private PlayerInventory inventory;
     [SerializeField] [TextArea(2, 5)]
-    private string winMessage = "YOU WIN!\nBeaver Inc has been taken down!\nThe Willamette River is free!";
+    private string winMessage = "YOU WIN!\nThe King Duck sacrificed himself to take down the mecha and Husky Inc.\nHusky and Beaver Inc are gone for good! The Willamette River is free!";
 
     // -------------------------------------------------------------------------
 
@@ -30,8 +30,13 @@ public class WinScreenUI : MonoBehaviour
 
     public void Show()
     {
+        Show(winMessage);
+    }
+
+    public void Show(string message)
+    {
         panel?.SetActive(true);
-        if (messageText != null) messageText.text = winMessage;
+        if (messageText != null) messageText.text = message;
         jingleSource?.Play();
         confettiParticles?.Play();
     }

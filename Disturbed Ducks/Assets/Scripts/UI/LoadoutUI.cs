@@ -32,8 +32,8 @@ public class LoadoutUI : MonoBehaviour
     {
         if (PlayerDuckInventory.Instance != null)
         {
-            PlayerDuckInventory.Instance.OnInventoryChanged    += Refresh;
-            PlayerDuckInventory.Instance.OnSelectedTypeChanged += _ => Refresh();
+            PlayerDuckInventory.Instance.OnInventoryChanged += Refresh;
+            PlayerDuckInventory.Instance.OnSelectedTypeChanged += HandleSelectedTypeChanged;
         }
 
         BuildSlots();
@@ -60,16 +60,28 @@ public class LoadoutUI : MonoBehaviour
 
     public void RebuildAndShow()
     {
-        _isBuilt = false;
-        if (slotContainer != null)
-            foreach (Transform child in slotContainer)
-                DestroyImmediate(child.gameObject); // ← immediate, not deferred
-
-        _slots.Clear();
+        ClearSlots();
         BuildSlots();
 
         if (loadoutPanel != null)
             loadoutPanel.SetActive(true);
+    }
+    private void ClearSlots()
+    {
+        _isBuilt = false;
+        _slots.Clear();
+
+        if (slotContainer == null) return;
+
+        for (int i = slotContainer.childCount - 1; i >= 0; i--)
+        {
+            var child = slotContainer.GetChild(i);
+
+            if (Application.isPlaying)
+                Destroy(child.gameObject);
+            else
+                DestroyImmediate(child.gameObject);
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -124,8 +136,15 @@ public class LoadoutUI : MonoBehaviour
     {
         if (PlayerDuckInventory.Instance != null)
         {
-            PlayerDuckInventory.Instance.OnInventoryChanged    -= Refresh;
-            PlayerDuckInventory.Instance.OnSelectedTypeChanged -= _ => Refresh();
+            PlayerDuckInventory.Instance.OnInventoryChanged -= Refresh;
+            PlayerDuckInventory.Instance.OnSelectedTypeChanged -= HandleSelectedTypeChanged;
         }
+
+        if (Instance == this)
+            Instance = null;
+    }
+    private void HandleSelectedTypeChanged(DuckDefinition selected)
+    {
+        Refresh();
     }
 }
