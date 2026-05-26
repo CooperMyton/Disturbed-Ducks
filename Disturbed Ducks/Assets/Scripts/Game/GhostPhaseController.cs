@@ -10,6 +10,8 @@ public class GhostPhaseController : MonoBehaviour
     private Collider _duckCollider;
     private readonly List<Collider> _ignoredColliders = new List<Collider>();
     private bool _waitingForClearance;
+    private bool _isPhasing;
+    public bool IsPhasing => _isPhasing;
 
     private void Awake()
     {
@@ -26,6 +28,7 @@ public class GhostPhaseController : MonoBehaviour
 
     public void BeginPhase()
     {
+        _isPhasing = true;
         _waitingForClearance = false;
         IgnorePhaseableColliders(true);
         GetComponent<DuckModelController>()?.SetAbility();
@@ -41,6 +44,7 @@ public class GhostPhaseController : MonoBehaviour
 
     public void ForceEndPhase()
     {
+        _isPhasing = false;
         _waitingForClearance = false;
         RestoreIgnoredCollisions();
         GetComponent<DuckModelController>()?.SetFlight();
@@ -98,6 +102,7 @@ public class GhostPhaseController : MonoBehaviour
 
     private void BecomeSolid()
     {
+        _isPhasing = false;
         _waitingForClearance = false;
         RestoreIgnoredCollisions();
         GetComponent<DuckModelController>()?.SetFlight();

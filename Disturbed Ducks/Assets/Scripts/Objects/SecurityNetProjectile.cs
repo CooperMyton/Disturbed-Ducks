@@ -30,6 +30,12 @@ public class SecurityNetProjectile : MonoBehaviour
         var impact = other.GetComponentInParent<DuckImpact>();
         if (impact == null || impact.HasCrashed) return;
 
+        if (DuckHazardImmunity.IsImmuneToLaserOrNet(other))
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         impact.Crash();
         Destroy(gameObject);
     }
