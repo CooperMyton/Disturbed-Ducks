@@ -67,4 +67,11 @@ public class FlightUIManager : MonoBehaviour
         if (promptText != null)
             promptText.text = message;
     }
+    public void ShowFinalHeroPrompt()
+    {
+        upgradeUI?.Hide();
+        EndOfAttemptUI.Instance?.Hide();
+        LoadoutUI.Instance?.Hide();
+        SetPrompt("Launch the Hero King Duck to finish the Mecha Husky");
+    }
 }

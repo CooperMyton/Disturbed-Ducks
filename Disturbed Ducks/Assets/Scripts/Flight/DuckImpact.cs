@@ -31,8 +31,10 @@ public class DuckImpact : MonoBehaviour
     {
         if (_hasCrashed) return;
 
+        float currentSpeed = _rb.linearVelocity.magnitude;
 
-       // Ground, obstacle tags, or explicit crash markers always crash.
+        ApplyFinalBossImpactDamage(collision, currentSpeed);
+
         if (collision.gameObject.CompareTag(groundTag) ||
             collision.gameObject.CompareTag(obstacleTag) ||
             collision.gameObject.GetComponentInParent<DuckCrashObstacle>() != null)
@@ -41,7 +43,6 @@ public class DuckImpact : MonoBehaviour
             return;
         }
 
-        float currentSpeed = _rb.linearVelocity.magnitude;
         Debug.Log($"Hit {collision.gameObject.name} at speed {currentSpeed:F1}");
 
         if (currentSpeed >= minSpeedToDisable)
@@ -89,5 +90,22 @@ public class DuckImpact : MonoBehaviour
         GetComponent<AbilityController>()?.OnReset();
 
         GetComponent<DuckController>()?.OnReset();
+    }
+    private void ApplyFinalBossImpactDamage(Collision collision, float impactSpeed)
+    {
+        if (collision == null) return;
+
+        float shieldMultiplier = GetComponent<ShieldController>()?.DamageMultiplier ?? 1f;
+        float damage = impactSpeed * _rb.mass * shieldMultiplier;
+
+        if (damage <= 0f) return;
+
+        var generator = collision.collider.GetComponentInParent<BossGenerator>();
+        if (generator != null)
+            generator.TakeDamage(damage);
+
+        var boss = collision.collider.GetComponentInParent<MechaHuskyBoss>();
+        if (boss != null)
+            boss.TakeDamage(damage);
     }
 }

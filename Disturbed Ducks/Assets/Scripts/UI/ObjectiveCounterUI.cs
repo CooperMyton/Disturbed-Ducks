@@ -5,8 +5,17 @@ public class ObjectiveCounterUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI counterText;
 
-    private void OnEnable()  => StageManager.OnObjectivesChanged += UpdateCounter;
-    private void OnDisable() => StageManager.OnObjectivesChanged -= UpdateCounter;
+    private void OnEnable()
+    {
+        StageManager.OnObjectivesChanged += UpdateCounter;
+        FinalBossPhaseManager.OnFinalObjectivesChanged += UpdateCounter;
+    }
+
+    private void OnDisable()
+    {
+        StageManager.OnObjectivesChanged -= UpdateCounter;
+        FinalBossPhaseManager.OnFinalObjectivesChanged -= UpdateCounter;
+    }
 
     private void UpdateCounter(int remaining, int total)
     {

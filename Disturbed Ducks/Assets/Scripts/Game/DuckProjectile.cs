@@ -41,6 +41,22 @@ public class DuckProjectile : MonoBehaviour
 
         bool hitSomething = false;
 
+        var generator = other.GetComponentInParent<BossGenerator>();
+        if (generator != null)
+        {
+            generator.TakeDamage(_damage);
+            Destroy(gameObject);
+            return;
+        }
+
+        var boss = other.GetComponentInParent<MechaHuskyBoss>();
+        if (boss != null)
+        {
+            boss.TakeDamage(_damage);
+            Destroy(gameObject);
+            return;
+        }
+
         var enemy = other.GetComponentInParent<TargetEnemy>();
         if (enemy != null)
         {

@@ -14,6 +14,8 @@ public static class ExplosionHelper
             hit.GetComponent<Destructible>()?.TakeDamage(damage, true);
             hit.GetComponent<TargetEnemy>()?.TakeDamage(damage);
             hit.GetComponent<ExplosiveCar>()?.TakeDamage(damage, true);
+            hit.GetComponentInParent<BossGenerator>()?.TakeDamage(damage);
+            hit.GetComponentInParent<MechaHuskyBoss>()?.TakeDamage(damage);
 
         }
 
