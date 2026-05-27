@@ -26,8 +26,8 @@ MonoBehaviour:
   flightModel: {fileID: 919132149155446097, guid: 9797e79db52e127479b3f40357cede97, type: 3}
   crashedModel: {fileID: 919132149155446097, guid: f739817ffb5e518458887491017743c2, type: 3}
   abilityModel: {fileID: 0}
-  launchSound: {fileID: 0}
-  crashSound: {fileID: 0}
+  launchSound: {fileID: 8300000, guid: a5aacd1fdac5779499aede9dde9b9a3a, type: 3}
+  crashSound: {fileID: 8300000, guid: 2bae76227abfc904c835f43193be49cf, type: 3}
   abilitySound: {fileID: 0}
   flyingLoopSound: {fileID: 0}
   ability: {fileID: 0}

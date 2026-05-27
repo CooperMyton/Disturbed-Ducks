@@ -271,6 +271,10 @@ PrefabInstance:
       propertyPath: currencyOnKill
       value: 800
       objectReference: {fileID: 0}
+    - target: {fileID: 2024898398058562750, guid: 9519b339462761d44b9c109a5cadbf44, type: 3}
+      propertyPath: m_Pitch
+      value: 0.9
+      objectReference: {fileID: 0}
     - target: {fileID: 3724334265451215925, guid: 9519b339462761d44b9c109a5cadbf44, type: 3}
       propertyPath: m_Name
       value: Shield Husky Variant

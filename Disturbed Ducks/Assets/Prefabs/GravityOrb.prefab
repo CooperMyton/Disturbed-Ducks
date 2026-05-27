@@ -255,4 +255,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GravityOrb
   gravityMultiplier: 8
   downwardSpeed: 40
-  touchSound: {fileID: 0}
+  orbRenderer: {fileID: 0}
+  glowColor: {r: 0.65, g: 0.15, b: 1, a: 1}
+  emissionIntensity: 5
+  glowLight: {fileID: 0}
+  lightRange: 5
+  lightIntensity: 4
+  touchSound: {fileID: 8300000, guid: e459e31e0c2bc0d4eb55a34272aeb2de, type: 3}

@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f183ee7c56b0642a40cbc6552dd5a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Collectible
+  collectSound: {fileID: 8300000, guid: 18cb7f8c5ab051444a35c06b6d8a72ff, type: 3}
   currencyOnCollect: 30
   bobHeight: 0.15
   bobSpeed: 2
