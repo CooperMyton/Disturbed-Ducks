@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: city_house_1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7a7ec4785cf672440bedb7259000c9e4, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
