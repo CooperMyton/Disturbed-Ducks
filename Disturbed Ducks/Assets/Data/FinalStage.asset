@@ -18,6 +18,6 @@ MonoBehaviour:
   collectibleTags: []
   firstClearBonus: 0
   nextStage: {fileID: 0}
-  backgroundMusic: {fileID: 0}
+  backgroundMusic: {fileID: 8300000, guid: b3d3e43e1c093c742a2cd511cdd82628, type: 3}
   ambienceLoop: {fileID: 0}
   clearSong: {fileID: 0}

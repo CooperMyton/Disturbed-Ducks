@@ -19,6 +19,6 @@ MonoBehaviour:
   collectibleTags: []
   firstClearBonus: 3000
   nextStage: {fileID: 11400000, guid: a542353ba093d0543aa13160a0a5cde2, type: 2}
-  backgroundMusic: {fileID: 0}
+  backgroundMusic: {fileID: 8300000, guid: 6de0464521e518e41b50a86799df6da6, type: 3}
   ambienceLoop: {fileID: 0}
   clearSong: {fileID: 0}
