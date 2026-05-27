@@ -12,30 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 966c395d0954f6348a929f7da487585f, type: 3}
   m_Name: PlayerInventory
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
-  currency: 36750
+  currency: 0
   ownedDuckTypes:
   - {fileID: 11400000, guid: 16029683c5870394088368d81ec3deab, type: 2}
-  ownedDuckCounts: 0a000000
+  ownedDuckCounts: 01000000
   speedLevels: 00000000
   maneurLevels: 00000000
   abilityLevels: 00000000
   startingDuck: {fileID: 11400000, guid: 16029683c5870394088368d81ec3deab, type: 2}
   startingDuckCount: 1
-  clearedStageIds:
-  - stage_1
-  - stage_2
-  - stage_3
-  - stage_4
-  - stage_5
-  - stage2_1
-  - stage2_2
-  - stage2_3
-  - stage2_4
-  - stage2_5
-  - stage2_6
-  - stage3_1
-  - stage3_2
-  - stage 3_3
-  - stage3_4
-  - stage3_5
-  savedStageIndex: 11
+  clearedStageIds: []
+  savedStageIndex: 0
