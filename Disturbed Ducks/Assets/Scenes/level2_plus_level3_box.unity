@@ -37601,7 +37601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 239b0a138d729514690cded387793add, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FinalHeroRescueObjective
-  captiveVisual: {fileID: 0}
+  captiveVisual: {fileID: 919132149155446097, guid: 22ca04f244c9e204f980654f8bb3081c, type: 3}
 --- !u!1001 &486271624
 PrefabInstance:
   m_ObjectHideFlags: 0
