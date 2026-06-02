@@ -28,6 +28,7 @@ public class FlightUIManager : MonoBehaviour
 
     public void ShowLaunchPrompt()
     {
+        EndOfAttemptUI.Instance?.SetEndRunVisible(!TitleScreenUI.IsShowing);
         upgradeUI?.Hide();
         EndOfAttemptUI.Instance?.Hide();
         LoadoutUI.Instance?.Show();
@@ -36,6 +37,7 @@ public class FlightUIManager : MonoBehaviour
 
     public void OnLaunched()
     {
+        EndOfAttemptUI.Instance?.SetEndRunVisible(true);
         TutorialManager.Instance?.OnLaunched(); // add this
         LoadoutUI.Instance?.Hide();
         SetPrompt("");
@@ -44,20 +46,20 @@ public class FlightUIManager : MonoBehaviour
     public void OnCrashed()
     {
         TutorialManager.Instance?.OnCrashed();
+
         bool hasRemaining = PlayerDuckInventory.Instance != null &&
                             PlayerDuckInventory.Instance.HasAnyRemaining();
 
+        EndOfAttemptUI.Instance?.SetEndRunVisible(hasRemaining && !TitleScreenUI.IsShowing);
+
         if (!hasRemaining)
         {
-            // Out of birds — show end screen AND upgrade panel so they can
-            // spend coins before restarting
             SetPrompt("");
             EndOfAttemptUI.Instance?.Show();
             upgradeUI?.Show();
         }
         else
         {
-            // Birds still available — just prompt, no upgrade menu
             SetPrompt("Press R for next duck");
         }
     }
@@ -69,6 +71,7 @@ public class FlightUIManager : MonoBehaviour
     }
     public void ShowFinalHeroPrompt()
     {
+        EndOfAttemptUI.Instance?.SetEndRunVisible(false);
         upgradeUI?.Hide();
         EndOfAttemptUI.Instance?.Hide();
         LoadoutUI.Instance?.Hide();

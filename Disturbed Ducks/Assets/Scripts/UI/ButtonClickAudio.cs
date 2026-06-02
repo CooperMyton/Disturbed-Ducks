@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 public class ButtonClickAudio : MonoBehaviour
 {
-    [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip clickSound;
+    [SerializeField] private float clickVolume = 1f;
 
     private void Start()
     {
@@ -14,7 +14,6 @@ public class ButtonClickAudio : MonoBehaviour
 
     private void PlayClick()
     {
-        if (clickSound != null && audioSource != null)
-            audioSource.PlayOneShot(clickSound);
+        SfxPlayer.Play(clickSound, clickVolume);
     }
 }

@@ -18,6 +18,11 @@ public class EndOfAttemptUI : MonoBehaviour
     [SerializeField] private Button restartButton;
     [SerializeField] private DuckSpawner duckSpawner;
 
+
+    [SerializeField] private Button endRunButton;
+    [SerializeField] private DuckFlightController duckFlightController;
+    [SerializeField] private AbilityController abilityController;
+
     // -------------------------------------------------------------------------
 
     private void Awake()
@@ -27,6 +32,8 @@ public class EndOfAttemptUI : MonoBehaviour
 
         restartButton?.onClick.AddListener(OnRestartClicked);
         panel?.SetActive(false);
+        endRunButton?.onClick.AddListener(OnEndRunClicked);
+        SetEndRunVisible(false);
     }
 
     private void Start()
@@ -43,6 +50,7 @@ public class EndOfAttemptUI : MonoBehaviour
         UpdateCurrencyDisplay(CurrencyManager.Instance?.Balance ?? 0);
         UpgradeUI.Instance?.Show();
         LoadoutUI.Instance?.Hide();
+        SetEndRunVisible(false);
     }
 
     public void Hide()
@@ -64,6 +72,20 @@ public class EndOfAttemptUI : MonoBehaviour
         Hide();
         duckSpawner.RestartAttempt();
         LoadoutUI.Instance?.Show();
+    }
+    private void OnEndRunClicked()
+    {
+        SetEndRunVisible(false);
+        duckFlightController?.EndRunFreeze();
+        abilityController?.SetAbilityInputEnabled(false);
+
+        FlightUIManager.Instance?.OnCrashed();
+        Show();
+    }
+    public void SetEndRunVisible(bool visible)
+    {
+        if (endRunButton != null)
+            endRunButton.gameObject.SetActive(visible);
     }
 
 }

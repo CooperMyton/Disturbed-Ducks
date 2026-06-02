@@ -28,6 +28,7 @@ public class StageClearUI : MonoBehaviour
 
     public void Show(StageDefinition stage, bool isFirstClear)
     {
+        EndOfAttemptUI.Instance?.SetEndRunVisible(true);
         panel.SetActive(true);
 
         if (stageNameText != null)
@@ -54,6 +55,7 @@ public class StageClearUI : MonoBehaviour
     private void OnNextStageClicked()
     {
         Hide();
+        EndOfAttemptUI.Instance?.SetEndRunVisible(false);
         StageManager.Instance?.LoadNextStage();
     }
 }

@@ -20,3 +20,6 @@ MonoBehaviour:
   - Blueprint
   firstClearBonus: 1000
   nextStage: {fileID: 11400000, guid: 55d85a58e8e1b924e87acbfb66957d8f, type: 2}
+  backgroundMusic: {fileID: 0}
+  ambienceLoop: {fileID: 0}
+  clearSong: {fileID: 8300000, guid: 9a1d593e1f0734e4fbea93c003b5d940, type: 3}

@@ -47,6 +47,10 @@ public class UpgradeUI : MonoBehaviour
     [Header("Sell Duck Button")]
     [SerializeField] private Button          sellDuckButton;
     [SerializeField] private TextMeshProUGUI sellDuckButtonText;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip upgradeTabClickSound;
+    [SerializeField] private float upgradeTabClickVolume = 1f;
     private DuckDefinition _selectedTab;
 
     private readonly List<(Button btn, Image img)> _tabData
@@ -174,7 +178,11 @@ public class UpgradeUI : MonoBehaviour
             tmp.raycastTarget = false;
 
             var capturedDuck = duck;
-            btn.onClick.AddListener(() => SelectTab(capturedDuck));
+            btn.onClick.AddListener(() =>
+            {
+                SfxPlayer.Play(upgradeTabClickSound, upgradeTabClickVolume);
+                SelectTab(capturedDuck);
+            });
 
             go.SetActive(true);
             _tabData.Add((btn, img));

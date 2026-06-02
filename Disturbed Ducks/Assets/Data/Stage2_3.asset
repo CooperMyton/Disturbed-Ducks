@@ -20,3 +20,6 @@ MonoBehaviour:
   - File
   firstClearBonus: 2000
   nextStage: {fileID: 11400000, guid: 3512b6a8651520347b6b4a8d2826fba1, type: 2}
+  backgroundMusic: {fileID: 0}
+  ambienceLoop: {fileID: 0}
+  clearSong: {fileID: 8300000, guid: 9a1d593e1f0734e4fbea93c003b5d940, type: 3}

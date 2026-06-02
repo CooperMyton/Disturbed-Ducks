@@ -16,7 +16,9 @@ public class DuckFlightController : MonoBehaviour
 
     [Header("Glide Physics")]
     [SerializeField] private float glideGravity = 12f;          // downward pull strength
-    [SerializeField] private float maxFallSpeed = 25f;          // terminal velocity
+    [SerializeField] private float maxFallSpeed = 25f; 
+    
+    private float _baseMaxFallSpeed = 10;         // terminal velocity
     [SerializeField] private float climbSpeedPenalty = 10f;     // speed lost per second when climbing
     [SerializeField] private float diveSpeedGain = 6f;          // speed gained per second when diving
     [SerializeField] private float noseFollowSpeed = 1.5f;      // how fast nose aligns to glide arc
@@ -49,6 +51,7 @@ public class DuckFlightController : MonoBehaviour
         _rb.freezeRotation = true;
         _rb.interpolation = RigidbodyInterpolation.Interpolate;
         _currentSpeed = forwardSpeed;
+        _baseMaxFallSpeed = maxFallSpeed;
     }
 
     private void Update()
@@ -113,6 +116,7 @@ public class DuckFlightController : MonoBehaviour
 
     public void PrepareForLaunch()
     {
+        ResetTemporaryFlightEffects();
         _isLaunched = false;
         _moveInput = Vector2.zero;
         _currentSpeed = 0f;
@@ -217,6 +221,7 @@ public class DuckFlightController : MonoBehaviour
         this.yawSpeed      = turnSpeed;  // keeping pitch and yaw in sync for now
         this.glideGravity  = gravity;
         this.minSpeed      = minSpeed;
+        ResetTemporaryFlightEffects();
     }
 
     public void SetManoeuvrability(float turnSpeed)
@@ -240,5 +245,25 @@ public class DuckFlightController : MonoBehaviour
         glideGravity *= gravityMultiplier;
         maxFallSpeed = Mathf.Max(maxFallSpeed, Mathf.Abs(downwardSpeed));
         _verticalVelocity = -Mathf.Abs(downwardSpeed);
+    }
+    private void ResetTemporaryFlightEffects()
+    {
+        maxFallSpeed = _baseMaxFallSpeed;
+        //_verticalVelocity = 0f;
+    }
+    public void EndRunFreeze()
+    {
+        _isLaunched = false;
+        _inputDisabled = true;
+        _moveInput = Vector2.zero;
+        _windVelocity = Vector3.zero;
+        _currentSpeed = 0f;
+        _verticalVelocity = 0f;
+
+        if (_rb != null)
+        {
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+        }
     }
 }

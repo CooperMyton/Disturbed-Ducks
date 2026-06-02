@@ -21,6 +21,7 @@ public class EnvironmentCompleteUI : MonoBehaviour
 
     public void Show(string message)
     {
+        EndOfAttemptUI.Instance?.SetEndRunVisible(false);
         if (messageText != null) messageText.text = message;
         panel?.SetActive(true);
     }
@@ -29,6 +30,7 @@ public class EnvironmentCompleteUI : MonoBehaviour
 
     private void OnNextLevelClicked()
     {
+        EndOfAttemptUI.Instance?.SetEndRunVisible(false);
         Hide();
         StageManager.Instance?.LoadNextStage();
     }
