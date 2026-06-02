@@ -10,6 +10,8 @@ public class TargetEnemy : MonoBehaviour
 {
     [Header("Health")]
     [SerializeField] private float maxHP = 150f;
+
+    [SerializeField] private SimpleWorldHealthBar healthBar;
     [SerializeField] private float currentHP;
 
     [Header("Currency Reward")]
@@ -45,7 +47,7 @@ public class TargetEnemy : MonoBehaviour
         currentHP = maxHP;
         if (objectRenderer == null)
             objectRenderer = GetComponent<Renderer>();
-        UpdateColor();
+        healthBar?.SetValue(1f);
 
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
@@ -73,7 +75,7 @@ public class TargetEnemy : MonoBehaviour
     public void TakeDamage(float amount)
     {
         currentHP = Mathf.Max(currentHP - amount, 0f);
-        UpdateColor();
+        healthBar?.SetValue(currentHP / maxHP);
         OnDamaged?.Invoke();
         if (hitSound != null && audioSource != null)
             audioSource.PlayOneShot(hitSound);
@@ -90,13 +92,6 @@ public class TargetEnemy : MonoBehaviour
         if (deathSound != null)
             AudioSource.PlayClipAtPoint(deathSound, transform.position);
         Destroy(gameObject);
-    }
-
-    private void UpdateColor()
-    {
-        if (objectRenderer == null) return;
-        float pct = currentHP / maxHP;
-        objectRenderer.material.color = Color.Lerp(damagedColor, healthyColor, pct);
     }
 
     private void Update()

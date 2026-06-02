@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BombDuckAbility
   m_EditorClassIdentifier: Assembly-CSharp::BombExplosionAbility
   abilityName: Detonate
+  abilityDescription: Deals a massive explosion. WIll detonate automatically on contact,
+    or can be timed with a short delay with the ability button.
   cooldown: 3
   upgradeLevels:
   - radiusIncrement: 0

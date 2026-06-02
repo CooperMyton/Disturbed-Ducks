@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: SplitDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: Split Duck
+  duckDescription: This duck is able to split itself into multiple smaller projectiles.
+    You only get one shot though!
   purchaseCosts: 320000004b0000006400000096000000e10000002c010000f4010000ee020000e8030000c4090000
   maxOwned: 10
   unlockStageIndex: 0

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BasicDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: Basic Duck
+  duckDescription: Simple duck, easy to use and control, has a dash ability
   purchaseCosts: 000000000a000000320000006400000096000000fa0000007701000058020000e8030000d0070000
   maxOwned: 10
   unlockStageIndex: 0

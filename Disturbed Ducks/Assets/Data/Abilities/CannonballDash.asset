@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: CannonballDash
   m_EditorClassIdentifier: Assembly-CSharp::DashAbility
   abilityName: Thrust
+  abilityDescription: Thrusts duck forward, allowing it to briefly surpass its maximum
+    speed.
   cooldown: 3
   baseSpeedBoost: 20
   upgradeLevels:

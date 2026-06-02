@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser-horizontal Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 2336115189886020617, guid: 640e1f92b70ac494699b19455007c70a, type: 3}
+      propertyPath: hitVolume
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4814694004395919904, guid: 640e1f92b70ac494699b19455007c70a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.51

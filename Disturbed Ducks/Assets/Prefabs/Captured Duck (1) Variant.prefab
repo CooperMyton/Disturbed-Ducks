@@ -73,6 +73,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3614793289808715123, guid: 3bd3d3ac0f4a82e41a9aabc014a3bc9e, type: 3}
+      propertyPath: collectVolume
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3614793289808715123, guid: 3bd3d3ac0f4a82e41a9aabc014a3bc9e, type: 3}
       propertyPath: currencyOnCollect
       value: 500
       objectReference: {fileID: 0}

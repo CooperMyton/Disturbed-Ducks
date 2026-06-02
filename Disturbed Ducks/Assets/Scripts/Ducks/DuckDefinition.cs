@@ -6,6 +6,9 @@ public class DuckDefinition : ScriptableObject
     [Header("Identity")]
     public string duckName = "Basic Duck";
 
+    [TextArea(2, 5)]
+    public string duckDescription = "";
+
     [Header("Purchase")]
     public int[] purchaseCosts = new int[] { 50 };
     public int maxOwned = 3;

@@ -10,6 +10,9 @@ public abstract class AbilityBase : ScriptableObject
 {
     [Header("Ability Info")]
     public string abilityName = "Ability";
+
+    [TextArea(2, 5)]
+    public string abilityDescription = "";
     public float  cooldown    = 3f;
 
     public virtual bool IsSingleUse => false;

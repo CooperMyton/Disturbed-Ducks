@@ -9,6 +9,7 @@ public class LaserHazard : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip hitSound;
+    [SerializeField] private float hitVolume = 10f;
 
     private void Awake()
     {
@@ -47,8 +48,12 @@ public class LaserHazard : MonoBehaviour
             return;
 
         if (hitSound != null)
-            AudioSource.PlayClipAtPoint(hitSound, transform.position);
-
+            SfxPlayer.Play(hitSound, hitVolume);
         impact.Crash();
+    }
+    private Vector3 AudioListenerPosition()
+    {
+        var listener = FindFirstObjectByType<AudioListener>();
+        return listener != null ? listener.transform.position : transform.position;
     }
 }

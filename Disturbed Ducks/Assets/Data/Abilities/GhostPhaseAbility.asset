@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: GhostPhaseAbility
   m_EditorClassIdentifier: Assembly-CSharp::GhostPhaseAbility
   abilityName: Phase
+  abilityDescription: While holding the ability button, duck is able to phase through
+    obstacles, projectiles, traps and weather!
   cooldown: 3
   baseDuration: 0.5
   upgradeLevels:

@@ -262,3 +262,4 @@ MonoBehaviour:
   lightRange: 5
   lightIntensity: 4
   touchSound: {fileID: 8300000, guid: e459e31e0c2bc0d4eb55a34272aeb2de, type: 3}
+  touchVolume: 3

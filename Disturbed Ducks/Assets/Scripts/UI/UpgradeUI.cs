@@ -11,6 +11,8 @@ public class UpgradeUI : MonoBehaviour
     [Header("Outer Panel")]
     [SerializeField] private GameObject      upgradePanel;
     [SerializeField] private TextMeshProUGUI duckNameText;
+    [SerializeField] private TextMeshProUGUI duckDescriptionText;
+    [SerializeField] private TextMeshProUGUI abilityDescriptionText;
 
     [Header("Tab System")]
     [SerializeField] private GameDefinition gameDefinition;
@@ -122,6 +124,13 @@ public class UpgradeUI : MonoBehaviour
         if (upgradeContent  != null) upgradeContent.SetActive(owned);
         if (purchaseContent != null) purchaseContent.SetActive(!owned);
         if (duckNameText    != null) duckNameText.text = _selectedTab.duckName;
+        if (duckDescriptionText != null)
+            duckDescriptionText.text = _selectedTab.duckDescription;
+
+        if (abilityDescriptionText != null)
+            abilityDescriptionText.text = _selectedTab.ability != null
+                ? _selectedTab.ability.abilityDescription
+                : "No active ability.";
         if (statsContainer  != null) statsContainer.gameObject.SetActive(owned);
 
         if (owned) RefreshUpgradeContent();
@@ -317,7 +326,7 @@ public class UpgradeUI : MonoBehaviour
         int    cost     = def.ability.GetUpgradeCost(um.AbilityLevel);
         string action   = locked ? "UNLOCK" : "UPGRADE";
         string costStr  = cost > 0 ? $" — {cost} coins" : "";
-        return $"{action}{previewStr}{costStr}";
+        return $"{action} ABILITY (Left Shift){previewStr}{costStr}";
     }
 
     private void OnUpgradeClicked(int track)

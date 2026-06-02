@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: ShieldAbility
   m_EditorClassIdentifier: Assembly-CSharp::ShieldAbility
   abilityName: Shield
+  abilityDescription: Press ability button to give duck a temporary shield. This
+    shield allows duck to be invulnerable to projectiles, traps and weather, and
+    also provides a damage boost. Upgrade to increase duration and damage multiplier.
   cooldown: 3
   baseDuration: 1
   baseDamageMultiplier: 1.5

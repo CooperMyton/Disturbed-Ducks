@@ -10,6 +10,8 @@ public class Collectible : MonoBehaviour
 {
     [Header("Audio")]
     [SerializeField] private AudioClip collectSound;
+
+    [SerializeField] private float collectVolume = 1f;
     [Header("Currency Reward")]
     [SerializeField] private int currencyOnCollect = 25;
 
@@ -69,7 +71,10 @@ public class Collectible : MonoBehaviour
         Debug.Log($"{gameObject.name} collected! +{currencyOnCollect} currency");
         OnCollected?.Invoke();
         if (collectSound != null)
-            AudioSource.PlayClipAtPoint(collectSound, transform.position);
+        {
+            Vector3 soundPosition = Camera.main != null ? Camera.main.transform.position : transform.position;
+            AudioSource.PlayClipAtPoint(collectSound, soundPosition, collectVolume);
+        }    
         Destroy(gameObject);
     }
 }

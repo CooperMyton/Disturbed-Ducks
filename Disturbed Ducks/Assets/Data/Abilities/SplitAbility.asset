@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: SplitAbility
   m_EditorClassIdentifier: Assembly-CSharp::SplitAbility
   abilityName: SplitAbility
+  abilityDescription: Press the ability button to split duck into multiple projectiles.
+    Each upgrade increases speed and mass of split ducks. Upgrade to level 4 to earn
+    an extra split.
   cooldown: 3
   baseSpeed: 75
   splitAngle: 15

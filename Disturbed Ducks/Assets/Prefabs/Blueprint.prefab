@@ -30,8 +30,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 132, y: 1.24, z: -223.56}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -125,7 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37f183ee7c56b0642a40cbc6552dd5a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Collectible
-  collectSound: {fileID: 8300000, guid: 6a40510156e06794c9a25c42e18b16e3, type: 3}
+  collectSound: {fileID: 8300000, guid: 18cb7f8c5ab051444a35c06b6d8a72ff, type: 3}
+  collectVolume: 3
   currencyOnCollect: 25
   bobHeight: 0.15
   bobSpeed: 2

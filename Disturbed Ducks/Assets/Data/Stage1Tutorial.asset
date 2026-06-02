@@ -17,7 +17,7 @@ MonoBehaviour:
       collect Dam Blueprints to move through stages and bring them down.
 
       While
-      flying use WASD to steer and Shift to use your ability.'
+      flying use WASD to steer and Left Shift to use your ability.'
     showOnce: 0
   onLaunchMessage:
     message: 

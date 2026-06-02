@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BasicDuckDash
   m_EditorClassIdentifier: Assembly-CSharp::DashAbility
   abilityName: Dash
+  abilityDescription: Gives duck a temporary dash speed boost, can allow the duck
+    to briefly surpass its maximum speed.
   cooldown: 3
   baseSpeedBoost: 8
   upgradeLevels:

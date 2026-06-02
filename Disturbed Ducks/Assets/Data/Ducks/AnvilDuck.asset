@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: AnvilDuck
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: Anvil Duck
+  duckDescription: Heavyweight duck who can deal massive vertical damage
   purchaseCosts: 320000004b0000006400000096000000e10000002c010000f4010000ee020000e8030000c4090000
   maxOwned: 10
+  unlockStageIndex: 0
+  unlockRequirementText: Locked
   baseMaxSpeed: 29
   baseTurnSpeed: 8
   baseGlideGravity: 12
@@ -23,10 +26,13 @@ MonoBehaviour:
   neutralModel: {fileID: 919132149155446097, guid: 95f84fb5d97cb0a41b8b1389660c6582, type: 3}
   flightModel: {fileID: 919132149155446097, guid: 7d5531cd38605c645a89cb984a8b44f4, type: 3}
   crashedModel: {fileID: 919132149155446097, guid: 574d53b72c9e73c4fbb6676b1ebceba1, type: 3}
+  abilityModel: {fileID: 0}
   launchSound: {fileID: 8300000, guid: 9074bc3dbc4f02c439ced03c8afba079, type: 3}
   crashSound: {fileID: 8300000, guid: 577868448c645894eb09448410474038, type: 3}
   abilitySound: {fileID: 8300000, guid: 6bb36a9c636806449ae2a4bd3a1057df, type: 3}
+  flyingLoopSound: {fileID: 0}
   ability: {fileID: 11400000, guid: 19c90f7c68880534eb15786bd23877d6, type: 2}
+  disableAbilityInput: 0
   explosionDefinition: {fileID: 0}
   maxSpeedUpgrade:
     upgradeName: Max Speed

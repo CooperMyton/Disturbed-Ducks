@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: ProjectileDuckAbility
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileDuckAbility
   abilityName: Shoot
-  cooldown: 0.2
+  abilityDescription: Press ability button to fire a bullet in the direction that
+    the duck is facing. Upgrade to increase ammo capacity and have each ammo do more
+    damage.
+  cooldown: 0.1
   baseAmmo: 3
   baseDamage: 20
   projectileSpeed: 50

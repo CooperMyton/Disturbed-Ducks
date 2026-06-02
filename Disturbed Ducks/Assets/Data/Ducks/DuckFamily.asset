@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: DuckFamily
   m_EditorClassIdentifier: Assembly-CSharp::DuckDefinition
   duckName: DuckFamily
+  duckDescription: Stronger in numbers. Flock of ducks who fly together in a V shape,
+    each duck can deal their own damage.
   purchaseCosts: 320000004b0000006400000096000000e10000002c010000f4010000ee020000e8030000c4090000
   maxOwned: 10
   unlockStageIndex: 0

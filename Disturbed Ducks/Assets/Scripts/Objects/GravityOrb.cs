@@ -16,6 +16,7 @@ public class GravityOrb : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip touchSound;
+    [SerializeField] private float touchVolume = 10f;
 
     private bool _used = false;
 
@@ -61,8 +62,12 @@ public class GravityOrb : MonoBehaviour
         flight.ApplyGravityOrb(gravityMultiplier, downwardSpeed);
 
         if (touchSound != null)
-            AudioSource.PlayClipAtPoint(touchSound, transform.position);
-
+            SfxPlayer.Play(touchSound, touchVolume);
         Destroy(gameObject);
+    }
+    private Vector3 AudioListenerPosition()
+    {
+        var listener = FindFirstObjectByType<AudioListener>();
+        return listener != null ? listener.transform.position : transform.position;
     }
 }

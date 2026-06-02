@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: DuckFamilyAbility
   m_EditorClassIdentifier: Assembly-CSharp::DuckFamilyAbility
   abilityName: Duck Family
+  abilityDescription: Each upgrade adds a new duck and makes each duck have increased
+    mass.
   cooldown: 3
   startingFamilyCount: 3
   familyDuckMass: 1.2
-  vAngle: 65
+  vAngle: 60
   spacing: 1.5
   upgradeLevels:
   - massIncrement: 0

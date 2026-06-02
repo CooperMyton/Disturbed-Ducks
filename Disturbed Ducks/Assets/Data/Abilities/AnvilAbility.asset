@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: AnvilAbility
   m_EditorClassIdentifier: Assembly-CSharp::AnvilAbility
   abilityName: Anvil Drop
+  abilityDescription: On activation, duck will hover briefly then fall with a lot
+    of force straight downward.
   cooldown: 3
   baseSlamForce: 75
   baseHangTime: 0.75
