@@ -20775,7 +20775,7 @@ PrefabInstance:
       objectReference: {fileID: 1309077405}
     - target: {fileID: 1404564433217810049, guid: 1798ce7337a69834484e6d0f8d2b5ea5, type: 3}
       propertyPath: m_VersionIndex
-      value: 3021
+      value: 3024
       objectReference: {fileID: 0}
     - target: {fileID: 1404564433217810049, guid: 1798ce7337a69834484e6d0f8d2b5ea5, type: 3}
       propertyPath: m_Tangents.Array.data[0].x
@@ -52721,6 +52721,9 @@ MonoBehaviour:
   currencyText: {fileID: 1087861082}
   restartButton: {fileID: 871557806}
   duckSpawner: {fileID: 522216499}
+  endRunButton: {fileID: 0}
+  duckFlightController: {fileID: 0}
+  abilityController: {fileID: 0}
 --- !u!1001 &614382512
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -88448,7 +88451,7 @@ PrefabInstance:
       objectReference: {fileID: 1002799946}
     - target: {fileID: 1404564433217810049, guid: 1798ce7337a69834484e6d0f8d2b5ea5, type: 3}
       propertyPath: m_VersionIndex
-      value: 5331
+      value: 5334
       objectReference: {fileID: 0}
     - target: {fileID: 1404564433217810049, guid: 1798ce7337a69834484e6d0f8d2b5ea5, type: 3}
       propertyPath: m_Tangents.Array.data[0].x
@@ -96732,6 +96735,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeUI
   upgradePanel: {fileID: 929863308}
   duckNameText: {fileID: 554453716}
+  duckDescriptionText: {fileID: 0}
+  abilityDescriptionText: {fileID: 0}
   gameDefinition: {fileID: 11400000, guid: 76e816f6105cdcd4a9154c8795d06af2, type: 2}
   tabContainer: {fileID: 943411000}
   tabSelectedColor: {r: 0, g: 0, b: 0, a: 1}
@@ -96757,6 +96762,8 @@ MonoBehaviour:
   purchaseUnlockButtonText: {fileID: 2023870800}
   sellDuckButton: {fileID: 1664549098}
   sellDuckButtonText: {fileID: 1699339469}
+  upgradeTabClickSound: {fileID: 0}
+  upgradeTabClickVolume: 1
   statsContainer: {fileID: 740939385}
 --- !u!4 &1366345409 stripped
 Transform:
