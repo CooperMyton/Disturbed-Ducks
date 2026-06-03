@@ -21,8 +21,7 @@ public class Destructible : MonoBehaviour
 
     [Header("Visual Feedback")]
     [SerializeField] private Renderer objectRenderer;
-    [SerializeField] private Color healthyColor = Color.white;
-    [SerializeField] private Color damagedColor = Color.red;
+
 
     [Header("Currency Reward")]
     [SerializeField] private int currencyOnBreak = 10;
@@ -42,7 +41,6 @@ public class Destructible : MonoBehaviour
         currentHP = maxHP;
         if (objectRenderer == null)
             objectRenderer = GetComponent<Renderer>();
-        UpdateColor();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -78,7 +76,6 @@ public class Destructible : MonoBehaviour
 
         currentHP -= amount;
         currentHP = Mathf.Max(currentHP, 0f);
-        UpdateColor();
 
         if (hitSound != null && audioSource != null)
             audioSource.PlayOneShot(hitSound);
@@ -100,12 +97,5 @@ public class Destructible : MonoBehaviour
         Destroy(gameObject);
         if (destroyedSound != null)
             AudioSource.PlayClipAtPoint(destroyedSound, transform.position);
-    }
-
-    private void UpdateColor()
-    {
-        if (objectRenderer == null) return;
-        float healthPercent = currentHP / maxHP;
-        objectRenderer.material.color = Color.Lerp(damagedColor, healthyColor, healthPercent);
     }
 }
