@@ -22,4 +22,4 @@ MonoBehaviour:
   nextStage: {fileID: 11400000, guid: 86147a0ca4ca41e44bad1ea04d9d57a9, type: 2}
   backgroundMusic: {fileID: 8300000, guid: f50eb12fb21eb4c48b24974edbe16dae, type: 3}
   ambienceLoop: {fileID: 0}
-  clearSong: {fileID: 0}
+  clearSong: {fileID: 8300000, guid: 412ab2da4749d2c4abd44654607f619d, type: 3}
